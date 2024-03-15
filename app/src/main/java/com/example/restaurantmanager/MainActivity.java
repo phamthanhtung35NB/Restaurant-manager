@@ -24,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
         //setContentView truyền layout vào
         //R là lớp tài nguyên, layout là thư mục chứa layout, activity_main là file layout
         setContentView(R.layout.activity_main);
-        textViewLocation = this.<TextView>findViewById(R.id.textViewLocation);
-        imageButtonLocation = this.<ImageButton>findViewById(R.id.imageButtonLocation);
+        addEvents();
+        addControls();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -33,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    private void addEvents() {
+    }
+
+    private void addControls() {
+        textViewLocation = this.<TextView>findViewById(R.id.textViewLocation);
+        imageButtonLocation = this.<ImageButton>findViewById(R.id.imageButtonLocation);
+    }
+
     public void getLocation(View v) {
         //code lấy vị trí
         Toast.makeText(this, "Đang lấy vị trí", Toast.LENGTH_SHORT).show();
