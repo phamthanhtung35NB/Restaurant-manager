@@ -27,6 +27,20 @@
         <ListView
             android:id="@+id/listViewMenu"
             android:layout_width="match_parent"
+            android:layout_height="326dp" >
+
+        </ListView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:text="Danh sách món đã thêm"
+            android:textColor="#FF0000" />
+
+        <ListView
+            android:id="@+id/listViewOder"
+            android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
