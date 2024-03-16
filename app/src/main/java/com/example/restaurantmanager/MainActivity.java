@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import adapter.MenuAdapter;
+import model.Account;
 import model.MenuRestaurant;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,8 +45,10 @@ public class MainActivity extends AppCompatActivity {
         //setContentView truyền layout vào
         //R là lớp tài nguyên, layout là thư mục chứa layout, activity_main là file layout
         setContentView(R.layout.activity_main);
-        addEvents();
+
         addControls();
+        addEvents();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -54,13 +58,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addEvents() {
-
+        button1.setOnClickListener(v -> {
+            onClickWriteData();
+        });
 
     }
 
+    //push data account and menu to firebase
+    private void onClickWriteData() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("account1");
+//        Account string = new Account("1", "admin", "admin", "0123456789","áđâs@fads", "Hà Nội");
+        Account menu = new Account("1", "admin", "admin", "0123456789","áđâs@fads", "Hà Nội","1", "Cơm chiên", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png");
+//        MenuRestaurant menu1 = new MenuRestaurant("2", "Cơm trắng", "Cơm", 10000, "https://i.imgur.com/ikbFUzX.png");
+        myRef.setValue(menu, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError error, DatabaseReference ref) {
+                if (error == null) {
+                    Toast.makeText(MainActivity.this, "onComplete: success", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "onComplete: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
     private void onClickReadData() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("message");
+        DatabaseReference myRef = database.getReference("saa/string");
 //        myRef.setValue("Hello, World!");
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
@@ -69,14 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
-                Log.d(TAG, "Value is: " + value);
+//                Log.d(TAG, "Value is: " + value);
                 textView1.setText(value);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
+//                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
     }
@@ -91,9 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         textView1 = findViewById(R.id.textView1);
         button1 = findViewById(R.id.button1);
-        button1.setOnClickListener(v -> {
-            onClickReadData();
-        });
+
         listViewMenu = findViewById(R.id.listViewMenu);
         data = new ArrayList<>();
         data.add(new MenuRestaurant("1", "Cơm chiên", "Cơm chiên + trứng", 50000, "https://i.imgur.com/ikbFUzX.png"));
