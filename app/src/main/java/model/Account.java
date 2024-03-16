@@ -23,14 +23,7 @@ public class Account {
         this.email = email;
         this.address = address;
         MenuRestaurant menuRestaurant1 = new MenuRestaurant(id2, name, description, price, image);
-        MenuRestaurant menuRestaurant4 = new MenuRestaurant("4", "Cơm chiên", "Cơm chiên hải sản", 50000, "https://cdn.tgdd.vn/Files/2020/07/14/1276873/food-1_800x450.jpg");
-        MenuRestaurant menuRestaurant2 = new MenuRestaurant("2", "Cơm trắng", "Cơm  hải sản", 10000, "https://cdn.tgdd.vn/Files/2020/07/14/1276873/food-1_800x450.jpg");
-        MenuRestaurant menuRestaurant3 = new MenuRestaurant("3", "Cá", "Cơm chiên hải sản", 500000, "https://cdn.tgdd.vn/Files/2020/07/14/1276873/food-1_800x450.jpg");
-
         this.menuRestaurant.put(id2,menuRestaurant1);
-        this.menuRestaurant.put("2",menuRestaurant2);
-        this.menuRestaurant.put("3",menuRestaurant3);
-        this.menuRestaurant.put("4",menuRestaurant4);
     }
 //    TreeMap<String,
 //            MenuRestaurant> menuRestaurant
@@ -95,9 +88,7 @@ public class Account {
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", menuRestaurant=" + menuRestaurant +
-                '}';
+                ", address='" + address ;
     }
 
 }
