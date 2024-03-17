@@ -15,32 +15,43 @@
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="56dp"
+            android:autoText="false"
+            android:gravity="center"
+            android:text="TextView"
+            android:textAlignment="center" />
 
-        <Button
-            android:id="@+id/button1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/imageButtonOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="?attr/actionModePasteDrawable" />
+        </LinearLayout>
 
         <ListView
             android:id="@+id/listViewMenu"
             android:layout_width="match_parent"
-            android:layout_height="326dp" >
+            android:layout_height="632dp">
 
         </ListView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="18dp"
-            android:text="Danh sách món đã thêm"
-            android:textColor="#FF0000" />
 
-        <ListView
-            android:id="@+id/listViewOder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

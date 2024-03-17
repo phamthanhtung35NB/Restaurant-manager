@@ -1,11 +1,9 @@
 package com.example.restaurantmanager;
 
-import static android.content.ContentValues.TAG;
-
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,23 +25,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import adapter.MenuAdapter;
-import model.Account;
 import model.MenuRestaurant;
 
 public class MainActivity extends AppCompatActivity {
 
     TextView textView1;
     Button button1;
+    ImageButton imageButtonOrder;
 
     ListView listViewMenu;
 
     ArrayList<MenuRestaurant> dataRestaurant;
 
     MenuAdapter menuAdapter;
-
-    public static ListView listViewOrder;
     public static ArrayList<MenuRestaurant> dataOrder;
-    public static MenuAdapter oderAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +57,17 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         readDataFromFireBase("account1");
-        MainActivity.oderAdapter = new MenuAdapter(MainActivity.this, R.layout.food, MainActivity.dataOrder);
-        MainActivity.listViewOrder.setAdapter(MainActivity.oderAdapter);
+
     }
 
     private void addEvents() {
         button1.setOnClickListener(v -> {
 //            onClickReadData();
 
+        });
+        imageButtonOrder.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, OderActivity2.class);
+            startActivity(intent);
         });
 
     }
@@ -153,8 +152,9 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         textView1 = findViewById(R.id.textView1);
         button1 = findViewById(R.id.button1);
+        imageButtonOrder = findViewById(R.id.imageButtonOrder);
         listViewMenu = findViewById(R.id.listViewMenu);
-        listViewOrder = findViewById(R.id.listViewOder);
+//        listViewOrder = findViewById(R.id.listViewOrder);
         dataRestaurant = new ArrayList<>();
         dataOrder = new ArrayList<>();
 //        listViewMenu.setAdapter(menuAdapter);

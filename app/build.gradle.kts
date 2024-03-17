@@ -30,6 +30,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 //lưu nếu sử dụng thư viện ngoài
 dependencies {
@@ -41,6 +44,10 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.8")
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.annotation)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
