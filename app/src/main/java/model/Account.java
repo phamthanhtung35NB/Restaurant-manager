@@ -25,6 +25,17 @@ public class Account {
         MenuRestaurant menuRestaurant1 = new MenuRestaurant(id2, name, description, price, image);
         this.menuRestaurant.put(id2,menuRestaurant1);
     }
+    public Account(String id, String username, String password, String phone, String email, String address) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+//        MenuRestaurant menuRestaurant1 = new MenuRestaurant(id2, name, description, price, image);
+//        this.menuRestaurant.put(id2,menuRestaurant1);
+        this.menuRestaurant = new TreeMap<>();
+    }
 //    TreeMap<String,
 //            MenuRestaurant> menuRestaurant
 //    public Account(String username, String password, String phone, String email, String address, MenuRestaurant menuRestaurant) {
