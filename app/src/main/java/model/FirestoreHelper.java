@@ -1,10 +1,15 @@
 package model;
 import static android.content.ContentValues.TAG;
 
+import static com.example.restaurantmanager.MainActivity.dataRestaurant;
+
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.restaurantmanager.LoginActivity;
+import com.example.restaurantmanager.MainActivity;
+import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -14,9 +19,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FieldValue;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
+import adapter.MenuAdapter;
 
 public class FirestoreHelper {
     private static FirebaseFirestore db;
@@ -24,8 +33,28 @@ public class FirestoreHelper {
     public FirestoreHelper() {
 
     }
-
-    public static void addAccount(Account account) {
+    public static boolean checkDocumentExistence(String document, String documentId) {
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection(document).document(documentId);
+        Task<DocumentSnapshot> task = docRef.get();
+        task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        return task.isSuccessful();
+    }
+    public static void addAccount(String type,Account account) {
         db = FirebaseFirestore.getInstance();
         Map<String, Object> newData = new HashMap<>();
         newData.put("username", account.getUsername());
@@ -40,7 +69,7 @@ public class FirestoreHelper {
         // Định nghĩa ID cho tài liệu
         String accountId = account.getUsername(); // Thay "your_custom_id" bằng ID muốn định nghĩa
 
-        db.collection("account").document(accountId) // Sử dụng document() thay vì add()
+        db.collection(type).document(accountId) // Sử dụng document() thay vì add()
                 .set(newData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -55,6 +84,98 @@ public class FirestoreHelper {
                     }
                 });
     }
+    public interface AccountCallback {
+        void onAccountReceived(Account account);
+        void onFailure(Exception e);
+    }
+
+//    public static void getAccount(String type, String accountId, AccountCallback callback) {
+//        db = FirebaseFirestore.getInstance();
+//
+//        db.collection(type).document(accountId)
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        String username = documentSnapshot.getString("username");
+//                        String password = documentSnapshot.getString("password");
+//                        String phone = documentSnapshot.getString("phone");
+//                        String email = documentSnapshot.getString("email");
+//                        String address = documentSnapshot.getString("address");
+//                        System.out.println("-----------------------");
+//                        System.out.println("username: "+username);
+//                        Map<String, Object> menuRestaurantData = (Map<String, Object>) documentSnapshot.get("menuRestaurant");
+//
+//                        Account account = new Account(type, username, password, phone, email, address);
+//                        callback.onAccountReceived(account);
+//                    } else {
+//                        Log.d(TAG, "No such document");
+//                        callback.onAccountReceived(null);
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.w(TAG, "Error getting document", e);
+//                    callback.onFailure(e);
+//                });
+//    }
+
+
+
+    public static String type = "restaurant";
+    public static String accountId = "tung";
+    public static void getMenuRestaurant() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(type).document(accountId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> accountData = documentSnapshot.getData();
+
+                            if (accountData.containsKey("menuRestaurant")) {
+                                Map<String, Object> menuRestaurantData = (Map<String, Object>) accountData.get("menuRestaurant");
+
+                                // Lặp qua các mục của menuRestaurantData và tạo các đối tượng MenuRestaurant tương ứng
+                                for (Map.Entry<String, Object> entry : menuRestaurantData.entrySet()) {
+                                    String menuId = entry.getKey();
+                                    Map<String, Object> menuData = (Map<String, Object>) entry.getValue();
+
+                                    // Lấy dữ liệu từ menuData và tạo đối tượng MenuRestaurant
+                                    String name = (String) menuData.get("name");
+                                    String description = (String) menuData.get("description");
+                                    double price = (double) menuData.get("price");
+                                    String image = (String) menuData.get("image");
+
+                                    // Tạo đối tượng MenuRestaurant từ dữ liệu thu được
+                                    MenuRestaurant menuRestaurant_ = new MenuRestaurant(menuId, name, description, price, image);
+                                    dataRestaurant.add(menuRestaurant_);
+//                                    MainActivity.dataRestaurant.add(menuRestaurant_);
+                                    // Sử dụng đối tượng menuRestaurant ở đây theo ý của bạn (ví dụ: thêm vào danh sách)
+                                    //print data
+//                                    System.out.println("-------++++++++++++++++++++++++++++++----------------------");
+//                                    System.out.println(MainActivity.dataRestaurant.size());
+//                                    for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
+//                                        System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
+//                                    }
+                                }
+
+                            } else {
+                                Log.d(TAG, "No menuRestaurant found for account: " + accountId);
+                            }
+                        } else {
+                            Log.d(TAG, "No such account exists with ID: " + accountId);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error getting account data for ID: " + accountId, e);
+                    }
+                });
+    }
+
     public static void addMenuRestaurant(String accountId, MenuRestaurant menuRestaurant) {
         // Lấy tham chiếu đến Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -68,7 +189,7 @@ public class FirestoreHelper {
         newMenuData.put("image", menuRestaurant.getImage());
 
         // Thực hiện truy vấn để thêm MenuRestaurant mới vào collection "menuRestaurant"
-        db.collection("account").document(accountId)
+        db.collection("restaurant").document(accountId)
                 .update("menuRestaurant." + menuRestaurant.getId(), newMenuData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -113,7 +234,7 @@ public class FirestoreHelper {
     }
     public void addClient(Account account) {
         db.collection("client")
-                .document(account.getId())
+                .document(account.getUsername())
                 .set(account)
                 .addOnSuccessListener(aVoid -> {
                     // Đã thêm thành công
@@ -151,7 +272,7 @@ public class FirestoreHelper {
     public static void checkCredentials(String username, String password, OnCheckCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("account").document(username).get()
+        db.collection("restaurant").document(username).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {

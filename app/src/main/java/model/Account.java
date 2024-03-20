@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class Account {
-    private String id;
+    private String type;
     private String username;
     private String password;
     private String phone;
@@ -15,8 +15,8 @@ public class Account {
     //constructor
     public Account() {
     }
-    public Account(String id, String username, String password, String phone, String email, String address,String id2, String name, String description, double price, String image) {
-        this.id = id;
+    public Account( String type,String username, String password, String phone, String email, String address,String id2, String name, String description, double price, String image) {
+        this.type = type;
         this.username = username;
         this.password = password;
         this.phone = phone;
@@ -25,8 +25,8 @@ public class Account {
         MenuRestaurant menuRestaurant1 = new MenuRestaurant(id2, name, description, price, image);
         this.menuRestaurant.put(id2,menuRestaurant1);
     }
-    public Account(String id, String username, String password, String phone, String email, String address) {
-        this.id = id;
+    public Account(String type,String username, String password, String phone, String email, String address) {
+        this.type = type;
         this.username = username;
         this.password = password;
         this.phone = phone;
@@ -47,13 +47,13 @@ public class Account {
 //        this.menuRestaurant.getDescription()=menuRestaurant.getDescription();
 //    }
     //getter and setter
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
 
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
     public String getUsername() {
         return username;
     }
@@ -94,7 +94,6 @@ public class Account {
     @Override
     public String toString() {
         return "Account{" +
-                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", phone='" + phone + '\'' +

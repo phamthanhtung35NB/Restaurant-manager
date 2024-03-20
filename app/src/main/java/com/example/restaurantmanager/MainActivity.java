@@ -1,12 +1,16 @@
 package com.example.restaurantmanager;
 
+import static android.content.ContentValues.TAG;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.widget.Button;
+import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,14 +19,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import adapter.MenuAdapter;
 import model.MenuRestaurant;
@@ -30,15 +34,15 @@ import model.MenuRestaurant;
 public class MainActivity extends AppCompatActivity {
 
     TextView textView1;
-    Button button1;
+//    Button button1;
     ImageButton imageButtonOrder;
 
     ListView listViewMenu;
 
-    ArrayList<MenuRestaurant> dataRestaurant;
+    public static ArrayList<MenuRestaurant> dataRestaurant ;
 
-    MenuAdapter menuAdapter;
-    public static ArrayList<MenuRestaurant> dataOrder;
+    public static MenuAdapter menuAdapter;
+    SQLiteDatabase database=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +60,111 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        readDataFromFireBase("account1");
+        readDataFromFireBase();
+
+
+
 
     }
 
-    private void addEvents() {
-        button1.setOnClickListener(v -> {
-//            onClickReadData();
+    private void readDataFromFireBase() {
+        System.out.println("size: "+MainActivity.dataRestaurant.size());
+        System.out.println(MainActivity.dataRestaurant.size());
+        getMenuRestaurant();
+        //print data
+        System.out.println("-------------------------------------------------------------");
+        for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
+            System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
+        }
+        System.out.println("size: "+MainActivity.dataRestaurant.size());
+//        System.out.println(MainActivity.dataRestaurant.size());
+        menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
+                listViewMenu.setAdapter(menuAdapter);
+    }
+    public static String type = "restaurant";
+    public static String accountId = "tung";
 
-        });
+
+
+
+    public void getMenuRestaurant() {
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection(type).document(accountId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> accountData = documentSnapshot.getData();
+
+                            if (accountData.containsKey("menuRestaurant")) {
+                                Map<String, Object> menuRestaurantData = (Map<String, Object>) accountData.get("menuRestaurant");
+
+                                // Lặp qua các mục của menuRestaurantData và tạo các đối tượng MenuRestaurant tương ứng
+                                for (Map.Entry<String, Object> entry : menuRestaurantData.entrySet()) {
+                                    String menuId = entry.getKey();
+                                    Map<String, Object> menuData = (Map<String, Object>) entry.getValue();
+
+                                    // Lấy dữ liệu từ menuData và tạo đối tượng MenuRestaurant
+                                    String name = (String) menuData.get("name");
+                                    String description = (String) menuData.get("description");
+                                    double price = (double) menuData.get("price");
+                                    String image = (String) menuData.get("image");
+
+                                    // Tạo đối tượng MenuRestaurant từ dữ liệu thu được
+                                    MenuRestaurant menuRestaurant_ = new MenuRestaurant(menuId, name, description, price, image);
+                                    dataRestaurant.add(menuRestaurant_);
+//                                    MainActivity.dataRestaurant.add(menuRestaurant_);
+                                    // Sử dụng đối tượng menuRestaurant ở đây theo ý của bạn (ví dụ: thêm vào danh sách)
+                                    //print data
+//                                    System.out.println("-------++++++++++++++++++++++++++++++----------------------");
+//                                    System.out.println(MainActivity.dataRestaurant.size());
+//                                    for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
+//                                        System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
+//                                    }
+                                }
+                                menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
+                                listViewMenu.setAdapter(menuAdapter);
+
+
+                            } else {
+                                Log.d(TAG, "No menuRestaurant found for account: " + accountId);
+                            }
+                        } else {
+                            Log.d(TAG, "No such account exists with ID: " + accountId);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error getting account data for ID: " + accountId, e);
+                    }
+                });
+    }
+
+    private void addEvents() {
+//        button1.setOnClickListener(v -> {
+////            onClickReadData();
+//
+//        });
         imageButtonOrder.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, OderActivity2.class);
+            Intent intent = new Intent(MainActivity.this, OderActivity.class);
             startActivity(intent);
         });
+        System.out.println("----------------------------1---------------------------------");
+        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
+        System.out.println("----------------------------2---------------------------------");
+        Cursor c = database.query("account", null, null, null, null, null, null);
+        System.out.println("----------------------------3---------------------------------");
+        while (c.moveToNext()) {
+            String data = c.getString(0) + "-" + c.getString(1) + "-" + c.getString(2) + "-" + c.getString(3) + "-" + c.getString(4) + "-" + c.getString(5);
+            textView1.setText(data);
+            System.out.println(data);
+        }
 
     }
 
@@ -91,43 +187,44 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //
 //    }
+    
 
     //read data from firebase
-    public void readDataFromFireBase(String id){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(id);
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String id1 = dataSnapshot.child("id").getValue().toString();
-                String username = dataSnapshot.child("username").getValue().toString();
-                String password = dataSnapshot.child("password").getValue().toString();
-                textView1.setText(id1 + " " + username + " " + password);
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(MainActivity.this, "onCancelled: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        DatabaseReference myRef2 = database.getReference(id+"/menuRestaurant");
-        myRef2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-                    MenuRestaurant menuRestaurant = dataSnapshot1.getValue(MenuRestaurant.class);
-                    dataRestaurant.add(menuRestaurant);
-                }
-                menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
-                listViewMenu.setAdapter(menuAdapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(MainActivity.this, "onCancelled: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-//        listViewMenu.setAdapter(menuAdapter);
-    }
+//    public void readDataFromFireBase(String id){
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference(id);
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                String id1 = dataSnapshot.child("id").getValue().toString();
+//                String username = dataSnapshot.child("username").getValue().toString();
+//                String password = dataSnapshot.child("password").getValue().toString();
+//                textView1.setText(id1 + " " + username + " " + password);
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Toast.makeText(MainActivity.this, "onCancelled: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        DatabaseReference myRef2 = database.getReference(id+"/menuRestaurant");
+//        myRef2.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+//                    MenuRestaurant menuRestaurant = dataSnapshot1.getValue(MenuRestaurant.class);
+//                    dataRestaurant.add(menuRestaurant);
+//                }
+//                menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
+//                listViewMenu.setAdapter(menuAdapter);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Toast.makeText(MainActivity.this, "onCancelled: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+////        listViewMenu.setAdapter(menuAdapter);
+//    }
 //    public void onClickReadData() {
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference myRef = database.getReference("account1");
@@ -151,12 +248,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         textView1 = findViewById(R.id.textView1);
-        button1 = findViewById(R.id.button1);
+//        button1 = findViewById(R.id.button1);
         imageButtonOrder = findViewById(R.id.imageButtonOrder);
         listViewMenu = findViewById(R.id.listViewMenu);
 //        listViewOrder = findViewById(R.id.listViewOrder);
         dataRestaurant = new ArrayList<>();
-        dataOrder = new ArrayList<>();
+
 //        listViewMenu.setAdapter(menuAdapter);
     }
 

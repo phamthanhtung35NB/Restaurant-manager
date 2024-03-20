@@ -3,7 +3,6 @@ package adapter;
 //import static com.example.restaurantmanager.MainActivity.oderAdapter;
 
 import android.app.Activity;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.restaurantmanager.MainActivity;
-import com.example.restaurantmanager.OderActivity2;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
 
@@ -65,13 +63,14 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         imageButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.dataOrder.add(menuRestaurant);
-//                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, "Thêm thành công món: "+ menuRestaurant.getName()+"", Toast.LENGTH_SHORT).show();
-//                OderActivity2.listViewOrder.setAdapter(oderAdapter);
-//                for (int i = 0; i < MainActivity.dataOrder.size(); i++) {
-//                    Toast.makeText(context, MainActivity.dataOrder.get(i).getName()+MainActivity.dataOrder.get(i).getPrice(), Toast.LENGTH_SHORT).show();
-//                }
+//                //add vào sqlite
+//                MainActivity.dataOrder.add(menuRestaurant);
+////                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "Thêm thành công món: "+ menuRestaurant.getName()+"", Toast.LENGTH_SHORT).show();
+////                OderActivity2.listViewOrder.setAdapter(oderAdapter);
+////                for (int i = 0; i < MainActivity.dataOrder.size(); i++) {
+////                    Toast.makeText(context, MainActivity.dataOrder.get(i).getName()+MainActivity.dataOrder.get(i).getPrice(), Toast.LENGTH_SHORT).show();
+////                }
             }
         });
         return row;

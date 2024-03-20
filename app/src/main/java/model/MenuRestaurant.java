@@ -11,6 +11,9 @@ public class MenuRestaurant implements Serializable{
     //hình ảnh
     private String image;
 
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
     //constructor
     public MenuRestaurant() {
     }
