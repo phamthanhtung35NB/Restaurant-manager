@@ -8,11 +8,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 
 import android.os.Bundle;
@@ -41,22 +37,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
 
 import model.Account;
-import model.FirestoreHelper;
-import model.MenuRestaurant;
 import model.SqliteAccountHelper;
-//import model.SqliteHelper;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TABLE_NAME_ACCOUNT = "account";
-    private static final String COLUMN_TYPE = "type";
-    private static final String COLUMN_USERNAME = "username";
-    private static final String COLUMN_PASSWORD = "password";
-    private static final String COLUMN_PHONE = "phone";
-    private static final String COLUMN_EMAIL = "email";
-    private static final String COLUMN_ADDRESS = "address";
+//    private static final String TABLE_NAME_ACCOUNT = "account";
+//    private static final String COLUMN_TYPE = "type";
+//    private static final String COLUMN_USERNAME = "username";
+//    private static final String COLUMN_PASSWORD = "password";
+//    private static final String COLUMN_PHONE = "phone";
+//    private static final String COLUMN_EMAIL = "email";
+//    private static final String COLUMN_ADDRESS = "address";
     private final String  DB_PATH_SUFFIX = "/databases/";
 //    SQLiteDatabase database=null;
     private final String DATABASE_NAME="menurestaurant.db";
@@ -67,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private RadioButton radioButtonRestaurantLogin;
     private RadioButton radioButtonClientLogin;
-    private SqliteAccountHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,50 +74,29 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     void init() {
+        processCopy();
         textViewUsername = findViewById(R.id.textViewUsername);
         textPassword = findViewById(R.id.textPassword2);
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonCreateNewAccount = findViewById(R.id.buttonCreateNewAccount);
         radioButtonRestaurantLogin = findViewById(R.id.radioButtonRestaurantLogin);
         radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
-
-        System.out.println("0----------------------------------");
-        processCopy();
-//Mở CSDL lên để dùng
-//        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
-// Tạo ListView
-        System.out.println("1----------------------------------");
-// Truy vấn CSDL và cập nhật hiển thị lên Listview
-//        Cursor c = database.query("account", null, null, null, null, null, null);
-//        System.out.println("2----------------------------------");
-//        c.moveToFirst();
-//        String data = "";
-//        while (c.isAfterLast() == false) {
-//            data = c.getString(0) + "-" + c.getString(1) + "-" + c.getString(2)+"-"+c.getString(3)+"-"+c.getString(4);
-//            System.out.println(data);
-//            c.moveToNext();
-//        }
-//        c.close();
-    }
-    private void processCopy() {
-//private app
-        File dbFile = getDatabasePath(DATABASE_NAME);
-        if (!dbFile.exists()) {
-            try {
-                CopyDataBaseFromAsset();
-//                Toast.makeText(this, "Copying sucess from Assets folder", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-//                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+        SqliteAccountHelper dbHelper = new SqliteAccountHelper(this);
+            Account account= dbHelper.getAccount();
+            if(account!=null){
+                System.out.println("account----------------------"+account.getUsername());
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         }
-    }
+
+
     void addEvents() {
         buttonLogin.setOnClickListener(v -> {
             login();
-//            addfire();
         });
         buttonCreateNewAccount.setOnClickListener(v -> {
-//            addRestaurant();
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
@@ -142,7 +113,6 @@ public class LoginActivity extends AppCompatActivity {
             textPassword.setError("Vui lòng nhập mật khẩu");
             return;
         }
-        final String type1 = "";
         db = FirebaseFirestore.getInstance();
         if (radioButtonClientLogin.isChecked()) {
             loginClient(username, password);
@@ -151,40 +121,9 @@ public class LoginActivity extends AppCompatActivity {
         }
         else {
             Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
-            return;
         }
     }
-    public void CopyDataBaseFromAsset() {
-// TODO Auto-generated method stub
-        try {
-            InputStream myInput;
-            myInput = getAssets().open(DATABASE_NAME);
-// Path to the just created empty db
-            String outFileName = getDatabasePath();
-// if the path doesn't exist first, create it
-            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
-            if (!f.exists())
-                f.mkdir();
-// Open the empty db as the output stream
-            OutputStream myOutput = new FileOutputStream(outFileName);
-// transfer bytes from the inputfile to the outputfile
-// Truyền bytes dữ liệu từ input đến output
-            int size = myInput.available();
-            byte[] buffer = new byte[size];
-            myInput.read(buffer);
-            myOutput.write(buffer);
-// Close the streams
-            myOutput.flush();
-            myOutput.close();
-            myInput.close();
-        } catch (IOException e) {
-// TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    private String getDatabasePath() {
-        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
-    }
+
     void loginRestaurant(String username, String password){
         db.collection("restaurant")
                 .document(username)
@@ -225,6 +164,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
     void loginClient(String username, String password){
         db.collection("client")
                 .document(username)
@@ -263,72 +204,55 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
     void insertAccount(String type, String username, String password, String phone, String email, String address){
-        System.out.println("insertAccount-------------------------------------------------");
-        SQLiteDatabase database= null;
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_TYPE, type);
-        contentValues.put(COLUMN_USERNAME, username);
-        contentValues.put(COLUMN_PASSWORD, password);
-        contentValues.put(COLUMN_PHONE, phone);
-        contentValues.put(COLUMN_EMAIL, email);
-        contentValues.put(COLUMN_ADDRESS, address);
-        long result = database.insert("account", null, contentValues);
-        if (result == -1) {
-            System.out.println("Fail to insert record!");
-            Toast.makeText(this, "Fail to insert record!", Toast.LENGTH_SHORT).show();
-        } else {
-            System.out.println("Inserted record successfully");
-            Toast.makeText(this, "Record inserted successfully!", Toast.LENGTH_SHORT).show();
-        }
-        System.out.println("insertAccount-------------------------------------------------");
+        SqliteAccountHelper databaseHelper =new SqliteAccountHelper(this);
+        databaseHelper.addAccountLogin(new Account(type, username, password, phone, email, address));
+        System.out.println("insertAccount------------------Done------------------------------");
     }
-//    void login(){
-//        String username = textViewUsername.getText().toString();
-//        String password = textPassword.getText().toString();
-//        String type = "";
-//
-//        if (radioButtonClientLogin.isChecked()) {
-//            Toast.makeText(LoginActivity.this, "Client", Toast.LENGTH_SHORT).show();
-//            type = "client";
-//        } else if (radioButtonRestaurantLogin.isChecked()) {
-//            Toast.makeText(LoginActivity.this, "Restaurant", Toast.LENGTH_SHORT).show();
-//            type = "restaurant";
-//        }
-//        if (type.equals("")) {
-//            Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        // Kiểm tra xem username và password có rỗng không
-//        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-//            // Gọi phương thức getAccount để lấy thông tin tài khoản từ Firestore
-//            FirestoreHelper.getAccount(type, username, new FirestoreHelper.AccountCallback() {
-////                Toast.makeText(LoginActivity.this, "Đang kiểm tra tài khoản", Toast.LENGTH_SHORT).show();
-//                @Override
-//                public void onAccountReceived(Account account) {
-//                    if (account != null && account.getPassword().equals(password)) {
-//                        SqliteAccountHelper.addAccountLogin(account.getType(), account.getUsername(), account.getPassword(), account.getPhone(), account.getEmail(), account.getAddress());
-//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//
-//                    } else {
-//                        Toast.makeText(LoginActivity.this, "Tài khoản hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Exception e) {
-//                    // Xử lý trường hợp lỗi khi lấy thông tin tài khoản
-//                }
-//            });
-//        } else {
-//            Toast.makeText(LoginActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
+    private void processCopy() {
+        File dbFile = getDatabasePath(DATABASE_NAME);
+        if (!dbFile.exists()) {
+            try {
+                CopyDataBaseFromAsset();
+                Toast.makeText(this, "Sao chép cơ sở dữ liệu vào hệ thống thành công", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
+    public void CopyDataBaseFromAsset() {
+        try {
+            InputStream myInput;
+            myInput = getAssets().open(DATABASE_NAME);
+            // Path to the just created empty db
+            String outFileName = getDatabasePath();
+            // if the path doesn't exist first, create it
+            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
+            if (!f.exists())
+                f.mkdir();
+            // Open the empty db as the output stream
+            OutputStream myOutput = new FileOutputStream(outFileName);
+            // transfer bytes from the inputfile to the outputfile
+            // Truyền bytes dữ liệu từ input đến output
+            int size = myInput.available();
+            byte[] buffer = new byte[size];
+            myInput.read(buffer);
+            myOutput.write(buffer);
+            // Close the streams
+            myOutput.flush();
+            myOutput.close();
+            myInput.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-
-
+    private String getDatabasePath() {
+        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
+    }
+    //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
     //add restaurant to firebase
 //    private void addRestaurant() {
 //        String id = "2";

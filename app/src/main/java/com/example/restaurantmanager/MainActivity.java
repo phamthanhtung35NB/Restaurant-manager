@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     public static MenuAdapter menuAdapter;
     SQLiteDatabase database=null;
 
+    public static String accountId = "tung";
+    public static String type = "restaurant";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,47 +53,19 @@ public class MainActivity extends AppCompatActivity {
         //setContentView truyền layout vào
         //R là lớp tài nguyên, layout là thư mục chứa layout, activity_main là file layout
         setContentView(R.layout.activity_main);
-
         init();
         addEvents();
-//        readDataFromFireBase("account1");
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         readDataFromFireBase();
-
-
-
-
+        addAccountLoginFromSQLite();
     }
 
     private void readDataFromFireBase() {
-        System.out.println("size: "+MainActivity.dataRestaurant.size());
-        System.out.println(MainActivity.dataRestaurant.size());
-        getMenuRestaurant();
-        //print data
-        System.out.println("-------------------------------------------------------------");
-        for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
-            System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
-        }
-        System.out.println("size: "+MainActivity.dataRestaurant.size());
-//        System.out.println(MainActivity.dataRestaurant.size());
-        menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
-                listViewMenu.setAdapter(menuAdapter);
-    }
-    public static String type = "restaurant";
-    public static String accountId = "tung";
-
-
-
-
-    public void getMenuRestaurant() {
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         db.collection(type).document(accountId)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -117,14 +91,6 @@ public class MainActivity extends AppCompatActivity {
                                     // Tạo đối tượng MenuRestaurant từ dữ liệu thu được
                                     MenuRestaurant menuRestaurant_ = new MenuRestaurant(menuId, name, description, price, image);
                                     dataRestaurant.add(menuRestaurant_);
-//                                    MainActivity.dataRestaurant.add(menuRestaurant_);
-                                    // Sử dụng đối tượng menuRestaurant ở đây theo ý của bạn (ví dụ: thêm vào danh sách)
-                                    //print data
-//                                    System.out.println("-------++++++++++++++++++++++++++++++----------------------");
-//                                    System.out.println(MainActivity.dataRestaurant.size());
-//                                    for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
-//                                        System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
-//                                    }
                                 }
                                 menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
                                 listViewMenu.setAdapter(menuAdapter);
@@ -144,7 +110,16 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, "Error getting account data for ID: " + accountId, e);
                     }
                 });
+        //print data
+        System.out.println("-------------------------------------------------------------");
+        for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
+            System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
+        }
+        menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
+                listViewMenu.setAdapter(menuAdapter);
     }
+
+
 
     private void addEvents() {
 //        button1.setOnClickListener(v -> {
@@ -156,15 +131,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         System.out.println("----------------------------1---------------------------------");
-        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
-        System.out.println("----------------------------2---------------------------------");
-        Cursor c = database.query("account", null, null, null, null, null, null);
-        System.out.println("----------------------------3---------------------------------");
-        while (c.moveToNext()) {
-            String data = c.getString(0) + "-" + c.getString(1) + "-" + c.getString(2) + "-" + c.getString(3) + "-" + c.getString(4) + "-" + c.getString(5);
-            textView1.setText(data);
-            System.out.println(data);
-        }
+
 
     }
 
@@ -246,6 +213,17 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //    }
 
+    void addAccountLoginFromSQLite() {
+        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
+        System.out.println("----------------------------2---------------------------------");
+        Cursor c = database.query("account", null, null, null, null, null, null);
+        System.out.println("----------------------------3---------------------------------");
+        while (c.moveToNext()) {
+            String data = c.getString(0) + "-" + c.getString(1) + "-" + c.getString(2) + "-" + c.getString(3) + "-" + c.getString(4) + "-" + c.getString(5);
+            textView1.setText(data);
+            System.out.println(data);
+        }
+    }
     private void init() {
         textView1 = findViewById(R.id.textView1);
 //        button1 = findViewById(R.id.button1);
@@ -253,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         listViewMenu = findViewById(R.id.listViewMenu);
 //        listViewOrder = findViewById(R.id.listViewOrder);
         dataRestaurant = new ArrayList<>();
+
 
 //        listViewMenu.setAdapter(menuAdapter);
     }

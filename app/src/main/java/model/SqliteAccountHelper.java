@@ -41,8 +41,9 @@ public class SqliteAccountHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Handle database upgrade tasks here
     }
-    public static void addAccountLogin(Account account) {
-        SQLiteDatabase database= null;
+    public void addAccountLogin(Account account) {
+//        SQLiteDatabase database= null;
+        SQLiteDatabase database = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TYPE, account.getType());
         contentValues.put(COLUMN_USERNAME, account.getUsername());
@@ -58,24 +59,99 @@ public class SqliteAccountHelper extends SQLiteOpenHelper {
         }
 
     }
+
+//    public void setAccountLogin(String type,Account account) {
+//        SQLiteDatabase database = getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put(COLUMN_USERNAME, account.getUsername());
+//        values.put(COLUMN_PASSWORD, account.getPassword());
+//        values.put(COLUMN_PHONE, account.getPhone());
+//        values.put(COLUMN_EMAIL, account.getEmail());
+//        values.put(COLUMN_ADDRESS, account.getAddress());
+//        // Cập nhật dữ liệu
+//        database.update(TABLE_NAME_ACCOUNT, values, COLUMN_TYPE + " = ?", new String[]{type});
+//        database.close();
+//    }
+//    public Account getData(String username) {
+//        SQLiteDatabase db = getReadableDatabase();
+//
+//        String query = "SELECT * FROM " + TABLE_NAME_ACCOUNT + " WHERE username = ?";
+//
+//        Cursor cursor = db.rawQuery(query, new String[]{username});
+//
+//        Account account = null;
+//
+//        if (cursor.moveToFirst()) { // Use moveToFirst instead of moveToNext
+//            account = new Account();
+//            int idColumnIndex = cursor.getColumnIndex(COLUMN_TYPE);
+//            if (idColumnIndex >= 0) {
+//                account.setType(cursor.getString(idColumnIndex));
+//            }
+//            int usernameColumnIndex = cursor.getColumnIndex(COLUMN_USERNAME);
+//            if (usernameColumnIndex >= 0) {
+//                account.setUsername(cursor.getString(usernameColumnIndex));
+//            }
+//            int passwordColumnIndex = cursor.getColumnIndex(COLUMN_PASSWORD);
+//            if (passwordColumnIndex >= 0) {
+//                account.setPassword(cursor.getString(passwordColumnIndex));
+//            }
+//        }
+//        cursor.close();
+//        db.close();
+//
+//        return account;
+//    }
+
+
+//    public boolean isTableEmpty(String tableName) {
+//        SQLiteDatabase db = getReadableDatabase();
+//
+//        long count = db.query(tableName, null, null, null, null, null, null).getCount();
+//
+//        db.close();
+//
+//        return count == 0;
+//    }
+
+
+
+
+
     // Truy vấn dữ liệu từ cơ sở dữ liệu
-    public Cursor getData(String type) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME_ACCOUNT + " WHERE " + COLUMN_TYPE + " = '" + type + "'";
-        return db.rawQuery(query, null);
-    }
+//    public Cursor getData(String type) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        String query = "SELECT * FROM " + TABLE_NAME_ACCOUNT + " WHERE " + COLUMN_TYPE + " = '" + type + "'";
+//        return db.rawQuery(query, null);
+//    }
     // Get single account
-    public Account getAccount(String type) {
+    public Account getAccount() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME_ACCOUNT, new String[]{COLUMN_TYPE,COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_ADDRESS}, COLUMN_TYPE + "=?",
-                new String[]{String.valueOf(type)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME_ACCOUNT, new String[]{COLUMN_TYPE, COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_ADDRESS},
+                null, null, null, null, null);
+
         if (cursor != null)
             cursor.moveToFirst();
 
+        if (cursor.getCount() == 0) {
+            // Handle the case where no accounts are found
+            return null; // Or take other appropriate action
+        }
+
         Account account = new Account(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
-        // return account
         return account;
     }
+//
+//    public Account getAccount(String type) {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.query(TABLE_NAME_ACCOUNT, new String[]{COLUMN_TYPE,COLUMN_USERNAME, COLUMN_PASSWORD, COLUMN_PHONE, COLUMN_EMAIL, COLUMN_ADDRESS}, COLUMN_TYPE + "=?",
+//                new String[]{String.valueOf(type)}, null, null, null, null);
+//        if (cursor != null)
+//            cursor.moveToFirst();
+//
+//        Account account = new Account(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+//        // return account
+//        return account;
+//    }
 
     // Update account
     public int updateAccount(Account account) {
