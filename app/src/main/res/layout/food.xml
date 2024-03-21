@@ -107,7 +107,7 @@
                 android:scrollbarStyle="outsideInset"
                 android:verticalScrollbarPosition="right"
                 android:visibility="visible"
-                tools:srcCompat="@android:drawable/ic_input_add" />
+                tools:srcCompat="@android:drawable/ic_menu_myplaces" />
         </LinearLayout>
     </LinearLayout>
 

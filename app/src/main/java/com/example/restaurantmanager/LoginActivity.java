@@ -11,6 +11,8 @@ import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
 
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private RadioButton radioButtonRestaurantLogin;
     private RadioButton radioButtonClientLogin;
-
+    SQLiteDatabase database=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,14 +83,36 @@ public class LoginActivity extends AppCompatActivity {
         buttonCreateNewAccount = findViewById(R.id.buttonCreateNewAccount);
         radioButtonRestaurantLogin = findViewById(R.id.radioButtonRestaurantLogin);
         radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
-        SqliteAccountHelper dbHelper = new SqliteAccountHelper(this);
-            Account account= dbHelper.getAccount();
-            if(account!=null){
-                System.out.println("account----------------------"+account.getUsername());
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        System.out.println("init-------------------------------------------------");
+        //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
+//        SqliteAccountHelper dbHelper = new SqliteAccountHelper(this);
+//        System.out.println("dbHelper-------------------------------------------------");
+//            Account account= dbHelper.getAccount();
+//        System.out.println("account-------------------------------------------------");
+//
+//            if(account!=null){
+//                System.out.println("load----------------------"+account.getUsername());
+////                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                if (account.getType().equals("restaurant")) {
+//                    Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                }
+//            }
+        //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
+        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
+        Cursor c = database.query("account", null, null, null, null, null, null);
+        System.out.println("----------------------------3---------------------------------");
+        int a=0;
+        while (c.moveToNext()) {
+            if (c.getString(1)!=null){
+                System.out.println("load"+a+"----------------------"+c.getString(1));
+                a++;
+                Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
                 startActivity(intent);
                 finish();
             }
+        }
         }
 
 

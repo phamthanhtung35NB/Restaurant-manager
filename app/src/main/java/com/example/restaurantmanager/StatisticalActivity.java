@@ -1,8 +1,6 @@
 package com.example.restaurantmanager;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,30 +8,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class HomeRestaurantActivity extends AppCompatActivity {
+public class StatisticalActivity extends AppCompatActivity {
 
-    LinearLayout lineButtonsMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_home_restaurant);
-        init();
-        addEvents();
+        setContentView(R.layout.activity_statistical);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-    }
-    void init(){
-        lineButtonsMenu = findViewById(R.id.lineButtonsMenu);
-
-    }
-    void addEvents(){
-        lineButtonsMenu.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeRestaurantActivity.this, MainActivity.class);
-            startActivity(intent);
         });
     }
 }

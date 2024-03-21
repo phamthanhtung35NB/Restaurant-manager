@@ -24,17 +24,39 @@ public class SqliteAccountHelper extends SQLiteOpenHelper {
     public SqliteAccountHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+//    @Override
+//    public void onCreate(SQLiteDatabase db) {
+//        String CREATE_ACCOUNT_TABLE = "CREATE TABLE " + TABLE_NAME_ACCOUNT + "("
+//                + COLUMN_TYPE + " TEXT PRIMARY KEY,"
+//                + COLUMN_USERNAME + " TEXT NOT NULL,"
+//                + COLUMN_PASSWORD + " TEXT NOT NULL,"
+//                + COLUMN_PHONE + " TEXT NOT NULL,"
+//                + COLUMN_EMAIL + " TEXT NOT NULL,"
+//                + COLUMN_ADDRESS + " TEXT" + ")";
+//        db.execSQL(CREATE_ACCOUNT_TABLE);
+//    }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_ACCOUNT_TABLE = "CREATE TABLE " + TABLE_NAME_ACCOUNT + "("
-                + COLUMN_TYPE + " TEXT PRIMARY KEY,"
-                + COLUMN_USERNAME + " TEXT NOT NULL,"
-                + COLUMN_PASSWORD + " TEXT NOT NULL,"
-                + COLUMN_PHONE + " TEXT NOT NULL,"
-                + COLUMN_EMAIL + " TEXT NOT NULL,"
-                + COLUMN_ADDRESS + " TEXT" + ")";
-        db.execSQL(CREATE_ACCOUNT_TABLE);
+        // Check if table exists before creating it
+        if (!hasTable(db, TABLE_NAME_ACCOUNT)) {
+            String CREATE_ACCOUNT_TABLE = "CREATE TABLE " + TABLE_NAME_ACCOUNT + "("
+                    + COLUMN_TYPE + " TEXT PRIMARY KEY,"
+                    + COLUMN_USERNAME + " TEXT NOT NULL,"
+                    + COLUMN_PASSWORD + " TEXT NOT NULL,"
+                    + COLUMN_PHONE + " TEXT NOT NULL,"
+                    + COLUMN_EMAIL + " TEXT NOT NULL,"
+                    + COLUMN_ADDRESS + " TEXT" + ")";
+            db.execSQL(CREATE_ACCOUNT_TABLE);
+        }
     }
+
+    private boolean hasTable(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "'", null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
+    }
+
 
 
     @Override
