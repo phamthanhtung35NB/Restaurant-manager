@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class HomeRestaurantActivity extends AppCompatActivity {
 
     LinearLayout lineButtonsMenu;
+    LinearLayout lineButtonsTable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +29,15 @@ public class HomeRestaurantActivity extends AppCompatActivity {
     }
     void init(){
         lineButtonsMenu = findViewById(R.id.lineButtonsMenu);
-
+        lineButtonsTable = findViewById(R.id.lineButtonsTable);
     }
     void addEvents(){
         lineButtonsMenu.setOnClickListener(v -> {
             Intent intent = new Intent(HomeRestaurantActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+        lineButtonsTable.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeRestaurantActivity.this, DinnerTableActivity.class);
             startActivity(intent);
         });
     }

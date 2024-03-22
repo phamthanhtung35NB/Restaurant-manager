@@ -88,6 +88,7 @@
             android:background="#1D201C" />
 
         <LinearLayout
+            android:id="@+id/lineButtonsTable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

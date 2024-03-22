@@ -19,6 +19,9 @@
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
         <activity
+            android:name=".DinnerTableActivity"
+            android:exported="false" />
+        <activity
             android:name=".StatisticalActivity"
             android:exported="false" />
         <activity
