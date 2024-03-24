@@ -32,6 +32,13 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
 
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/add" />
+
         </LinearLayout>
 
         <ListView

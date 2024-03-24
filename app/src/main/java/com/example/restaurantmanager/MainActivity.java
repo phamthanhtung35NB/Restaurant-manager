@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     TextView textView1;
 //    Button button1;
     ImageButton imageButtonOrder;
-
+    ImageButton imageButtonMenuOp;
     ListView listViewMenu;
 
     public static ArrayList<MenuRestaurant> dataRestaurant ;
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         readDataFromFireBase();
         addAccountLoginFromSQLite();
     }
+
 
     private void readDataFromFireBase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -119,7 +120,44 @@ public class MainActivity extends AppCompatActivity {
                 listViewMenu.setAdapter(menuAdapter);
     }
 
+    private void addDataToFireBase(MenuRestaurant menuRestaurant) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(type).document(accountId)
+                .update("menuRestaurant." + menuRestaurant.getId(), menuRestaurant.toMap())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data added successfully for account: " + accountId);
+                        // Optionally refresh the UI to reflect the new data
 
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error adding data for account: " + accountId, e);
+                    }
+                });
+    }
+    private void updateDataInFireBase(String menuId, MenuRestaurant updatedMenuRestaurant) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(type).document(accountId)
+                .update("menuRestaurant." + menuId, updatedMenuRestaurant.toMap())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Data updated successfully for account: " + accountId);
+                        // Optionally refresh the UI to reflect the changes
+//                        refreshData();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error updating data for account: " + accountId, e);
+                    }
+                });
+    }
 
     private void addEvents() {
 //        button1.setOnClickListener(v -> {
@@ -131,7 +169,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         System.out.println("----------------------------1---------------------------------");
-
+        imageButtonMenuOp.setOnClickListener(v -> {
+//            addDataToFireBase(new MenuRestaurant("4", "Cơm chiên", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
+            updateDataInFireBase("4", new MenuRestaurant("4", "Cơm chiê----n", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
+        });
 
     }
 
@@ -232,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         listViewMenu = findViewById(R.id.listViewMenu);
 //        listViewOrder = findViewById(R.id.listViewOrder);
         dataRestaurant = new ArrayList<>();
-
+        imageButtonMenuOp = findViewById(R.id.imageButtonMenuOp);
 
 //        listViewMenu.setAdapter(menuAdapter);
     }

@@ -9,10 +9,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import model.Account;
 import model.FirestoreHelper;
@@ -29,6 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton radioButtonRestaurant;
     private RadioButton radioButtonClient;
 
+    FirebaseFirestore firestore;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
         textPassword3.setHint("Confirm Password");
         textPhone.setHint("Phone");
         textEmail.setHint("Email");
+        mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
     }
     void addEvents(){
@@ -74,42 +90,101 @@ public class RegisterActivity extends AppCompatActivity {
         String phone = textPhone.getText().toString();
         String email = textEmail.getText().toString();
         String type = "";
-        if (radioButtonClient.isChecked()) {
-            Toast.makeText(RegisterActivity.this, "Client", Toast.LENGTH_SHORT).show();
-            type = "client";
-        } else if (radioButtonRestaurant.isChecked()) {
-            Toast.makeText(RegisterActivity.this, "Restaurant", Toast.LENGTH_SHORT).show();
-        type = "restaurant";
-        }
         if (username.equals("") || password.equals("") || password2.equals("") || phone.equals("") || email.equals("")) {
             Toast.makeText(RegisterActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        if (!password.equals(password2)) {
+            Toast.makeText(RegisterActivity.this, "Mật khẩu không trùng khớp", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // kiểm tra xem username có phải là email không
+        if (!username.contains("@")) {
+            Toast.makeText(RegisterActivity.this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // kiểm tra xem password có đủ mạnh không
+        if (password.length() < 6) {
+            Toast.makeText(RegisterActivity.this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (radioButtonClient.isChecked()) {
+            type = "client";
+
+            Toast.makeText(RegisterActivity.this, "Client", Toast.LENGTH_SHORT).show();
+            mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        System.out.println("tạo tài khoản thành công-----------------------------------------");
+                        // lấy user uid của người dùng hiện tại
+                        String uid = mAuth.getCurrentUser().getUid();
+                        // thêm thông tin người dùng vào firestore  dựa vào uid
+                        Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
+                        // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
+                        DocumentReference documentReference = firestore.collection("client").document(uid);
+                        // thêm thông tin phone và email vào firestore document uid của người dùng
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("phone", phone);
+                        user.put("email", email);
+                        documentReference.set(user).addOnSuccessListener(aVoid -> {
+                            Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                        });
+                        //kiểm tra xem tạo thành công document chưa
+
+                        finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
+                    } else {
+                        Toast.makeText(RegisterActivity.this,"Đã có lỗi xảy ra",Toast.LENGTH_SHORT);
+                    }
+                }
+            });
+        } else if (radioButtonRestaurant.isChecked()) {
+            type = "restaurant";
+            Toast.makeText(RegisterActivity.this, "Restaurant", Toast.LENGTH_SHORT).show();
+            mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        System.out.println("tạo tài khoản thành công-----------------------------------------");
+                        // lấy user uid của người dùng hiện tại
+                        String uid = mAuth.getCurrentUser().getUid();
+                        // thêm thông tin người dùng vào firestore  dựa vào uid
+                        Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
+                        // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
+                        DocumentReference documentReference = firestore.collection("restaurant").document(uid);
+                        // thêm thông tin phone và email vào firestore document uid của người dùng
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("phone", phone);
+                        user.put("email", email);
+                        documentReference.set(user).addOnSuccessListener(aVoid -> {
+                            Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                        });
+                        //kiểm tra xem tạo thành công document chưa
+
+                        finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
+                    } else {
+                        Toast.makeText(RegisterActivity.this,"Đã có lỗi xảy ra",Toast.LENGTH_SHORT);
+                    }
+                }
+            });
         }
         if (type.equals("")) {
             Toast.makeText(RegisterActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!password.equals(password2)) {
-            Toast.makeText(RegisterActivity.this, "Mật khẩu không trùng khớp", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (false==FirestoreHelper.checkDocumentExistence("account", username)) {
-            if (false==FirestoreHelper.checkDocumentExistence("client", username)) {
-                if (password.equals(password2)) {
-                    FirestoreHelper.addAccount(type,new Account(type,username, password, phone, email, ""));
-                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(intent);
-                } else {
-                    Toast.makeText(RegisterActivity.this, "Mật khẩu không trùng khớp", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-            Toast.makeText(RegisterActivity.this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else{
-            Toast.makeText(RegisterActivity.this, "Tài khoản đã tồn tại", Toast.LENGTH_SHORT).show();
-        }
+
+
+
+
+//                    FirestoreHelper.addAccount(type,new Account(type,username, password, phone, email, ""));
+//                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//            startActivity(intent);
+
+
+
+
 
     }
 }

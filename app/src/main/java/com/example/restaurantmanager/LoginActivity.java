@@ -18,6 +18,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 //import android.widget.ProgressBar;
@@ -30,9 +31,17 @@ import android.widget.Toast;
 //import adapter.MenuAdapter;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -62,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     private RadioButton radioButtonRestaurantLogin;
     private RadioButton radioButtonClientLogin;
     SQLiteDatabase database=null;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +93,8 @@ public class LoginActivity extends AppCompatActivity {
         buttonCreateNewAccount = findViewById(R.id.buttonCreateNewAccount);
         radioButtonRestaurantLogin = findViewById(R.id.radioButtonRestaurantLogin);
         radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         System.out.println("init-------------------------------------------------");
         //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
 //        SqliteAccountHelper dbHelper = new SqliteAccountHelper(this);
@@ -100,25 +112,29 @@ public class LoginActivity extends AppCompatActivity {
 //                }
 //            }
         //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
-        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
-        Cursor c = database.query("account", null, null, null, null, null, null);
-        System.out.println("----------------------------3---------------------------------");
-        int a=0;
-        while (c.moveToNext()) {
-            if (c.getString(1)!=null){
-                System.out.println("load"+a+"----------------------"+c.getString(1));
-                a++;
-                Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }
-        }
+//        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
+//        Cursor c = database.query("account", null, null, null, null, null, null);
+//        System.out.println("----------------------------3---------------------------------");
+//        int a=0;
+//        while (c.moveToNext()) {
+//            if (c.getString(1)!=null){
+//                System.out.println("load"+a+"----------------------"+c.getString(1));
+//                a++;
+//                Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }
+    }
 
 
     void addEvents() {
-        buttonLogin.setOnClickListener(v -> {
-            login();
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+
         });
         buttonCreateNewAccount.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -127,8 +143,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     private void login() {
-        final String username = textViewUsername.getText().toString();
-        final String password = textPassword.getText().toString();
+        System.out.println("login-------------------------------------------------");
+        String username = textViewUsername.getText().toString();
+        String password = textPassword.getText().toString();
         if (TextUtils.isEmpty(username)) {
             textViewUsername.setError("Vui lòng nhập tên đăng nhập");
             return;
@@ -137,95 +154,92 @@ public class LoginActivity extends AppCompatActivity {
             textPassword.setError("Vui lòng nhập mật khẩu");
             return;
         }
-        db = FirebaseFirestore.getInstance();
-        if (radioButtonClientLogin.isChecked()) {
-            loginClient(username, password);
-        } else if (radioButtonRestaurantLogin.isChecked()) {
-            loginRestaurant(username, password);
-        }
-        else {
-            Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
-        }
+        mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // kiểm tra user uid của người dùng thuộc collection client hay collection restaurant
+                    String uid = mAuth.getCurrentUser().getUid();
+                    if (radioButtonClientLogin.isChecked()) {
+                        loginClient(uid);
+                    } else if (radioButtonRestaurantLogin.isChecked()) {
+                        loginRestaurant(uid);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
+                    }
+//                    finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
+                } else {
+                    Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+//    private void login() {
+//        final String username = textViewUsername.getText().toString();
+//        final String password = textPassword.getText().toString();
+//        if (TextUtils.isEmpty(username)) {
+//            textViewUsername.setError("Vui lòng nhập tên đăng nhập");
+//            return;
+//        }
+//        if (TextUtils.isEmpty(password)) {
+//            textPassword.setError("Vui lòng nhập mật khẩu");
+//            return;
+//        }
+//        db = FirebaseFirestore.getInstance();
+//        if (radioButtonClientLogin.isChecked()) {
+//            loginClient(username, password);
+//        } else if (radioButtonRestaurantLogin.isChecked()) {
+//            loginRestaurant(username, password);
+//        }
+//        else {
+//            Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    void loginRestaurant(String uid){
+        DocumentReference documentReference = db.collection("restaurant").document(uid);
+        //kiểm tra xem uid có tồn tại trong collection client không nếu không thì kiểm tra trong collection restaurant
+        documentReference.get().addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                // nếu uid tồn tại trong collection client thì lấy thông tin phone và email của người dùng
+                DocumentSnapshot document = task1.getResult();
+                if (document.exists()) {
+                    String phone = document.getString("phone");
+                    String email = document.getString("email");
+
+                    Toast.makeText(LoginActivity.this, "Login với tài khoản nhà hàng phone: " + phone, Toast.LENGTH_SHORT).show();
+//                                insertAccount("client", username, password, phone, email, address);
+                    Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Không tồn tại tài khoản nhà hàng", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    void loginRestaurant(String username, String password){
-        db.collection("restaurant")
-                .document(username)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        System.out.println("onComplete-------------------------------------------------");
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String storedPassword = document.getString("password");
-                                String username1 = document.getString("username");
-                                String phone = document.getString("phone");
-                                String email = document.getString("email");
-                                String address = document.getString("address");
-                                // So sánh password nhập vào với password lưu trong Firestore
-                                if (storedPassword != null && storedPassword.equals(password)) {
-                                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                    System.out.println("Đăng nhập thành công-----------------------------------------");
-                                    insertAccount("restaurant", username1, storedPassword, phone, email, address);
-                                    System.out.println("insertAccount----5645654645------------------------------------");
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
-                                } else {
-                                    // Sai mật khẩu
-                                    Toast.makeText(LoginActivity.this, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                // Tài khoản không tồn tại
-                                Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            // Lỗi khi thực hiện truy vấn
-                            Toast.makeText(LoginActivity.this, "Lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
 
-
-    void loginClient(String username, String password){
-        db.collection("client")
-                .document(username)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        System.out.println("onComplete-------------------------------------------------");
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String storedPassword = document.getString("password");
-                                String phone = document.getString("phone");
-                                String email = document.getString("email");
-                                String address = document.getString("address");
-                                // So sánh password nhập vào với password lưu trong Firestore
-                                if (storedPassword != null && storedPassword.equals(password)) {
-                                    Toast.makeText(LoginActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                                    insertAccount("client", username, password, phone, email, address);
-                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
-                                } else {
-                                    // Sai mật khẩu
-                                    Toast.makeText(LoginActivity.this, "Sai mật khẩu", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                // Tài khoản không tồn tại
-                                Toast.makeText(LoginActivity.this, "Tài khoản không tồn tại", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            // Lỗi khi thực hiện truy vấn
-                            Toast.makeText(LoginActivity.this, "Lỗi: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+    void loginClient(String uid){
+        DocumentReference documentReference = db.collection("client").document(uid);
+        //kiểm tra xem uid có tồn tại trong collection client không nếu không thì kiểm tra trong collection restaurant
+        documentReference.get().addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                // nếu uid tồn tại trong collection client thì lấy thông tin phone và email của người dùng
+                DocumentSnapshot document = task1.getResult();
+                if (document.exists()) {
+                    String phone = document.getString("phone");
+                    String email = document.getString("email");
+                    Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+//                                insertAccount("client", username, password, phone, email, address);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Không tồn tại tài khoản khách hàng", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     void insertAccount(String type, String username, String password, String phone, String email, String address){
         SqliteAccountHelper databaseHelper =new SqliteAccountHelper(this);

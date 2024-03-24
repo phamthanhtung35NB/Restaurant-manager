@@ -1,6 +1,9 @@
 
 package model;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MenuRestaurant implements Serializable{
     private String id;
     private String name;
@@ -16,6 +19,14 @@ public class MenuRestaurant implements Serializable{
     }
     //constructor
     public MenuRestaurant() {
+    }
+    public Map<String, Object> toMap() {
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("name", this.name);
+        dataMap.put("description", this.description);
+        dataMap.put("price", this.price);
+        dataMap.put("image", this.image);
+        return dataMap;
     }
     public MenuRestaurant(String id, String name, String description, double price, String image) {
         this.id = id;
