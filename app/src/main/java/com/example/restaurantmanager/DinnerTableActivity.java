@@ -1,7 +1,10 @@
 package com.example.restaurantmanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +20,8 @@ import model.Table;
 
 public class DinnerTableActivity extends AppCompatActivity {
     GridView gvTable;
+    ImageButton imageButtonExit;
+    TextView textViewSummary;
     public static ArrayList<Table> arrTableData;
     TableAdapter adapterTable;
     @Override
@@ -34,6 +39,9 @@ public class DinnerTableActivity extends AppCompatActivity {
     }
     public void init(){
         gvTable = findViewById(R.id.gvTable);
+        imageButtonExit = findViewById(R.id.imageButtonExit);
+        textViewSummary = findViewById(R.id.textViewSummary);
+
         arrTableData = new ArrayList<>();
         arrTableData.add(new Table(1,"Bàn 1","---------------------","Trống","https://i.imgur.com/ikbFUzX.png"));
         arrTableData.add(new Table(2,"Bàn 2","--------------------- 2","Trống","https://i.imgur.com/ikbFUzX.png"));
@@ -49,5 +57,10 @@ public class DinnerTableActivity extends AppCompatActivity {
         gvTable.setAdapter(adapterTable);
     }
     public void addEvent(){
+        imageButtonExit.setOnClickListener(v -> {
+            Intent intent = new Intent(DinnerTableActivity.this, HomeRestaurantActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }
