@@ -10,18 +10,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.MainActivity;
+import com.example.restaurantmanager.EditFoodActivity;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import model.MenuRestaurant;
+
 
 public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
     //màn hình sử dụng adapter
@@ -42,11 +43,11 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         LayoutInflater inflater = this.context.getLayoutInflater();
         View row = inflater.inflate(this.resource, null);
         TextView textViewId = row.findViewById(R.id.textViewId);
-        TextView textViewName = row.findViewById(R.id.textViewName);
-        TextView textViewDescription = row.findViewById(R.id.textViewDescription);
-        TextView textViewPrice = row.findViewById(R.id.textViewPrice);
+        TextView textViewName = row.findViewById(R.id.edtName);
+        TextView textViewDescription = row.findViewById(R.id.edtDescription);
+        TextView textViewPrice = row.findViewById(R.id.edtPrice);
         ImageView imageViewFood = row.findViewById(R.id.imageViewFood);
-        ImageButton imageButtonAdd = row.findViewById(R.id.imageButtonAdd);
+        ImageButton imageButtonSet = row.findViewById(R.id.imageButtonSave);
 
         MenuRestaurant menuRestaurant = this.objects.get(position);
 
@@ -60,7 +61,7 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
                 .into(imageViewFood);
 //        imageViewFood.setImageResource(R.drawable.rice);
 //        imageViewFood.setImageBitmap(BitmapFactory.decodeFile(menuRestaurant.getImage()));
-        imageButtonAdd.setOnClickListener(new View.OnClickListener() {
+        imageButtonSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                //add vào sqlite
@@ -71,6 +72,16 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
 ////                for (int i = 0; i < MainActivity.dataOrder.size(); i++) {
 ////                    Toast.makeText(context, MainActivity.dataOrder.get(i).getName()+MainActivity.dataOrder.get(i).getPrice(), Toast.LENGTH_SHORT).show();
 ////                }
+            //xửa món ăn
+                Intent intent = new Intent(context, EditFoodActivity.class);
+                intent.putExtra("id", menuRestaurant.getId());
+                intent.putExtra("name", menuRestaurant.getName());
+                intent.putExtra("description", menuRestaurant.getDescription());
+                intent.putExtra("price", menuRestaurant.getPrice());
+                intent.putExtra("image", menuRestaurant.getImage());
+                context.startActivity(intent);
+
+
             }
         });
         return row;

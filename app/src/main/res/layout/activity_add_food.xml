@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".EditFoodActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/imageViewFood"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/food_load" />
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewId"
+                    android:layout_width="50dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="id"
+                    android:textStyle="bold|italic" />
+
+                <EditText
+                    android:id="@+id/edtPrice"
+                    android:layout_width="229dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:autoText="false"
+                    android:gravity="right"
+                    android:hint="Price"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:text=" VNĐ"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edtName"
+                android:layout_width="185dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:hint="Name food"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtDescription"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="Description" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+
+        <ImageButton
+            android:id="@+id/imageButtonSave"
+            android:layout_width="425dp"
+            android:layout_height="92dp"
+            android:layout_gravity="center"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            android:scrollbarAlwaysDrawHorizontalTrack="false"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarStyle="outsideInset"
+            android:verticalScrollbarPosition="right"
+            android:visibility="visible"
+            tools:srcCompat="@android:drawable/ic_menu_myplaces" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="#25A80F" />
+</androidx.constraintlayout.widget.ConstraintLayout>

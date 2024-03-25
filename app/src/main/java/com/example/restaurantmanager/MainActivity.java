@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //    Button button1;
     ImageButton imageButtonOrder;
     ImageButton imageButtonMenuOp;
+    ImageButton imageButtonAdd;
     ListView listViewMenu;
 
     public static ArrayList<MenuRestaurant> dataRestaurant ;
@@ -112,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         //print data
-        System.out.println("-------------------------------------------------------------");
         for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
             System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
         }
@@ -120,25 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 listViewMenu.setAdapter(menuAdapter);
     }
 
-    private void addDataToFireBase(MenuRestaurant menuRestaurant) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(type).document(accountId)
-                .update("menuRestaurant." + menuRestaurant.getId(), menuRestaurant.toMap())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data added successfully for account: " + accountId);
-                        // Optionally refresh the UI to reflect the new data
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error adding data for account: " + accountId, e);
-                    }
-                });
-    }
     private void updateDataInFireBase(String menuId, MenuRestaurant updatedMenuRestaurant) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(type).document(accountId)
@@ -168,10 +150,16 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, OderActivity.class);
             startActivity(intent);
         });
-        System.out.println("----------------------------1---------------------------------");
         imageButtonMenuOp.setOnClickListener(v -> {
 //            addDataToFireBase(new MenuRestaurant("4", "Cơm chiên", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
-            updateDataInFireBase("4", new MenuRestaurant("4", "Cơm chiê----n", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
+//            updateDataInFireBase("4", new MenuRestaurant("4", "Cơm chiê----n", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
+        Intent intent = new Intent(MainActivity.this, AddFoodActivity.class);
+        startActivity(intent);
+        });
+        imageButtonAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddFoodActivity.class);
+            startActivity(intent);
+            finish();
         });
 
     }
@@ -256,9 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     void addAccountLoginFromSQLite() {
         database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
-        System.out.println("----------------------------2---------------------------------");
         Cursor c = database.query("account", null, null, null, null, null, null);
-        System.out.println("----------------------------3---------------------------------");
         while (c.moveToNext()) {
             String data = c.getString(0) + "-" + c.getString(1) + "-" + c.getString(2) + "-" + c.getString(3) + "-" + c.getString(4) + "-" + c.getString(5);
             textView1.setText(data);
@@ -274,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
 //        listViewOrder = findViewById(R.id.listViewOrder);
         dataRestaurant = new ArrayList<>();
         imageButtonMenuOp = findViewById(R.id.imageButtonMenuOp);
+        imageButtonAdd = findViewById(R.id.imageButtonAdd);
 
 //        listViewMenu.setAdapter(menuAdapter);
     }
