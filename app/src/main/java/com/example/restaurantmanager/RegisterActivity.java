@@ -79,16 +79,17 @@ public class RegisterActivity extends AppCompatActivity {
     }
     void addEvents(){
         buttonLogin2.setOnClickListener(v -> {
-            login();
+            createAccount();
         });
 
     }
-    void login(){
+    void createAccount(){
+        String email = textEmail.getText().toString();
         String username = textViewUsername2.getText().toString();
         String password = textPassword2.getText().toString();
         String password2 = textPassword3.getText().toString();
         String phone = textPhone.getText().toString();
-        String email = textEmail.getText().toString();
+
         String type = "";
         if (username.equals("") || password.equals("") || password2.equals("") || phone.equals("") || email.equals("")) {
             Toast.makeText(RegisterActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
@@ -100,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
         // kiểm tra xem username có phải là email không
-        if (!username.contains("@")) {
+        if (!email.contains("@")) {
             Toast.makeText(RegisterActivity.this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -113,7 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
             type = "client";
 
             Toast.makeText(RegisterActivity.this, "Client", Toast.LENGTH_SHORT).show();
-            mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -126,6 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
                         DocumentReference documentReference = firestore.collection("client").document(uid);
                         // thêm thông tin phone và email vào firestore document uid của người dùng
                         Map<String, Object> user = new HashMap<>();
+                        user.put("username", username);
                         user.put("phone", phone);
                         user.put("email", email);
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
@@ -142,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
         } else if (radioButtonRestaurant.isChecked()) {
             type = "restaurant";
             Toast.makeText(RegisterActivity.this, "Restaurant", Toast.LENGTH_SHORT).show();
-            mAuth.createUserWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
@@ -155,8 +157,12 @@ public class RegisterActivity extends AppCompatActivity {
                         DocumentReference documentReference = firestore.collection("restaurant").document(uid);
                         // thêm thông tin phone và email vào firestore document uid của người dùng
                         Map<String, Object> user = new HashMap<>();
+                        user.put("username", username);
                         user.put("phone", phone);
                         user.put("email", email);
+//                        // thêm thông tin menu vào firestore document uid của người dùng
+//                        MenuRestaurant menuRestaurant = new MenuRestaurant();
+//                        user.put("menu", menuRestaurant);
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                         });

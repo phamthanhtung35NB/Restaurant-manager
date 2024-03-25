@@ -28,7 +28,7 @@
             android:id="@+id/textViewUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Username"
+            android:hint="Email"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true" />
 
@@ -66,14 +66,14 @@
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Create Account Client    " />
+                android:text="Login Clie  " />
 
             <RadioButton
                 android:id="@+id/radioButtonRestaurantLogin"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Create Account Restaurant" />
+                android:text="Login Restaurant" />
         </RadioGroup>
 
         <TextView
@@ -94,7 +94,7 @@
             android:id="@+id/buttonCreateNewAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="tạo mới" />
+            android:text="Create Account" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

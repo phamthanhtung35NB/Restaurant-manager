@@ -154,6 +154,12 @@ public class LoginActivity extends AppCompatActivity {
             textPassword.setError("Vui lòng nhập mật khẩu");
             return;
         }
+        //1 account cố định để test
+        if (username.equals("admin") && password.equals("admin")) {
+            Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
+            startActivity(intent);
+            finish();
+        }
         mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
