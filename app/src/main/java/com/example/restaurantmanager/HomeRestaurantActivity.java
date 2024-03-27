@@ -33,7 +33,12 @@ public class HomeRestaurantActivity extends AppCompatActivity {
     }
     void addEvents(){
         lineButtonsMenu.setOnClickListener(v -> {
+            Intent intentGet = getIntent();
+            String accountId = intentGet.getStringExtra("uid");
+            String type = intentGet.getStringExtra("type");
             Intent intent = new Intent(HomeRestaurantActivity.this, MainActivity.class);
+            intent.putExtra("type", type);
+            intent.putExtra("uid", accountId);
             startActivity(intent);
         });
         lineButtonsTable.setOnClickListener(v -> {

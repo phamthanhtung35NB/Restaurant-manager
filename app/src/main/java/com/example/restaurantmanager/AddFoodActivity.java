@@ -57,8 +57,15 @@ public class AddFoodActivity extends AppCompatActivity {
         imageViewFood = findViewById(R.id.imageViewFood);
         imageButtonSave = findViewById(R.id.imageButtonSave);
         textViewId.setText("Auto");
+        Intent intent = getIntent();
+        accountId = intent.getStringExtra("uid");
+        System.out.println("-----------------------====idMaxLong: " + accountId);
     }
     void addEvents() {
+        imageViewFood.setOnClickListener(v -> {
+//            TODO: xin cấp quyền máy ảnh + chụp ảnh + lưu ảnh vào strorage(name: đầu gmail+id)+ lấy link + load ảnh
+
+        });
         imageButtonSave.setOnClickListener(v -> {
             //lưu dữ liệu
             String name = edtName.getText().toString();

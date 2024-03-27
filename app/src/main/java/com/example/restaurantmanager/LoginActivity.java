@@ -77,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
         init();
         addEvents();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -215,9 +216,15 @@ public class LoginActivity extends AppCompatActivity {
 
                     Toast.makeText(LoginActivity.this, "Login với tài khoản nhà hàng phone: " + phone, Toast.LENGTH_SHORT).show();
 //                                insertAccount("client", username, password, phone, email, address);
+                    String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
+                    //uid của người dùng
+
+                    intent.putExtra("type", "restaurant");
+                    intent.putExtra("uid", uid1);
+                    System.out.println("bên login-----------------"+uid1);
                     startActivity(intent);
-                    finish();
+//                    finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Không tồn tại tài khoản nhà hàng", Toast.LENGTH_SHORT).show();
                 }
@@ -237,9 +244,13 @@ public class LoginActivity extends AppCompatActivity {
                     String phone = document.getString("phone");
                     String email = document.getString("email");
                     Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    String uid1 = mAuth.getCurrentUser().getUid();
+                    Intent intent = new Intent(LoginActivity.this, HomeClientActivity.class);
+
+                    intent.putExtra("type", "client");
+                    intent.putExtra("uid", uid1);
                     startActivity(intent);
-                    finish();
+//                    finish();
 //                                insertAccount("client", username, password, phone, email, address);
                 } else {
                     Toast.makeText(LoginActivity.this, "Không tồn tại tài khoản khách hàng", Toast.LENGTH_SHORT).show();

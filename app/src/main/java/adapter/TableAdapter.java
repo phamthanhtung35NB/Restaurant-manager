@@ -1,7 +1,10 @@
 package adapter;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.restaurantmanager.HandleQrActivity;
+import com.example.restaurantmanager.LoginActivity;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
 
@@ -56,7 +61,10 @@ public class TableAdapter extends ArrayAdapter<Table> {
         linearLayoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Bàn: "+ table.getName()+"", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, HandleQrActivity.class);
+                intent.putExtra("table", table.getId()+"");
+                context.startActivity(intent);
 //                //add vào sqlite
 //                MainActivity.dataOrder.add(menuRestaurant);
 ////                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();

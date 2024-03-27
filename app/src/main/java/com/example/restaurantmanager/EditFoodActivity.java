@@ -29,8 +29,8 @@ public class EditFoodActivity extends AppCompatActivity {
     TextView textViewId;
     ImageView imageViewFood;
     ImageButton imageButtonSave;
-    public static String accountId = "tung";
-    public static String type = "restaurant";
+    String accountId = MainActivity.accountId;
+    public static final String type = "restaurant";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +65,10 @@ public class EditFoodActivity extends AppCompatActivity {
 
     }
     void addEvents() {
+        imageViewFood.setOnClickListener(v -> {
+//            TODO: xin cấp quyền máy ảnh + chụp ảnh + lưu ảnh vào strorage(name: đầu gmail+id)+ lấy link + load ảnh
+
+        });
         imageButtonSave.setOnClickListener(v -> {
             //lưu dữ liệu
             String name = edtName.getText().toString();

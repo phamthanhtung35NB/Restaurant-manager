@@ -46,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     SQLiteDatabase database=null;
 
     public static String accountId = "tung";
-    public static String type = "restaurant";
+    final String type = "restaurant";
+//String accountId ;
+//    String type ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         addAccountLoginFromSQLite();
     }
 
-
+    //read data from firebase nếu null thì tạo 1 dữ liêu mẫu
     private void readDataFromFireBase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(type).document(accountId)
@@ -93,15 +95,21 @@ public class MainActivity extends AppCompatActivity {
                                     // Tạo đối tượng MenuRestaurant từ dữ liệu thu được
                                     MenuRestaurant menuRestaurant_ = new MenuRestaurant(menuId, name, description, price, image);
                                     dataRestaurant.add(menuRestaurant_);
+                                    System.out.println("-----------------------------(-1))");
                                 }
+                                System.out.println("-----------------------------0");
                                 menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
                                 listViewMenu.setAdapter(menuAdapter);
 
-
+                                System.out.println("----------------------1");
                             } else {
                                 Log.d(TAG, "No menuRestaurant found for account: " + accountId);
+                                System.out.println("----------------------No menuRestaurant found for account: " + accountId);
+                                MenuRestaurant menuRestaurant_ = new MenuRestaurant("0","Name","Description",0.0,"https://i.imgur.com/ikbFUzX.png");
+                                dataRestaurant.add(menuRestaurant_);
                             }
                         } else {
+                            System.out.println("----------------------2");
                             Log.d(TAG, "No such account exists with ID: " + accountId);
                         }
                     }
@@ -110,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e(TAG, "Error getting account data for ID: " + accountId, e);
+                        System.out.println("------------------------------3");
                     }
                 });
         //print data
@@ -146,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
 ////            onClickReadData();
 //
 //        });
+        System.out.println("1111111111111111111111111111111111111111111");
+        System.out.println(accountId);
+        System.out.println(type);
         imageButtonOrder.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, OderActivity.class);
             startActivity(intent);
@@ -158,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         });
         imageButtonAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddFoodActivity.class);
+            intent.putExtra("uid", accountId);
             startActivity(intent);
             finish();
         });
@@ -253,6 +266,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void init() {
+        //lấy Intent từ activity trước
+        Intent intent = getIntent();
+        accountId = intent.getStringExtra("uid");
+//        type = intent.getStringExtra("type");
+        System.out.println("000000000000000000000000000000");
+        System.out.println(accountId);
+        System.out.println(type);
         textView1 = findViewById(R.id.textView1);
 //        button1 = findViewById(R.id.button1);
         imageButtonOrder = findViewById(R.id.imageButtonOrder);
