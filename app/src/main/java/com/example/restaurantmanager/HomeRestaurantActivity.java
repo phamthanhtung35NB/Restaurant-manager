@@ -14,6 +14,8 @@ public class HomeRestaurantActivity extends AppCompatActivity {
 
     LinearLayout lineButtonsMenu;
     LinearLayout lineButtonsTable;
+    String accountId = "";
+    String type = "restaurant";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +32,13 @@ public class HomeRestaurantActivity extends AppCompatActivity {
     void init(){
         lineButtonsMenu = findViewById(R.id.lineButtonsMenu);
         lineButtonsTable = findViewById(R.id.lineButtonsTable);
+        Intent intentGet = getIntent();
+        accountId = intentGet.getStringExtra("uid");
+        type = intentGet.getStringExtra("type");
     }
     void addEvents(){
         lineButtonsMenu.setOnClickListener(v -> {
-            Intent intentGet = getIntent();
-            String accountId = intentGet.getStringExtra("uid");
-            String type = intentGet.getStringExtra("type");
+
             Intent intent = new Intent(HomeRestaurantActivity.this, MainActivity.class);
             intent.putExtra("type", type);
             intent.putExtra("uid", accountId);
@@ -43,6 +46,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
         });
         lineButtonsTable.setOnClickListener(v -> {
             Intent intent = new Intent(HomeRestaurantActivity.this, DinnerTableActivity.class);
+            intent.putExtra("uid", accountId);
             startActivity(intent);
         });
     }

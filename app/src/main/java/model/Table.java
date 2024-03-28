@@ -9,7 +9,7 @@ public class Table {
     private String describe;
     private String stateEmpty;
     private String image;
-    private TreeMap<String,MenuRestaurant> menuRestaurant=new TreeMap<>();
+
     public Table() {
     }
     public Table(int id, String name,String describe, String stateEmpty, String image) {
@@ -20,14 +20,13 @@ public class Table {
         this.describe=describe;
     }
 
-    public Table(int id, String name,String describe, String stateEmpty, String image, TreeMap<String, MenuRestaurant> menuRestaurant) {
-        this.id = id;
-        this.name = name;
-        this.describe = describe;
-        this.stateEmpty = stateEmpty;
-        this.image = image;
-        this.menuRestaurant = menuRestaurant;
-    }
+//    public Table(int id, String name,String describe, String stateEmpty, String image) {
+//        this.id = id;
+//        this.name = name;
+//        this.describe = describe;
+//        this.stateEmpty = stateEmpty;
+//        this.image = image;
+//    }
 
     public int getId() {
         return id;
@@ -69,11 +68,14 @@ public class Table {
         this.image = image;
     }
 
-    public TreeMap<String, MenuRestaurant> getMenuRestaurant() {
-        return menuRestaurant;
-    }
-
-    public void setMenuRestaurant(TreeMap<String, MenuRestaurant> menuRestaurant) {
-        this.menuRestaurant = menuRestaurant;
+    @Override
+    public String toString() {
+        return "Table{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", describe='" + describe + '\'' +
+                ", stateEmpty='" + stateEmpty + '\'' +
+                ", image='" + image + '\'' +
+                '}';
     }
 }

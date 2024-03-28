@@ -45,9 +45,9 @@ public class HandleQrActivity extends AppCompatActivity {
     }
 
     void init() throws WriterException {
-        String content = "tungpham010203/";
+        String content = "";
         Intent intent = getIntent();
-        String tableNumber = intent.getStringExtra("table"); // Assuming "table" is the key
+        String tableNumber = intent.getStringExtra("uid");
 
         // Check if table number is available from intent
         if (tableNumber != null && !tableNumber.isEmpty()) {

@@ -43,6 +43,22 @@
                     android:textStyle="bold|italic" />
 
                 <EditText
+                    android:id="@+id/edtName"
+                    android:layout_width="359dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:text="Name"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <EditText
                     android:id="@+id/edtPrice"
                     android:layout_width="229dp"
                     android:layout_height="match_parent"
@@ -52,24 +68,17 @@
                     android:textStyle="italic" />
 
                 <TextView
-                    android:layout_width="30dp"
+                    android:layout_width="44dp"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:text=" VNĐ"
                     android:textStyle="italic" />
             </LinearLayout>
 
             <EditText
-                android:id="@+id/edtName"
-                android:layout_width="185dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:text="Name"
-                android:textStyle="bold" />
-
-            <EditText
                 android:id="@+id/edtDescription"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="64dp"
                 android:text="TextView" />
 
         </LinearLayout>
@@ -85,7 +94,7 @@
             android:layout_height="92dp"
             android:layout_gravity="center"
             android:cropToPadding="false"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:scrollbarAlwaysDrawHorizontalTrack="false"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarStyle="outsideInset"

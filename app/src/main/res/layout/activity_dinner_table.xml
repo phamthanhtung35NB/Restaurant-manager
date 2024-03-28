@@ -22,6 +22,13 @@
             android:scaleType="centerInside"
             app:srcCompat="@drawable/logout" />
 
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="58dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/add" />
+
         <TextView
             android:layout_width="10dp"
             android:layout_height="match_parent" />

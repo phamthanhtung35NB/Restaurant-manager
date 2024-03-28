@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.restaurantmanager.DinnerTableActivity;
 import com.example.restaurantmanager.HandleQrActivity;
 import com.example.restaurantmanager.LoginActivity;
 import com.example.restaurantmanager.R;
@@ -63,7 +64,8 @@ public class TableAdapter extends ArrayAdapter<Table> {
             public void onClick(View v) {
                 Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, HandleQrActivity.class);
-                intent.putExtra("table", table.getId()+"");
+                String qr = DinnerTableActivity.accountId+"_"+table.getId()+"";
+                intent.putExtra("uid", qr);
                 context.startActivity(intent);
 //                //add vào sqlite
 //                MainActivity.dataOrder.add(menuRestaurant);
