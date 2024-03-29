@@ -2,6 +2,7 @@ package com.example.restaurantmanager.MenuRestaurant.Table;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,11 +28,12 @@ import model.Table;
 
 public class DinnerTableActivity extends AppCompatActivity {
     GridView gvTable;
-    ImageButton imageButtonExit,imageButtonAdd;
+    ImageButton imageButtonExit,imageButtonAddTable;
     TextView textViewSummary;
     public static ArrayList<Table> arrTableData;
     TableAdapter adapterTable;
     public static String accountId = "";
+    public static int idTableMax = 0;
     String type = "restaurant";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,7 @@ public class DinnerTableActivity extends AppCompatActivity {
         gvTable = findViewById(R.id.gvTable);
         imageButtonExit = findViewById(R.id.imageButtonExit);
         textViewSummary = findViewById(R.id.textViewSummary);
-        imageButtonAdd = findViewById(R.id.imageButtonAdd);
+        imageButtonAddTable = findViewById(R.id.imageButtonAddTable);
         arrTableData = new ArrayList<>();
         System.out.println("------------------------------------------------------");
         System.out.println("accountId: " + accountId);
@@ -114,6 +116,8 @@ public class DinnerTableActivity extends AppCompatActivity {
                         System.out.println("adapterTable: ---------")   ;
                         gvTable.setAdapter(adapterTable);
                     }
+
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         // Xử lý lỗi
@@ -157,11 +161,14 @@ public class DinnerTableActivity extends AppCompatActivity {
             finish();
         });
         System.out.println("hết event-----------------------------");
-//        imageButtonAdd.setOnClickListener(v -> {
-//            Intent intent = new Intent(DinnerTableActivity.this, AddTableActivity.class);
-//            intent.putExtra("uid",accountId);
-//            startActivity(intent);
-//            finish();
-//        });
+        imageButtonAddTable.setOnClickListener(v -> {
+            Intent intent = new Intent(DinnerTableActivity.this, AddTableActivity.class);
+            intent.putExtra("uid",accountId);
+            intent.putExtra("idMax",idTableMax);
+            startActivity(intent);
+
+        });
     }
+
+
 }
