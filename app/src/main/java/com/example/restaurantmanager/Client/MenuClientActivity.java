@@ -2,6 +2,7 @@ package com.example.restaurantmanager.Client;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class MenuClientActivity extends AppCompatActivity {
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
     TextView textViewInformation;
-    ImageButton imageButtonxoa;
+    ImageButton imageButtonGioHang;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -77,12 +78,18 @@ public class MenuClientActivity extends AppCompatActivity {
         textViewInformation = findViewById(R.id.textViewInformation);
         textViewInformation.setText(text);
         listViewClient = findViewById(R.id.listViewClient);
+        imageButtonGioHang = findViewById(R.id.imageButtonGioHang);
         dataMenuViewClient = new ArrayList<>();
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
 //        listViewClient.setAdapter(menuClientAdapter);
         readDataFromFireBase();
     }
     void addEvents() {
+        imageButtonGioHang.setOnClickListener(v -> {
+            Intent intent = new Intent(MenuClientActivity.this, OrderClientActivity.class);
+
+            startActivity(intent);
+        });
     }
 
     private void readDataFromFireBase() {

@@ -1,9 +1,6 @@
 package adapter;
 
-//import static com.example.restaurantmanager.MenuRestaurant.Menu.MainActivity.oderAdapter;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.restaurantmanager.Client.OrderClientActivity;
-import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DatabaseReference;
@@ -29,14 +25,14 @@ import java.util.List;
 
 import model.MenuRestaurant;
 
-public class OrderAdapter extends ArrayAdapter<MenuRestaurant> {
+public class OrderClientAdapter extends ArrayAdapter<MenuRestaurant> {
     //màn hình sử dụng adapter
     Activity context;
     //layout cho từng dòng muốn hiển thị
     int resource;
     //danh sách nguồn dữ liệu muốn hiển thị lên giao diện
     List<MenuRestaurant> objects;
-    public OrderAdapter(@NonNull Activity context, int resource, @NonNull List<MenuRestaurant> objects) {
+    public OrderClientAdapter(@NonNull Activity context, int resource, @NonNull List<MenuRestaurant> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -73,15 +69,15 @@ public class OrderAdapter extends ArrayAdapter<MenuRestaurant> {
                 Toast.makeText(context, "Xóa thành công", Toast.LENGTH_SHORT).show();
                 //xóa trong database
 
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                    DatabaseReference ref = database.getReference(OderActivity.url).child(menuRestaurant.getId());
+                DatabaseReference ref = database.getReference(OrderClientActivity.URL).child(menuRestaurant.getId());
 
-                    // Xóa dữ liệu
-                    ref.removeValue();
-                    //cập nhật lại listview
-                OderActivity.dataOrder.remove(position);
-                OderActivity.oderAdapter.notifyDataSetChanged();
+                // Xóa dữ liệu
+                ref.removeValue();
+//                làm mới lại listview
+                OrderClientActivity.dataOrderClient.remove(position);
+                OrderClientActivity.orderClientAdapter.notifyDataSetChanged();
 
 
             }
