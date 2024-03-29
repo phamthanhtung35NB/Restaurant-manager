@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.MenuRestaurant.Menu;
 
 import static android.content.ContentValues.TAG;
 
@@ -18,11 +18,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,11 +51,11 @@ public class AddFoodActivity extends AppCompatActivity {
     }
     void init() {
         textViewId = findViewById(R.id.textViewId);
-        edtName = findViewById(R.id.edtName);
-        edtDescription = findViewById(R.id.edtDescription);
-        edtPrice = findViewById(R.id.edtPrice);
-        imageViewFood = findViewById(R.id.imageViewFood);
-        imageButtonSave = findViewById(R.id.imageButtonSave);
+        edtName = findViewById(R.id.textViewNameOrder);
+        edtDescription = findViewById(R.id.textViewDescriptionOrder);
+        edtPrice = findViewById(R.id.textViewPriceOrder);
+        imageViewFood = findViewById(R.id.imageViewFoodOrder);
+        imageButtonSave = findViewById(R.id.imageButtonDelFood);
         textViewId.setText("Auto");
         Intent intent = getIntent();
         accountId = intent.getStringExtra("uid");

@@ -12,6 +12,7 @@ import android.widget.Toast;
 public class SqliteAccountHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME_ACCOUNT = "account";
+    private static final String TABLE_NAME_URL = "order";
     private static final String COLUMN_TYPE = "type";
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_PASSWORD = "password";
@@ -62,6 +63,18 @@ public class SqliteAccountHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Handle database upgrade tasks here
+    }
+    public void addUrl(String url) {
+        SQLiteDatabase database = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_TYPE, "url");
+        contentValues.put(COLUMN_USERNAME, url);
+        long result = database.insert(TABLE_NAME_ACCOUNT, null, contentValues);
+        if (result == -1) {
+            Log.d("TAG", "Fail to insert record!");
+        } else {
+            Log.d("TAG", "Inserted record successfully");
+        }
     }
     public void addAccountLogin(Account account) {
 //        SQLiteDatabase database= null;

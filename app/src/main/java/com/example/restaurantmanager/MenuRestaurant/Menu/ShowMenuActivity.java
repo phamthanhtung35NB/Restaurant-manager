@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.MenuRestaurant.Menu;
 
 import static android.content.ContentValues.TAG;
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
@@ -19,6 +19,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
+import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,7 +33,7 @@ import java.util.Map;
 import adapter.MenuAdapter;
 import model.MenuRestaurant;
 
-public class MainActivity extends AppCompatActivity {
+public class ShowMenuActivity extends AppCompatActivity {
 
     TextView textView1;
 //    Button button1;
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         //setContentView truyền layout vào
         //R là lớp tài nguyên, layout là thư mục chứa layout, activity_main là file layout
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_show_menu);
         init();
         addEvents();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                     System.out.println("-----------------------------(-1))");
                                 }
                                 System.out.println("-----------------------------0");
-                                menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
+                                menuAdapter = new MenuAdapter(ShowMenuActivity.this, R.layout.food, dataRestaurant);
                                 listViewMenu.setAdapter(menuAdapter);
 
                                 System.out.println("----------------------1");
@@ -122,10 +124,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         //print data
-        for (MenuRestaurant menuRestaurant : MainActivity.dataRestaurant) {
+        for (MenuRestaurant menuRestaurant : ShowMenuActivity.dataRestaurant) {
             System.out.println(menuRestaurant.getId()+" "+menuRestaurant.getName()+" "+menuRestaurant.getDescription()+" "+menuRestaurant.getPrice()+" "+menuRestaurant.getImage());
         }
-        menuAdapter = new MenuAdapter(MainActivity.this, R.layout.food, dataRestaurant);
+        menuAdapter = new MenuAdapter(ShowMenuActivity.this, R.layout.food, dataRestaurant);
                 listViewMenu.setAdapter(menuAdapter);
     }
 
@@ -159,17 +161,18 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(accountId);
         System.out.println(type);
         imageButtonOrder.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, OderActivity.class);
+            Intent intent = new Intent(ShowMenuActivity.this, OderActivity.class);
             startActivity(intent);
+            finish();
         });
         imageButtonMenuOp.setOnClickListener(v -> {
 //            addDataToFireBase(new MenuRestaurant("4", "Cơm chiên", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
 //            updateDataInFireBase("4", new MenuRestaurant("4", "Cơm chiê----n", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
-        Intent intent = new Intent(MainActivity.this, AddFoodActivity.class);
+        Intent intent = new Intent(ShowMenuActivity.this, AddFoodActivity.class);
         startActivity(intent);
         });
         imageButtonAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddFoodActivity.class);
+            Intent intent = new Intent(ShowMenuActivity.this, AddFoodActivity.class);
             intent.putExtra("uid", accountId);
             startActivity(intent);
             finish();

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:gravity="center|left"
     android:orientation="vertical"
-    tools:context=".DinnerTableActivity">
+    tools:context=".MenuRestaurant.Table.DinnerTableActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.MenuRestaurant.Menu;
 
 import static android.content.ContentValues.TAG;
 
@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,7 +30,7 @@ public class EditFoodActivity extends AppCompatActivity {
     TextView textViewId;
     ImageView imageViewFood;
     ImageButton imageButtonSave;
-    String accountId = MainActivity.accountId;
+    String accountId = ShowMenuActivity.accountId;
     public static final String type = "restaurant";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,11 @@ public class EditFoodActivity extends AppCompatActivity {
     }
     void init() {
         textViewId = findViewById(R.id.textViewId);
-        edtName = findViewById(R.id.edtName);
-        edtDescription = findViewById(R.id.edtDescription);
-        edtPrice = findViewById(R.id.edtPrice);
-        imageViewFood = findViewById(R.id.imageViewFood);
-        imageButtonSave = findViewById(R.id.imageButtonSave);
+        edtName = findViewById(R.id.textViewNameOrder);
+        edtDescription = findViewById(R.id.textViewDescriptionOrder);
+        edtPrice = findViewById(R.id.textViewPriceOrder);
+        imageViewFood = findViewById(R.id.imageViewFoodOrder);
+        imageButtonSave = findViewById(R.id.imageButtonDelFood);
 
         Intent intent = getIntent();
         textViewId.setText(intent.getStringExtra("id"));
@@ -78,7 +79,7 @@ public class EditFoodActivity extends AppCompatActivity {
             String id = getIntent().getStringExtra("id");
             MenuRestaurant updatedMenuRestaurant = new MenuRestaurant(id, name, description, price, image);
             updateDataInFireBase(id, updatedMenuRestaurant);
-            Intent intent = new Intent(EditFoodActivity.this, MainActivity.class);
+            Intent intent = new Intent(EditFoodActivity.this, ShowMenuActivity.class);
             startActivity(intent);
             finish();
         });

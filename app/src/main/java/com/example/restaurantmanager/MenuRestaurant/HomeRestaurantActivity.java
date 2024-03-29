@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.MenuRestaurant;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
+import com.example.restaurantmanager.MenuRestaurant.Table.DinnerTableActivity;
+import com.example.restaurantmanager.R;
 
 public class HomeRestaurantActivity extends AppCompatActivity {
 
@@ -39,7 +43,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
     void addEvents(){
         lineButtonsMenu.setOnClickListener(v -> {
 
-            Intent intent = new Intent(HomeRestaurantActivity.this, MainActivity.class);
+            Intent intent = new Intent(HomeRestaurantActivity.this, ShowMenuActivity.class);
             intent.putExtra("type", type);
             intent.putExtra("uid", accountId);
             startActivity(intent);

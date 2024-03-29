@@ -26,8 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import model.Account;
-import model.FirestoreHelper;
+
 import model.MenuRestaurant;
 
 public class RegisterActivity extends AppCompatActivity {

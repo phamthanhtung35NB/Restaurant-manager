@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <!-- // cấp quyền -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -21,29 +22,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
+
+
         <activity
-            android:name=".AddTableActivity"
+            android:name=".MenuRestaurant.Table.AddTableActivity"
             android:exported="false" />
         <activity
             android:name=".HandleQrActivity"
             android:exported="false" />
         <activity
-            android:name=".AddFoodActivity"
+            android:name=".MenuRestaurant.Menu.AddFoodActivity"
             android:exported="false" />
         <activity
-            android:name=".EditFoodActivity"
+            android:name=".MenuRestaurant.Menu.EditFoodActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeClientActivity"
+            android:name=".Client.HomeClientActivity"
             android:exported="false" />
         <activity
-            android:name=".DinnerTableActivity"
+            android:name=".MenuRestaurant.Table.DinnerTableActivity"
             android:exported="false" />
         <activity
             android:name=".StatisticalActivity"
             android:exported="false" />
         <activity
-            android:name=".HomeRestaurantActivity"
+            android:name=".MenuRestaurant.HomeRestaurantActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -70,7 +73,7 @@
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/actions" /> -->
         <activity
-            android:name=".OderActivity"
+            android:name=".MenuRestaurant.Order.OderActivity"
             android:exported="false" /> <!-- <activity -->
         <!-- android:name=".ui.login.LoginActivity" -->
         <!-- android:exported="false" -->
@@ -85,7 +88,7 @@
         <!-- </intent-filter> -->
         <!-- </activity> -->
         <activity
-            android:name=".MainActivity"
+            android:name=".MenuRestaurant.Menu.ShowMenuActivity"
             android:exported="false"
             android:label="@string/title_activity_login" /> <!-- màn hình chạy trước -->
         <activity

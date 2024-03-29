@@ -1,6 +1,6 @@
 package adapter;
 
-//import static com.example.restaurantmanager.MainActivity.oderAdapter;
+//import static com.example.restaurantmanager.MenuRestaurant.Menu.MainActivity.oderAdapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -15,7 +15,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.EditFoodActivity;
+import com.example.restaurantmanager.MenuRestaurant.Menu.EditFoodActivity;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
 
@@ -43,11 +43,11 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         LayoutInflater inflater = this.context.getLayoutInflater();
         View row = inflater.inflate(this.resource, null);
         TextView textViewId = row.findViewById(R.id.textViewId);
-        TextView textViewName = row.findViewById(R.id.edtName);
-        TextView textViewDescription = row.findViewById(R.id.edtDescription);
-        TextView textViewPrice = row.findViewById(R.id.edtPrice);
-        ImageView imageViewFood = row.findViewById(R.id.imageViewFood);
-        ImageButton imageButtonSet = row.findViewById(R.id.imageButtonSave);
+        TextView textViewName = row.findViewById(R.id.textViewNameOrder);
+        TextView textViewDescription = row.findViewById(R.id.textViewDescriptionOrder);
+        TextView textViewPrice = row.findViewById(R.id.textViewPriceOrder);
+        ImageView imageViewFood = row.findViewById(R.id.imageViewFoodOrder);
+        ImageButton imageButtonSet = row.findViewById(R.id.imageButtonDelFood);
 
         MenuRestaurant menuRestaurant = this.objects.get(position);
 

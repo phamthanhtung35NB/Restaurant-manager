@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".AddTableActivity">
+    tools:context=".MenuRestaurant.Table.AddTableActivity">
 
     <TextView
         android:layout_width="3dp"

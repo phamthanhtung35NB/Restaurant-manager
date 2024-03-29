@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.MenuRestaurant.Table;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.R;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import model.TableRestaurant;
+import model.Table;
 
 public class AddTableActivity extends AppCompatActivity {
 
@@ -82,7 +83,7 @@ public class AddTableActivity extends AppCompatActivity {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
-        TableRestaurant table = new TableRestaurant(idMax,name,describe,"Trống","");
+        Table table = new Table(idMax,name,describe,"Trống","");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(id);
         myRef.push().setValue(table);

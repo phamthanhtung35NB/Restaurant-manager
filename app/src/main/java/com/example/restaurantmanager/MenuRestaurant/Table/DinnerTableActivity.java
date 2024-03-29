@@ -1,19 +1,19 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.MenuRestaurant.Table;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
+import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import adapter.TableAdapter;
-import model.MenuRestaurant;
 import model.Table;
 
 public class DinnerTableActivity extends AppCompatActivity {
@@ -121,6 +120,7 @@ public class DinnerTableActivity extends AppCompatActivity {
                         System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
                     }
                 });
+
     }
 
 //    public void readDataFromFireBase(String id){

@@ -1,15 +1,11 @@
 package adapter;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,15 +14,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.DinnerTableActivity;
-import com.example.restaurantmanager.HandleQrActivity;
-import com.example.restaurantmanager.LoginActivity;
+import com.example.restaurantmanager.MenuRestaurant.Table.DinnerTableActivity;
+import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import model.MenuRestaurant;
 import model.Table;
 
 public class TableAdapter extends ArrayAdapter<Table> {
@@ -63,9 +57,9 @@ public class TableAdapter extends ArrayAdapter<Table> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, HandleQrActivity.class);
-                String qr = DinnerTableActivity.accountId+"_"+table.getId()+"";
-                intent.putExtra("uid", qr);
+                Intent intent = new Intent(context, OderActivity.class);
+                String qr = DinnerTableActivity.accountId+"/"+table.getId()+"/order";
+                intent.putExtra("url", qr);
                 context.startActivity(intent);
 //                //add vào sqlite
 //                MainActivity.dataOrder.add(menuRestaurant);

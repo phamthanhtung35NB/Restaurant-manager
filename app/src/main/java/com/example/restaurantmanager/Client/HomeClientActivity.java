@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.Client;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -55,6 +56,8 @@ public class HomeClientActivity extends AppCompatActivity {
             String content = result.getContents();
             if (content != null) {
                 // Check if table number is available from intent
+                //lưu mã QR vào database
+
                     textView.setText("Mã QR: " + content);
 
             } else {
