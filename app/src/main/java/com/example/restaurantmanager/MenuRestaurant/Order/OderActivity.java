@@ -91,7 +91,8 @@ public class OderActivity extends AppCompatActivity {
         }
         imageViewQr.setImageBitmap(bitmap);
     }
-    void  readDataFromFireBase(){
+
+    void readDataFromFireBase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOrder = database.getReference(url);
         refOrder.addListenerForSingleValueEvent(new ValueEventListener() {

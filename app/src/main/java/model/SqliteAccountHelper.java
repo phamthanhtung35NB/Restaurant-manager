@@ -12,7 +12,6 @@ import android.widget.Toast;
 public class SqliteAccountHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String TABLE_NAME_ACCOUNT = "account";
-    private static final String TABLE_NAME_URL = "order";
     private static final String COLUMN_TYPE = "type";
     private static final String COLUMN_USERNAME = "username";
     private static final String COLUMN_PASSWORD = "password";

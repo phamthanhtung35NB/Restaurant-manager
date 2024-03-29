@@ -15,14 +15,8 @@ import java.util.List;
 public class SqliteUrlOrderHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 //    private static final String TABLE_NAME_ACCOUNT = "account";
-    private static final String TABLE_NAME_ORDER = "order"; // New table for order URLs
-//    private static final String COLUMN_TYPE = "type";
-//    private static final String COLUMN_USERNAME = "username";
-//    private static final String COLUMN_PASSWORD = "password";
-//    private static final String COLUMN_PHONE = "phone";
-//    private static final String COLUMN_EMAIL = "email";
-//    private static final String COLUMN_ADDRESS = "address";
-    private static final String COLUMN_URL_ORDER = "urlOrder"; // Primary key for order table
+    private static final String TABLE_NAME_ORDER = "order_menu";
+    private static final String COLUMN_URL_ORDER = "urlOrder_menu"; // Primary key for order table
 
     private final String  DB_PATH_SUFFIX = "/databases/";
 
@@ -31,26 +25,16 @@ public class SqliteUrlOrderHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    //    @Override
-//    public void onCreate(SQLiteDatabase db) {
-//        String CREATE_ACCOUNT_TABLE = "CREATE TABLE " + TABLE_NAME_ACCOUNT + "("
-//                + COLUMN_TYPE + " TEXT PRIMARY KEY,"
-//                + COLUMN_USERNAME + " TEXT NOT NULL,"
-//                + COLUMN_PASSWORD + " TEXT NOT NULL,"
-//                + COLUMN_PHONE + " TEXT NOT NULL,"
-//                + COLUMN_EMAIL + " TEXT NOT NULL,"
-//                + COLUMN_ADDRESS + " TEXT" + ")";
-//        db.execSQL(CREATE_ACCOUNT_TABLE);
-//    }
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Check if tables exist before creating them
-        if (!hasTable(db, TABLE_NAME_ORDER)) {
-            String CREATE_ORDER_TABLE = "CREATE TABLE " + TABLE_NAME_ORDER + "("
-                    + COLUMN_URL_ORDER + " TEXT NOT NULL" + ")";
-            db.execSQL(CREATE_ORDER_TABLE);
-        }
+       if (!hasTable(db, TABLE_NAME_ORDER)) {
+        String CREATE_ORDER_TABLE = "CREATE TABLE " + TABLE_NAME_ORDER + " ( "
+                + COLUMN_URL_ORDER + " TEXT NOT NULL" + ")";
+        db.execSQL(CREATE_ORDER_TABLE);
     }
+    }
+
 
     private boolean hasTable(SQLiteDatabase db, String tableName) {
         Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "'", null);
@@ -71,6 +55,7 @@ public class SqliteUrlOrderHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_URL_ORDER, url); // Add url to order table
         long result = database.insert(TABLE_NAME_ORDER, null, contentValues);
+
         if (result == -1) {
             Log.d("TAG", "Fail to insert order URL!");
         } else {
@@ -81,23 +66,25 @@ public class SqliteUrlOrderHelper extends SQLiteOpenHelper {
 
 
     // Get all order URLs
-    public List<String> getAllUrls() {
-        List<String> urls = new ArrayList<>();
+    public String getAllUrls() {
+        String urls ="";
         SQLiteDatabase db = getReadableDatabase();
+
         String[] projection = {COLUMN_URL_ORDER}; // Specify only the URL_ORDER column
         Cursor cursor = db.query(TABLE_NAME_ORDER, projection, null, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
 
-        if (cursor.moveToFirst()) {
-            do {
-                urls.add(cursor.getString(cursor.getColumnName(COLUMN_URL_ORDER)));
-            } while (cursor.moveToNext());
+        if (cursor.getCount() == 0) {
+            // Handle the case where no accounts are found
+            return null; // Or take other appropriate action
         }
 
+        urls=cursor.getString(0);
         cursor.close();
         db.close();
         return urls;
     }
-
 
     // Delete an order URL
     public void deleteUrl(String url) {
