@@ -91,7 +91,7 @@ public class DinnerTableActivity extends AppCompatActivity {
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
 
                 // Tham chiếu đến node cha
-                DatabaseReference ref = database.getReference(id);
+                    DatabaseReference ref = database.getReference(id);
 
                 // Lắng nghe giá trị của tất cả child
                 ref.addListenerForSingleValueEvent(new ValueEventListener() {

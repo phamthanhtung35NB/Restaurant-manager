@@ -43,8 +43,16 @@ public class HomeClientActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         String text = preferences.getString("key", "");
-
+        //tách chuỗi
+        String[] arr = text.split("/");
+        String content = arr[2];
+        if (content.equals("order")){
+            Intent intent = new Intent(HomeClientActivity.this, MenuClientActivity.class);
+            intent.putExtra("url", content);
+            startActivity(intent);
+        }
         textView.setText(text);
+
     }
     void addEvents() {
         imageButtonScan.setOnClickListener(v -> {

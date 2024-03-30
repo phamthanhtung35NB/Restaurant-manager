@@ -160,6 +160,7 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("phone", phone);
                         user.put("email", email);
                         user.put("idMax", 0);
+                        user.put("idTableMax", 0);
                         user.put("menuRestaurant", new HashMap<String, MenuRestaurant>());
 //                        // thêm thông tin menu vào firestore document uid của người dùng
 //                        MenuRestaurant menuRestaurant = new MenuRestaurant();

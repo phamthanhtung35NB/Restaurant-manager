@@ -32,6 +32,8 @@ public class OrderClientActivity extends AppCompatActivity {
 
     public static OrderClientAdapter orderClientAdapter;
     public static ArrayList<MenuRestaurant> dataOrderClient;
+
+    public static double tong = 0;
     Button buttonThanhToanClient;
     TextView textThongTinBanClient;
     public static String URL = "";
@@ -103,6 +105,42 @@ public class OrderClientActivity extends AppCompatActivity {
     void addEvents() {
         buttonThanhToanClient.setOnClickListener(v -> {
             // Xử lý sự kiện khi click vào nút thanh toán
+            //xóa dữ liệu preferences my_preferences
+            SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove("key");
+            editor.apply();
+            //tính tổng price trên firebase
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference refOrder = database.getReference(URL);
+            refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Lặp qua tất cả child
+                    double tong = 0;
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        // Tạo instance mới của ClassTable
+                        MenuRestaurant menuOrder = new MenuRestaurant();
+                        if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+                            menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
+                            tong += menuOrder.getPrice();
+                        }
+                    }
+                    //tính tổng price
+                    System.out.println("tong: " + tong);
+                    //xóa dữ liệu trên firebase
+                    refOrder.removeValue();
+                    //chuyển sang activity thanh toán
+                    OrderClientActivity.tong = tong;
+                    textThongTinBanClient.setText("Tổng tiền: " + tong);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Xử lý lỗi
+                    System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+                }
+
+            });
         });
     }
 }
