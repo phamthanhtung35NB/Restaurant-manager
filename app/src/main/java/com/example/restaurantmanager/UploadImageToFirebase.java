@@ -31,14 +31,14 @@ public class UploadImageToFirebase {
     public static String imageUrl = "";
 
     // Hàm tải ảnh lên Firebase
-    public static void uploadImageToFirebase(Bitmap bitmap,String accauntId,ProgressBar progressBar) {
+    public static void uploadImageToFirebase(Bitmap bitmap,String nameImage ,String accauntId,ProgressBar progressBar) {
         //mở progress bar
         progressBar.setVisibility(View.VISIBLE);
         // Tạo tham chiếu đến Firebase Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        StorageReference imagesRef = storageRef.child(accauntId+"/" + generateImageName());
+        StorageReference imagesRef = storageRef.child(accauntId+"/" + generateImageName(nameImage));
 
         // Chuyển đổi Bitmap thành dữ liệu byte
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -73,12 +73,12 @@ public class UploadImageToFirebase {
     }
 
     //tạo tên ảnh là 1 giờ phut giay_ngày_thang_nam
-    private static String generateImageName() {
+    private static String generateImageName(String nameImage) {
         // Lấy thời gian hiện tại
         long currentTime = System.currentTimeMillis();
         // Định dạng thời gian
         SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss_dd_MM_yyyy", Locale.getDefault());
         String timestamp = sdf.format(new Date(currentTime));
-        return "image_menu_" + timestamp + ".png";
+        return ""+nameImage + timestamp + ".png";
     }
 }

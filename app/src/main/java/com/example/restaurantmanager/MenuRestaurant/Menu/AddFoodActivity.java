@@ -48,6 +48,7 @@ public class AddFoodActivity extends AppCompatActivity {
     ImageButton imageButtonSave;
     private ProgressBar progressBar;
     // Define a static final int for the camera request code
+    //CAMERA_REQUEST_CODE có tác dụng như một ID để xác định rằng bạn đang yêu cầu kết quả từ máy ảnh.
     private static final int CAMERA_REQUEST_CODE = 100;
     public static String accountId = "tung";
     public static String type = "restaurant";
@@ -119,7 +120,7 @@ public class AddFoodActivity extends AppCompatActivity {
             Bitmap bitmap = (Bitmap) data.getExtras().get("data");
 
             imageViewFood.setImageBitmap(bitmap);
-            UploadImageToFirebase.uploadImageToFirebase(bitmap, accountId, progressBar);
+            UploadImageToFirebase.uploadImageToFirebase(bitmap,"imageMenu_", accountId, progressBar);
             System.out.println("---------------------------------+++++++---------------------");
 
 
