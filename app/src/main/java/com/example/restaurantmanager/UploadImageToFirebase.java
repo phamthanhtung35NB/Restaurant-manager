@@ -40,10 +40,11 @@ public class UploadImageToFirebase {
 
         StorageReference imagesRef = storageRef.child(accauntId+"/" + generateImageName(nameImage));
 
-        // Chuyển đổi Bitmap thành dữ liệu byte
+        // Chuyển đổi Bitmap thành dữ liệu byte với định dạng PNG và chất lượng nén là 100
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
         byte[] data = baos.toByteArray();
+
 
         // Tải dữ liệu byte lên Firebase Storage
         UploadTask uploadTask = imagesRef.putBytes(data);
@@ -80,5 +81,25 @@ public class UploadImageToFirebase {
         SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss_dd_MM_yyyy", Locale.getDefault());
         String timestamp = sdf.format(new Date(currentTime));
         return ""+nameImage + timestamp + ".png";
+    }
+    public static void deleteImageFromFirebase(String imageUrl) {
+        // Tạo tham chiếu tới Firebase Storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        // Lấy tham chiếu đến ảnh dựa trên link
+        StorageReference photoRef = storage.getReferenceFromUrl(imageUrl);
+        // Xóa ảnh từ Firebase Storage
+        photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // Xử lý khi xóa ảnh thành công
+                System.out.println("Xóa ảnh thành công");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Xử lý khi xóa ảnh thất bại
+                System.out.println("Xóa ảnh thất bại: " + exception.getMessage());
+            }
+        });
     }
 }

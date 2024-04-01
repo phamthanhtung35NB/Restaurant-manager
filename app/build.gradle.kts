@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
 
+    //test
+    testImplementation ("org.mockito:mockito-core:3.12.4")
 
     //add ZXing
     implementation("com.google.zxing:core:3.4.1")

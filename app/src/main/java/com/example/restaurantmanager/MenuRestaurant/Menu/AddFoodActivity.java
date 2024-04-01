@@ -4,6 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -35,6 +37,8 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -81,10 +85,24 @@ public class AddFoodActivity extends AppCompatActivity {
         accountId = intent.getStringExtra("uid");
         System.out.println("-----------------------====idMaxLong: " + accountId);
     }
+//    private void openCamera() {
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+//    }
     private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        // Tạo Intent để mở ứng dụng máy ảnh mặc định
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // Kiểm tra xem thiết bị có ứng dụng máy ảnh để xử lý Intent không
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Gửi Intent để mở ứng dụng máy ảnh và chụp ảnh
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+        } else {
+            // Trường hợp không có ứng dụng máy ảnh nào được tìm thấy, thông báo cho người dùng
+            Toast.makeText(this, "Không tìm thấy ứng dụng máy ảnh.", Toast.LENGTH_SHORT).show();
+        }
     }
+
     void addEvents() {
         imageViewFood.setOnClickListener(v -> {
 //            TODO: xin cấp quyền máy ảnh + chụp ảnh + lưu ảnh vào strorage+ lấy link + load ảnh
@@ -117,15 +135,51 @@ public class AddFoodActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            // Lấy dữ liệu ảnh từ Intent
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                // Lấy ảnh từ dữ liệu ảnh
+                Bitmap bitmap = (Bitmap) extras.get("data");
 
-            imageViewFood.setImageBitmap(bitmap);
-            UploadImageToFirebase.uploadImageToFirebase(bitmap,"imageMenu_", accountId, progressBar);
-            System.out.println("---------------------------------+++++++---------------------");
+                // Hiển thị ảnh trong ImageView
+                imageViewFood.setImageBitmap(bitmap);
 
+                // Upload ảnh lên Firebase
+                UploadImageToFirebase.uploadImageToFirebase(bitmap, "imageMenu_", accountId, progressBar);
+            } else {
+                // Nếu dữ liệu ảnh trả về từ Intent không có, thực hiện lấy ảnh gốc từ Camera
+                Uri imageUri = data.getData();
+                try {
+                    // Sử dụng ImageReader để đọc ảnh gốc từ Camera
+                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
 
+                    // Hiển thị ảnh trong ImageView
+                    imageViewFood.setImageBitmap(bitmap);
+
+                    // Upload ảnh lên Firebase
+                    UploadImageToFirebase.uploadImageToFirebase(bitmap, "imageMenu_", accountId, progressBar);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+//            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+//
+//            imageViewFood.setImageBitmap(bitmap);
+//            UploadImageToFirebase.uploadImageToFirebase(bitmap,"imageMenu_", accountId, progressBar);
+//            System.out.println("---------------------------------+++++++---------------------");
+//
+//
+//        }
+//    }
 
     private void addDataToFireBase(MenuRestaurant menuRestaurant) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
