@@ -1,0 +1,9 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+LoginActivity -> HomeActivity;
+
+stop
+
+@enduml

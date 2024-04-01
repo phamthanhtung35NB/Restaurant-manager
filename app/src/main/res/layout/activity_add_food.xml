@@ -15,10 +15,16 @@
 
         <ImageView
             android:id="@+id/imageViewFoodOrder"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/food_load" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:layout_width="5dp"
@@ -102,6 +108,7 @@
             android:verticalScrollbarPosition="right"
             android:visibility="visible"
             tools:srcCompat="@android:drawable/ic_menu_myplaces" />
+
     </LinearLayout>
 
     <TextView

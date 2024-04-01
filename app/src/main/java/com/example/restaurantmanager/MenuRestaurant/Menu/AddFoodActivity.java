@@ -3,11 +3,15 @@ package com.example.restaurantmanager.MenuRestaurant.Menu;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +23,21 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.restaurantmanager.R;
+import com.example.restaurantmanager.UploadImageToFirebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import model.MenuRestaurant;
 
@@ -34,8 +46,12 @@ public class AddFoodActivity extends AppCompatActivity {
     TextView textViewId;
     ImageView imageViewFood;
     ImageButton imageButtonSave;
+    private ProgressBar progressBar;
+    // Define a static final int for the camera request code
+    private static final int CAMERA_REQUEST_CODE = 100;
     public static String accountId = "tung";
     public static String type = "restaurant";
+//    public static String imageUrl = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,33 +72,60 @@ public class AddFoodActivity extends AppCompatActivity {
         edtPrice = findViewById(R.id.textViewPriceOrder);
         imageViewFood = findViewById(R.id.imageViewFoodOrder);
         imageButtonSave = findViewById(R.id.imageButtonDelFood);
+        progressBar = findViewById(R.id.progressBar);
+        // Ẩn ProgressBar
+        progressBar.setVisibility(View.GONE);
         textViewId.setText("Auto");
         Intent intent = getIntent();
         accountId = intent.getStringExtra("uid");
         System.out.println("-----------------------====idMaxLong: " + accountId);
     }
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
+    }
     void addEvents() {
         imageViewFood.setOnClickListener(v -> {
-//            TODO: xin cấp quyền máy ảnh + chụp ảnh + lưu ảnh vào strorage(name: đầu gmail+id)+ lấy link + load ảnh
+//            TODO: xin cấp quyền máy ảnh + chụp ảnh + lưu ảnh vào strorage+ lấy link + load ảnh
+            openCamera();
 
         });
+//        imageButtonSave.setOnClickListener(v -> {
+//            System.out.println("URL: " + imageUrl);
+//        });
         imageButtonSave.setOnClickListener(v -> {
             //lưu dữ liệu
             String name = edtName.getText().toString();
             String description = edtDescription.getText().toString();
             double price = Double.parseDouble(edtPrice.getText().toString());
-            String image = getIntent().getStringExtra("image");
+            String image = UploadImageToFirebase.imageUrl;
 
             String id = String.valueOf(1111);
 
             MenuRestaurant updatedMenuRestaurant = new MenuRestaurant(id, name, description, price, image);
             readIDMaxFromFireBase(updatedMenuRestaurant);
+
             Toast.makeText(AddFoodActivity.this, "Thêm thành công", Toast.LENGTH_SHORT).show();
             edtName.setText("");
             edtDescription.setText("");
             edtPrice.setText("");
         });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+
+            imageViewFood.setImageBitmap(bitmap);
+            UploadImageToFirebase.uploadImageToFirebase(bitmap, accountId, progressBar);
+            System.out.println("---------------------------------+++++++---------------------");
+
+
+        }
+    }
+
     private void addDataToFireBase(MenuRestaurant menuRestaurant) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(type).document(accountId)
