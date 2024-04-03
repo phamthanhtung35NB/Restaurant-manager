@@ -18,6 +18,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
 
     LinearLayout lineButtonsMenu;
     LinearLayout lineButtonsTable;
+    LinearLayout lineButtonsStatistical;
     String accountId = "";
     String type = "restaurant";
     @Override
@@ -36,6 +37,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
     void init(){
         lineButtonsMenu = findViewById(R.id.lineButtonsMenu);
         lineButtonsTable = findViewById(R.id.lineButtonsTable);
+        lineButtonsStatistical = findViewById(R.id.lineButtonsStatistical);
         Intent intentGet = getIntent();
         accountId = intentGet.getStringExtra("uid");
         type = intentGet.getStringExtra("type");
@@ -51,6 +53,10 @@ public class HomeRestaurantActivity extends AppCompatActivity {
         lineButtonsTable.setOnClickListener(v -> {
             Intent intent = new Intent(HomeRestaurantActivity.this, DinnerTableActivity.class);
             intent.putExtra("uid", accountId);
+            startActivity(intent);
+        });
+        lineButtonsStatistical.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeRestaurantActivity.this, StatisticalActivity.class);
             startActivity(intent);
         });
     }

@@ -34,6 +34,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
 }
 //lưu nếu sử dụng thư viện ngoài
 dependencies {
@@ -51,8 +52,8 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
 
-    //test
-    testImplementation ("org.mockito:mockito-core:3.12.4")
+    //MPAndroidChart
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     //add ZXing
     implementation("com.google.zxing:core:3.4.1")
