@@ -19,6 +19,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import model.Account;
+import model.HistoryRestaurant;
 import model.SqliteAccountHelper;
 import model.SqliteUrlOrderHelper;
 
@@ -42,17 +43,20 @@ public class HomeClientActivity extends AppCompatActivity {
         imageButtonScan = findViewById(R.id.imageButtonScan);
         textView = findViewById(R.id.textView);
         SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-        String text = preferences.getString("key", "");
-        //tách chuỗi
-        String[] arr = text.split("/");
-        String content = arr[2];
-        if (content.equals("order")){
-            Intent intent = new Intent(HomeClientActivity.this, MenuClientActivity.class);
-            intent.putExtra("url", content);
-            startActivity(intent);
-        }
-        textView.setText(text);
+        if (preferences.getString("key", "") != "") {
+            String text = preferences.getString("key", "");
+            //tách chuỗi
+            String[] arr = text.split("/");
 
+            String content = arr[2];
+            if (content.equals("order")){
+                Intent intent = new Intent(HomeClientActivity.this, MenuClientActivity.class);
+                intent.putExtra("url", content);
+                startActivity(intent);
+            }
+            textView.setText(text);
+        }
+        HistoryRestaurant.readSumDayFromFireBase("Kj44x84LCzcwIXOpsR7wCU4pepB3");
     }
     void addEvents() {
         imageButtonScan.setOnClickListener(v -> {
@@ -64,6 +68,7 @@ public class HomeClientActivity extends AppCompatActivity {
 //            integrator.setCaptureActivity(400);
 
             integrator.initiateScan();
+
         });
     }
     @Override
@@ -91,6 +96,8 @@ public class HomeClientActivity extends AppCompatActivity {
                 Intent intent = new Intent(HomeClientActivity.this, MenuClientActivity.class);
                 intent.putExtra("url", content);
                 startActivity(intent);
+                //đóng activity
+                finish();
 
             } else {
                 textView.setText("Không tìm thấy mã QR");

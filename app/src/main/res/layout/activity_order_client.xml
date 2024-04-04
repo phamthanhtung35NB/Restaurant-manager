@@ -30,7 +30,7 @@
         <ListView
             android:id="@+id/listViewOrderClient"
             android:layout_width="match_parent"
-            android:layout_height="296dp" />
+            android:layout_height="589dp" />
 
         <Button
             android:id="@+id/buttonThanhToanClient"
