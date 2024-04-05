@@ -2,6 +2,8 @@ package com.example.restaurantmanager;
 
 //import android.app.Activity;
 
+import static com.google.firebase.appcheck.internal.util.Logger.TAG;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
@@ -17,6 +19,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,12 +35,17 @@ import android.widget.Toast;
 import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 import java.io.File;
@@ -45,6 +53,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.Account;
 import model.SqliteAccountHelper;
@@ -77,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
 
         init();
         addEvents();
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -171,6 +182,26 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
                     }
+                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                                return;
+                            }
+
+                            // Get new FCM registration token
+                            String token = task.getResult();
+
+                            // Log and toast
+                            String msg = getString(R.string.msg_token_fmt, token);
+                            Log.d(TAG, msg);
+                            Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+                            // Send the Instance ID token to your app server.
+                            sendRegistrationToServer(token);
+                        }
+                    });
 //                    finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
                 } else {
                     Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
@@ -199,7 +230,30 @@ public class LoginActivity extends AppCompatActivity {
 //            Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
 //        }
 //    }
-
+private void sendRegistrationToServer(String token) {
+    // TODO: Implement this method to send token to your app server.
+    Log.d(TAG, "sendRegistrationToServer: sending token " + token);
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    if (user != null) {
+        // Save the user's token to Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("token", token);
+        db.collection("chat").document(user.getUid()).set(data, SetOptions.merge())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Token successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing token", e);
+                    }
+                });
+    }
+}
     void loginRestaurant(String uid){
         DocumentReference documentReference = db.collection("restaurant").document(uid);
         //kiểm tra xem uid có tồn tại trong collection client không nếu không thì kiểm tra trong collection restaurant

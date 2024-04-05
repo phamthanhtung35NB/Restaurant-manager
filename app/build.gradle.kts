@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.restaurantmanager"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -52,14 +52,17 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
 
+    implementation ("com.android.volley:volley:1.1.1")
     //MPAndroidChart
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     //add ZXing
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.journeyapps:zxing-android-embedded:4.2.0")
-    implementation(libs.firebase.messaging)
+//    implementation(libs.firebase.messaging)
+    implementation("com.google.firebase:firebase-messaging:21.1.0")
     implementation(libs.firebase.inappmessaging.display)
+    implementation("com.google.firebase:firebase-inappmessaging:20.0.0")
 
     //add sqlite
 
