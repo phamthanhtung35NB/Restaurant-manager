@@ -1,16 +1,21 @@
 package com.example.restaurantmanager;
 
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -72,6 +77,54 @@ private void sendRegistrationToServer(String token) {
                 });
     }
 }
+    public static void fetchTokenAndSendToServer(final Context context,String type) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+
+                // Get new FCM registration token
+                String token = task.getResult();
+
+                // Log and toast
+                String msg = context.getString(R.string.msg_token_fmt, token);
+                Log.d(TAG, msg);
+                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+
+                // Send the Instance ID token to your app server.
+                sendRegistrationToServer(token,type);
+            }
+        });
+    }"ftoBTzOuSRVmwZiCd-PuFD:APA91bH7c4vWD99tqqqFmWXD6u830ewhFssQQRT3Nh0rupSR8s_YIzXUMBFyY2Sl2wfdmWNMoPYwAhuhHvelerN8smDSU60NRbbFDZpZJKUbCKRiQvrg59xIv0yHwMbSN7JoFnqDSZUr"
+
+
+    private static void sendRegistrationToServer(String token, String type) {
+        // TODO: Implement this method to send token to your app server.
+        Log.d(TAG, "sendRegistrationToServer: sending token " + token);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Save the user's token to Firestore
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            Map<String, Object> data = new HashMap<>();
+            data.put("token", token);
+            db.collection(type).document(user.getUid()).update(data)//, SetOptions.merge())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "Token successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error writing token", e);
+                        }
+                    });
+        }
+    }
 }
 //
 //public class MyFirebaseMessagingService extends FirebaseMessagingService {

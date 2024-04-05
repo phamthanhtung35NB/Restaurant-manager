@@ -182,26 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
                     }
-                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                        @Override
-                        public void onComplete(@NonNull Task<String> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-                                return;
-                            }
 
-                            // Get new FCM registration token
-                            String token = task.getResult();
-
-                            // Log and toast
-                            String msg = getString(R.string.msg_token_fmt, token);
-                            Log.d(TAG, msg);
-                            Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
-
-                            // Send the Instance ID token to your app server.
-                            sendRegistrationToServer(token);
-                        }
-                    });
 //                    finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
                 } else {
                     Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
@@ -230,30 +211,7 @@ public class LoginActivity extends AppCompatActivity {
 //            Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
 //        }
 //    }
-private void sendRegistrationToServer(String token) {
-    // TODO: Implement this method to send token to your app server.
-    Log.d(TAG, "sendRegistrationToServer: sending token " + token);
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    if (user != null) {
-        // Save the user's token to Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> data = new HashMap<>();
-        data.put("token", token);
-        db.collection("chat").document(user.getUid()).set(data, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Token successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing token", e);
-                    }
-                });
-    }
-}
+
     void loginRestaurant(String uid){
         DocumentReference documentReference = db.collection("restaurant").document(uid);
         //kiểm tra xem uid có tồn tại trong collection client không nếu không thì kiểm tra trong collection restaurant
@@ -273,7 +231,7 @@ private void sendRegistrationToServer(String token) {
 
                     intent.putExtra("type", "restaurant");
                     intent.putExtra("uid", uid1);
-                    System.out.println("bên login-----------------"+uid1);
+                    MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "restaurant");
                     startActivity(intent);
 //                    finish();
                 } else {
@@ -300,6 +258,7 @@ private void sendRegistrationToServer(String token) {
 
                     intent.putExtra("type", "client");
                     intent.putExtra("uid", uid1);
+                    MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "client");
                     startActivity(intent);
 //                    finish();
 //                                insertAccount("client", username, password, phone, email, address);
