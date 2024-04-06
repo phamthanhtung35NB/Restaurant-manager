@@ -4,38 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg_white_corner_16"
+    android:layout_height="250dp"
     android:layout_margin="16dp"
+    android:background="@drawable/bg_white_corner_16"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".DialogNotificationActivity">
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        android:gravity="center"
+        android:layout_height="50dp"
         android:background="@drawable/bg_yellow_corner_16_top"
-        android:text="Thông báo" />
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Thông báo"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="139dp"
+        android:background="@drawable/bg_white_corner_16"
+        android:gravity="center"
+        android:text="Bàn đã được quét QR thành công"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đây là thông báo"
-            android:textSize="16sp"
-            android:gravity="center"
-            android:textColor="@color/black" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+<!--        <Button-->
+<!--            android:id="@+id/btnCrack"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="2"-->
+<!--            android:alpha="0.7"-->
+<!--            android:background="@drawable/bg_gray_corner_10"-->
+<!--            android:text="Hủy Kết Nối"-->
+<!--            android:textColor="@color/black" />-->
+
         <Button
             android:id="@+id/btnClose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_yellow_corner_10"
             android:text="Đóng"
-            android:textColor="@color/white"
-            android:background="@drawable/bg_yellow_corner_16_top" />
+            android:textColor="@color/black" />
     </LinearLayout>
+
+
 </LinearLayout>

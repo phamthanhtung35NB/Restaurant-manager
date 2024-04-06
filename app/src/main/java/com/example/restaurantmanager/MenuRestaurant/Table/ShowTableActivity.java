@@ -2,7 +2,6 @@ package com.example.restaurantmanager.MenuRestaurant.Table;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
 import adapter.TableAdapter;
 import model.Table;
 
-public class DinnerTableActivity extends AppCompatActivity {
+public class ShowTableActivity extends AppCompatActivity {
     GridView gvTable;
     ImageButton imageButtonExit,imageButtonAddTable;
     TextView textViewSummary;
@@ -53,7 +52,6 @@ public class DinnerTableActivity extends AppCompatActivity {
         Intent intent = getIntent();
         accountId = intent.getStringExtra("uid");
 
-
         gvTable = findViewById(R.id.gvTable);
         imageButtonExit = findViewById(R.id.imageButtonExit);
         textViewSummary = findViewById(R.id.textViewSummary);
@@ -63,7 +61,21 @@ public class DinnerTableActivity extends AppCompatActivity {
         System.out.println("accountId: " + accountId);
 
     }
+    public void addEvent(){
+        imageButtonExit.setOnClickListener(v -> {
+            Intent intent = new Intent(ShowTableActivity.this, HomeRestaurantActivity.class);
+            startActivity(intent);
+            finish();
+        });
+        System.out.println("hết event-----------------------------");
+        imageButtonAddTable.setOnClickListener(v -> {
+            Intent intent = new Intent(ShowTableActivity.this, AddTableActivity.class);
+            intent.putExtra("uid",accountId);
+            intent.putExtra("idMax",idTableMax);
+            startActivity(intent);
 
+        });
+    }
     //push data account and menu to firebase
 //    private void onClickWriteData() {
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -85,46 +97,44 @@ public class DinnerTableActivity extends AppCompatActivity {
 //    }
 
 
-    //read data from firebase
-    public void readDataFromFireBase(String id){
-                // Khởi tạo Firebase Database
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
+    /**
+     * Đọc dữ liệu table từ Firebase
+     * @param accountId uid của node cha trong realtime database của restaurant
+     *           uid này được truyền từ HomeRestaurantActivity khi click vào button Table của restaurant
+     */
+    public void readDataFromFireBase(String accountId){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(accountId);
+        // Lắng nghe giá trị của tất cả child
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // lặp qua tất cả child
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    // tạo instance mới của ClassTable
+                    Table table = new Table();
+                    if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
 
-                // Tham chiếu đến node cha
-                    DatabaseReference ref = database.getReference(id);
+                        table.setId(childSnapshot.child("id").getValue(Integer.class));
+                        table.setName(childSnapshot.child("name").getValue(String.class));
+                        table.setDescribe(childSnapshot.child("describe").getValue(String.class));
+                        table.setStateEmpty(childSnapshot.child("stateEmpty").getValue(String.class));
+                        table.setImage(childSnapshot.child("image").getValue(String.class));
 
-                // Lắng nghe giá trị của tất cả child
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // Lặp qua tất cả child
-                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                            // Tạo instance mới của ClassTable
-                            Table table = new Table();
-                            if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
-                                table.setId(childSnapshot.child("id").getValue(Integer.class));
-                                table.setName(childSnapshot.child("name").getValue(String.class));
-                                table.setDescribe(childSnapshot.child("describe").getValue(String.class));
-                                table.setStateEmpty(childSnapshot.child("stateEmpty").getValue(String.class));
-                                table.setImage(childSnapshot.child("image").getValue(String.class));
-                                System.out.println(table);
-                                arrTableData.add(table);
-                            }
-                        }
-                        System.out.println("arrTableData: " + arrTableData.size());
-                        adapterTable = new TableAdapter(DinnerTableActivity.this, R.layout.table, arrTableData);
-                        System.out.println("adapterTable: ---------")   ;
-                        gvTable.setAdapter(adapterTable);
+                        // thêm từng bàn vào mảng arrTableData
+                        arrTableData.add(table);
                     }
+                }
 
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        // Xử lý lỗi
-                        System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
-                    }
-                });
-
+                adapterTable = new TableAdapter(ShowTableActivity.this, R.layout.table, arrTableData);
+                gvTable.setAdapter(adapterTable);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Xử lý lỗi
+                System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+            }
+        });
     }
 
 //    public void readDataFromFireBase(String id){
@@ -153,22 +163,5 @@ public class DinnerTableActivity extends AppCompatActivity {
 //        });
 ////        listViewMenu.setAdapter(menuAdapter);
 //    }
-
-    public void addEvent(){
-        imageButtonExit.setOnClickListener(v -> {
-            Intent intent = new Intent(DinnerTableActivity.this, HomeRestaurantActivity.class);
-            startActivity(intent);
-            finish();
-        });
-        System.out.println("hết event-----------------------------");
-        imageButtonAddTable.setOnClickListener(v -> {
-            Intent intent = new Intent(DinnerTableActivity.this, AddTableActivity.class);
-            intent.putExtra("uid",accountId);
-            intent.putExtra("idMax",idTableMax);
-            startActivity(intent);
-
-        });
-    }
-
 
 }

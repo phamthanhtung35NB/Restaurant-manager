@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.MenuRestaurant.Table.DinnerTableActivity;
+import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
@@ -27,12 +27,33 @@ public class TableAdapter extends ArrayAdapter<Table> {
     Activity context;
     int resource;
     List<Table> objects;
+
+    /**
+     * Constructor của TableAdapter
+     * @param context Activity hiện tại
+     * @param resource Layout cho từng item
+     * @param objects Danh sách bàn
+     */
     public TableAdapter(@NonNull Activity context, int resource, @NonNull List<Table> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
         this.objects = objects;
     }
+
+    /**
+     *  Được gọi khi ListView cần một view từ Adapter. getView() sẽ cung cấp một View cho mỗi item trong danh sách.
+     * @param position The position of the item within the adapter's data set of the item whose view
+     *        we want.
+     * @param convertView The old view to reuse, if possible. Note: You should check that this view
+     *        is non-null and of an appropriate type before using. If it is not possible to convert
+     *        this view to display the correct data, this method can create a new view.
+     *        Heterogeneous lists can specify their number of view types, so that this View is
+     *        always of the right type (see {@link #getViewTypeCount()} and
+     *        {@link #getItemViewType(int)}).
+     * @param parent The parent that this view will eventually be attached to
+     * @return A View corresponding to the data at the specified position.
+     */
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = this.context.getLayoutInflater();
@@ -51,14 +72,15 @@ public class TableAdapter extends ArrayAdapter<Table> {
         Picasso.get()
                 .load(table.getImage())
                 .into(imageViewPhoto);
-//        imageViewFood.setImageResource(R.drawable.rice);
-//        imageViewFood.setImageBitmap(BitmapFactory.decodeFile(menuRestaurant.getImage()));
+        /**
+         * Xử lý sự kiện khi click vào 1 bàn (item trong GridView)
+         */
         linearLayoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, OderActivity.class);
-                String qr = DinnerTableActivity.accountId+"/"+table.getId()+"/order";
+                String qr = ShowTableActivity.accountId+"/"+table.getId()+"/order";
                 intent.putExtra("url", qr);
                 context.startActivity(intent);
 //                //add vào sqlite

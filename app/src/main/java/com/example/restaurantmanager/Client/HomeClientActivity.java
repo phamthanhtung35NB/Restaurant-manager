@@ -67,7 +67,7 @@ public class HomeClientActivity extends AppCompatActivity {
             //tách chuỗi
             String[] arr = text.split("/");
 
-            String content = arr[2];
+                String content = arr[2];
             if (content.equals("order")){
                 Intent intent = new Intent(HomeClientActivity.this, MenuClientActivity.class);
                 intent.putExtra("url", content);

@@ -269,3 +269,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 }
+//    onCreate(): Được gọi khi Activity được tạo. Đây là nơi bạn thường khởi tạo các thành phần của giao diện người dùng và các dữ liệu khác.
+//    onStart(): Được gọi khi Activity trở nên hiển thị cho người dùng.
+//    onResume(): Được gọi khi người dùng bắt đầu tương tác với Activity.
+//    onPause(): Được gọi khi hệ thống chuẩn bị tiếp tục một Activity khác.
+//    onStop(): Được gọi khi Activity không còn hiển thị cho người dùng.
+//    onDestroy(): Được gọi trước khi Activity bị hủy.

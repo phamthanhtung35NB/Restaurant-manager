@@ -11,7 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
-import com.example.restaurantmanager.MenuRestaurant.Table.DinnerTableActivity;
+import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
 import com.example.restaurantmanager.R;
 
 public class HomeRestaurantActivity extends AppCompatActivity {
@@ -52,7 +52,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
         });
         //Quản lý bàn ăn
         lineButtonsTable.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeRestaurantActivity.this, DinnerTableActivity.class);
+            Intent intent = new Intent(HomeRestaurantActivity.this, ShowTableActivity.class);
             intent.putExtra("uid", accountId);
             startActivity(intent);
         });

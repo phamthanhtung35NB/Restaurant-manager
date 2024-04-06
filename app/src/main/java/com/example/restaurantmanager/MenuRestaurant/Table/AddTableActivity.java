@@ -75,7 +75,6 @@ public class AddTableActivity extends AppCompatActivity {
         Intent intent = getIntent();
         accountId = intent.getStringExtra("uid");
         Toast.makeText(this, "idMax: "+accountId, Toast.LENGTH_SHORT).show();
-//        readIdMax(accountId);
     }
     void addEvent(){
         imageButtonAdd.setOnClickListener(v -> {

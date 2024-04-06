@@ -59,7 +59,7 @@
             android:name=".Client.HomeClientActivity"
             android:exported="false" />
         <activity
-            android:name=".MenuRestaurant.Table.DinnerTableActivity"
+            android:name=".MenuRestaurant.Table.ShowTableActivity"
             android:exported="false" />
         <activity
             android:name=".MenuRestaurant.StatisticalActivity"
