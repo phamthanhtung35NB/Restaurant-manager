@@ -9,14 +9,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class NotificationActivity extends AppCompatActivity {
+public class DialogNotificationActivity extends AppCompatActivity {
     TextView notificationTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_notification);
-        init();
+        setContentView(R.layout.activity_notification_dialog);
+//        init();
         addEvents();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -24,9 +24,9 @@ public class NotificationActivity extends AppCompatActivity {
             return insets;
         });
     }
-    void init() {
-        notificationTextView = findViewById(R.id.notificationTextView);
-    }
+//    void init() {
+//        notificationTextView = findViewById(R.id.notificationTextView);
+//    }
     void addEvents() {
     }
 }
