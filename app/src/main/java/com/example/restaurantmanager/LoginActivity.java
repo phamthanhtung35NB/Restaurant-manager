@@ -1,9 +1,5 @@
 package com.example.restaurantmanager;
 
-//import android.app.Activity;
-
-//import static com.example.restaurantmanager.Notifications.MyFirebaseMessagingService.PERMISSION_REQUEST_CODE;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
@@ -55,13 +51,7 @@ import model.Account;
 import model.SqliteAccountHelper;
 
 public class LoginActivity extends AppCompatActivity {
-//    private static final String TABLE_NAME_ACCOUNT = "account";
-//    private static final String COLUMN_TYPE = "type";
-//    private static final String COLUMN_USERNAME = "username";
-//    private static final String COLUMN_PASSWORD = "password";
-//    private static final String COLUMN_PHONE = "phone";
-//    private static final String COLUMN_EMAIL = "email";
-//    private static final String COLUMN_ADDRESS = "address";
+
     private final String  DB_PATH_SUFFIX = "/databases/";
 //    SQLiteDatabase database=null;
     private final String DATABASE_NAME="menurestaurant.db";
@@ -73,24 +63,23 @@ public class LoginActivity extends AppCompatActivity {
     private RadioButton radioButtonRestaurantLogin;
     private RadioButton radioButtonClientLogin;
     SQLiteDatabase database=null;
+    //mAuth là biến để xác thực người dùng
     private FirebaseAuth mAuth;
+    //PERMISSION_REQUEST_CODE là mã yêu cầu quyền
     private static final int PERMISSION_REQUEST_CODE = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-
         init();
         addEvents();
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         // Check if the notification policy access has been granted for the app.
         if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
             Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
@@ -105,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Quyền đã được cấp, gọi notify()
                 System.out.println("onRequestPermissionsResult-------------------------------------------------");
             } else {
-                // Quyền không được cấp, bạn có thể hiển thị một thông báo hoặc thực hiện các hành động khác ở đây
+                // Quyền không được cấp,
             }
         }
     }
@@ -120,36 +109,6 @@ public class LoginActivity extends AppCompatActivity {
         radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        System.out.println("init-------------------------------------------------");
-        //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
-//        SqliteAccountHelper dbHelper = new SqliteAccountHelper(this);
-//        System.out.println("dbHelper-------------------------------------------------");
-//            Account account= dbHelper.getAccount();
-//        System.out.println("account-------------------------------------------------");
-//
-//            if(account!=null){
-//                System.out.println("load----------------------"+account.getUsername());
-////                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                if (account.getType().equals("restaurant")) {
-//                    Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//            }
-        //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
-//        database = openOrCreateDatabase("menurestaurant.db", MODE_PRIVATE, null);
-//        Cursor c = database.query("account", null, null, null, null, null, null);
-//        System.out.println("----------------------------3---------------------------------");
-//        int a=0;
-//        while (c.moveToNext()) {
-//            if (c.getString(1)!=null){
-//                System.out.println("load"+a+"----------------------"+c.getString(1));
-//                a++;
-//                Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }
     }
 
 
@@ -168,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     private void login() {
-        System.out.println("login-------------------------------------------------");
+        textPassword.setText("1234567");
         String username = textViewUsername.getText().toString();
         String password = textPassword.getText().toString();
         if (TextUtils.isEmpty(username)) {
@@ -198,36 +157,13 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
                     }
-
-//                    finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
                 } else {
                     Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
-//    private void login() {
-//        final String username = textViewUsername.getText().toString();
-//        final String password = textPassword.getText().toString();
-//        if (TextUtils.isEmpty(username)) {
-//            textViewUsername.setError("Vui lòng nhập tên đăng nhập");
-//            return;
-//        }
-//        if (TextUtils.isEmpty(password)) {
-//            textPassword.setError("Vui lòng nhập mật khẩu");
-//            return;
-//        }
-//        db = FirebaseFirestore.getInstance();
-//        if (radioButtonClientLogin.isChecked()) {
-//            loginClient(username, password);
-//        } else if (radioButtonRestaurantLogin.isChecked()) {
-//            loginRestaurant(username, password);
-//        }
-//        else {
-//            Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
+    //////////////////////////////////////////ĐĂNG NHẬP VỚI TÀI KHOẢN NHÀ HÀNG//////////////////////////////////////////
     void loginRestaurant(String uid){
         DocumentReference documentReference = db.collection("restaurant").document(uid);
         //kiểm tra xem uid có tồn tại trong collection client không nếu không thì kiểm tra trong collection restaurant
@@ -244,9 +180,9 @@ public class LoginActivity extends AppCompatActivity {
                     String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
                     //uid của người dùng
-
                     intent.putExtra("type", "restaurant");
                     intent.putExtra("uid", uid1);
+                    //lấy token của thiết bị và gửi lên server
                     MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "restaurant");
                     startActivity(intent);
 //                    finish();
@@ -257,7 +193,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
+    //////////////////////////////////////////ĐĂNG NHẬP VỚI TÀI KHOẢN KHÁCH HÀNG//////////////////////////////////////////
     void loginClient(String uid){
         DocumentReference documentReference = db.collection("client").document(uid);
         //kiểm tra xem uid có tồn tại trong collection client không nếu không thì kiểm tra trong collection restaurant
@@ -271,13 +207,11 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();
                     String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, HomeClientActivity.class);
-
                     intent.putExtra("type", "client");
                     intent.putExtra("uid", uid1);
+                    //lấy token của thiết bị và gửi lên server
                     MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "client");
                     startActivity(intent);
-//                    finish();
-//                                insertAccount("client", username, password, phone, email, address);
                 } else {
                     Toast.makeText(LoginActivity.this, "Không tồn tại tài khoản khách hàng", Toast.LENGTH_SHORT).show();
                 }
@@ -289,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
         databaseHelper.addAccountLogin(new Account(type, username, password, phone, email, address));
         System.out.println("insertAccount------------------Done------------------------------");
     }
-    //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
+    //////////////////////////////////////////KHỞI TẠO DATABASE SQLITE//////////////////////////////////////////
     private void processCopy() {
         File dbFile = getDatabasePath(DATABASE_NAME);
         if (!dbFile.exists()) {
@@ -333,17 +267,5 @@ public class LoginActivity extends AppCompatActivity {
     private String getDatabasePath() {
         return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
     }
-    //////////////////////////////////////////KHỞI TẠO DATABASE//////////////////////////////////////////
-    //add restaurant to firebase
-//    private void addRestaurant() {
-//        String id = "2";
-//        String name = "Bún";
-//        String description = "Bún Hà Nội";
-//        double price = 30000;
-//        String image = "https://firebasestorage.googleapis.com/v0/b/restaurantmanager-1e3e7.appspot.com/o/restaurant%2Ftung%2Fbuncha.jpg?alt=media&token=3e3e3e3e-3e3e-3e3e-3e3e-3e3e3e3e3e3e";
-//        MenuRestaurant menuRestaurant = new MenuRestaurant(id, name, description, price, image);
-//        FirestoreHelper.addMenuRestaurant( "tung", menuRestaurant);
-//    }
-
 
 }

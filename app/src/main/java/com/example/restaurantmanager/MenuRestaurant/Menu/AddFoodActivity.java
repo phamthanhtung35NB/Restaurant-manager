@@ -51,9 +51,11 @@ public class AddFoodActivity extends AppCompatActivity {
     ImageView imageViewFood;
     ImageButton imageButtonSave;
     private ProgressBar progressBar;
+
     // Define a static final int for the camera request code
     //CAMERA_REQUEST_CODE có tác dụng như một ID để xác định rằng bạn đang yêu cầu kết quả từ máy ảnh.
     private static final int CAMERA_REQUEST_CODE = 100;
+
     public static String accountId = "tung";
     public static String type = "restaurant";
 //    public static String imageUrl = "";
@@ -85,33 +87,11 @@ public class AddFoodActivity extends AppCompatActivity {
         accountId = intent.getStringExtra("uid");
         System.out.println("-----------------------====idMaxLong: " + accountId);
     }
-//    private void openCamera() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        startActivityForResult(intent, CAMERA_REQUEST_CODE);
-//    }
-    private void openCamera() {
-        // Tạo Intent để mở ứng dụng máy ảnh mặc định
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        // Kiểm tra xem thiết bị có ứng dụng máy ảnh để xử lý Intent không
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-            // Gửi Intent để mở ứng dụng máy ảnh và chụp ảnh
-            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-        } else {
-            // Trường hợp không có ứng dụng máy ảnh nào được tìm thấy, thông báo cho người dùng
-            Toast.makeText(this, "Không tìm thấy ứng dụng máy ảnh.", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     void addEvents() {
         imageViewFood.setOnClickListener(v -> {
-//            TODO: xin cấp quyền máy ảnh + chụp ảnh + lưu ảnh vào strorage+ lấy link + load ảnh
             openCamera();
-
         });
-//        imageButtonSave.setOnClickListener(v -> {
-//            System.out.println("URL: " + imageUrl);
-//        });
         imageButtonSave.setOnClickListener(v -> {
             //lưu dữ liệu
             String name = edtName.getText().toString();
@@ -130,20 +110,59 @@ public class AddFoodActivity extends AppCompatActivity {
             edtPrice.setText("");
         });
     }
+
+    /**
+     * Hàm openCamera() dùng để mở ứng dụng máy ảnh mặc định của thiết bị.
+     * Khi người dùng chụp ảnh, ảnh sẽ được trả về dưới dạng Bitmap.
+     *
+     */
+    private void openCamera() {
+        // Tạo Intent để mở ứng dụng máy ảnh mặc định
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Kiểm tra xem thiết bị có ứng dụng máy ảnh để xử lý Intent không
+        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+            // Gửi Intent để mở ứng dụng máy ảnh và chụp ảnh
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+        } else {
+            // Trường hợp không có ứng dụng máy ảnh nào được tìm thấy, thông báo cho người dùng
+            Toast.makeText(this, "Không tìm thấy ứng dụng máy ảnh.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Hàm onActivityResult() được gọi sau khi một Activity khác trả về kết quả cho Activity hiện tại.
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     *                    Đây là mã yêu cầu mà bạn đã gửi với startActivityForResult().
+     *                    Nó giúp bạn xác định rằng kết quả này đến từ đâu.
+     *                    Ví dụ: nếu bạn gửi yêu cầu với mã 100, bạn sẽ nhận lại mã 100 ở đây.
+     *
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     *                   Đây là mã kết quả trả về từ Activity con thông qua phương thức setResult().
+     *                   Ví dụ: nếu Activity con trả về kết quả thành công, bạn sẽ nhận được RESULT_OK.
+     *                   Nếu Activity con trả về kết quả thất bại, bạn sẽ nhận được RESULT_CANCELED.
+     *                   Nếu Activity con trả về kết quả thành công và có dữ liệu, bạn cũng sẽ nhận được RESULT_OK.
+     *
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *             Một Intent, có thể trả về dữ liệu kết quả cho người gọi
+     *              (các dữ liệu khác nhau có thể được đính kèm vào Intent "extras").
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             // Lấy dữ liệu ảnh từ Intent
             Bundle extras = data.getExtras();
             if (extras != null) {
                 // Lấy ảnh từ dữ liệu ảnh
                 Bitmap bitmap = (Bitmap) extras.get("data");
-
                 // Hiển thị ảnh trong ImageView
                 imageViewFood.setImageBitmap(bitmap);
-
                 // Upload ảnh lên Firebase
                 UploadImageToFirebase.uploadImageToFirebase(bitmap, "imageMenu_", accountId, progressBar);
             } else {
@@ -181,56 +200,23 @@ public class AddFoodActivity extends AppCompatActivity {
 //        }
 //    }
 
-    private void addDataToFireBase(MenuRestaurant menuRestaurant) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(type).document(accountId)
-                .update("menuRestaurant." + menuRestaurant.getId(), menuRestaurant.toMap())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Data added successfully for account: " + accountId);
-                        System.out.println("-----------------------====idMaxLong: add " + menuRestaurant.getId());
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error adding data for account: " + accountId, e);
-                    }
-                });
-    }
-    private void updateIdMax(long newIdMax,MenuRestaurant menuRestaurant) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("idMax", newIdMax);
-
-        db.collection(type).document(accountId)
-                .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "ID Max updated successfully!");
-                        Toast.makeText(AddFoodActivity.this, "ID Max updated successfully!", Toast.LENGTH_SHORT).show();
-                        System.out.println("-----------------------====idMaxLong: set" + newIdMax);
-                        menuRestaurant.setId(String.valueOf(newIdMax));
-                        addDataToFireBase( menuRestaurant);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error updating ID Max", e);
-                    }
-                });
-    }
-
+    ///////////////////////////////////////////////ADD MENU TO FIREBASE////////////////////////////////////////////
+    /**
+     * Get ID Max from Firebase
+     * Update ID Max in Firebase
+     * Add data to Firebase
+     */
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /**
+     * Đọc ID Max từ Firebase
+     * @param menuRestaurant thông tin món ăn mới
+     *
+     */
     private void readIDMaxFromFireBase(MenuRestaurant menuRestaurant) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection(type).document(accountId)
-                .get()
+        db.collection(type).document(accountId).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -239,7 +225,7 @@ public class AddFoodActivity extends AppCompatActivity {
                             Long idMaxLong = (Long) accountData.get("idMax");
                             idMaxLong++;
                             updateIdMax(idMaxLong,menuRestaurant);
-                        Toast.makeText(AddFoodActivity.this, "idMaxInt: " + idMaxLong, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddFoodActivity.this, "idMaxInt: " + idMaxLong, Toast.LENGTH_SHORT).show();
                         } else {
                             Log.d(TAG, "No such document");
 
@@ -251,9 +237,61 @@ public class AddFoodActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
 
                     }
-                    // ... (Mã xử lý lỗi hiện có của bạn)
                 });
     }
 
+    /**
+     * Update ID Max trong Firebase
+     * @param newIdMax ID Max mới
+     * @param menuRestaurant thông tin món ăn mới
+     */
+    private void updateIdMax(long newIdMax,MenuRestaurant menuRestaurant) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("idMax", newIdMax);
+
+        db.collection(type).document(accountId).update(data)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "ID Max updated successfully!");
+                    Toast.makeText(AddFoodActivity.this, "ID Max updated successfully!", Toast.LENGTH_SHORT).show();
+                    System.out.println("-----------------------====idMaxLong: set" + newIdMax);
+                    menuRestaurant.setId(String.valueOf(newIdMax));
+                    addDataToFireBase( menuRestaurant);
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "Error updating ID Max", e);
+                }
+            });
+    }
+
+    /**
+     * Update món ăn trong menu của nhà hàng lên Firebase
+     *
+     * @param menuRestaurant thông tin món ăn mới
+     */
+    private void addDataToFireBase(MenuRestaurant menuRestaurant) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(type).document(accountId).update("menuRestaurant." + menuRestaurant.getId(), menuRestaurant.toMap())
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG, "Data added successfully for account: " + accountId);
+                    System.out.println("-----------------------====idMaxLong: add " + menuRestaurant.getId());
+
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "Error adding data for account: " + accountId, e);
+                }
+            });
+    }
 
 }

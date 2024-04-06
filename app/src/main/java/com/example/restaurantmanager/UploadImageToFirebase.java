@@ -30,7 +30,13 @@ public class UploadImageToFirebase {
     private static final String TAG = "FirebaseImageUploader";
     public static String imageUrl = "";
 
-    // Hàm tải ảnh lên Firebase
+    /**
+     * upload image to firebase
+     * @param bitmap ảnh cần upload lên firebase storage dưới dạng bitmap
+     * @param nameImage tên ảnh cần upload
+     * @param accauntId id của tài khoản restaurant
+     * @param progressBar progress bar để hiển thị quá trình upload ảnh
+     */
     public static void uploadImageToFirebase(Bitmap bitmap,String nameImage ,String accauntId,ProgressBar progressBar) {
         //mở progress bar
         progressBar.setVisibility(View.VISIBLE);
@@ -39,7 +45,6 @@ public class UploadImageToFirebase {
         StorageReference storageRef = storage.getReference();
 
         StorageReference imagesRef = storageRef.child(accauntId+"/" + generateImageName(nameImage));
-
         // Chuyển đổi Bitmap thành dữ liệu byte với định dạng PNG và chất lượng nén là 100
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -82,6 +87,7 @@ public class UploadImageToFirebase {
         String timestamp = sdf.format(new Date(currentTime));
         return ""+nameImage + timestamp + ".png";
     }
+
     public static void deleteImageFromFirebase(String imageUrl) {
         // Tạo tham chiếu tới Firebase Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();

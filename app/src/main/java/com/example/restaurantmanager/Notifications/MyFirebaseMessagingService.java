@@ -37,6 +37,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMessagingService";
     private static final int PERMISSION_REQUEST_CODE = 123;
+    public static Boolean isNotification = false;
+    public static String title = "";
+    public static String message = "";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -53,6 +56,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             System.out.println("có thông báo");
             System.out.println("Message Notification Title: " + remoteMessage.getNotification().getTitle());
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            title = remoteMessage.getNotification().getTitle();
+            message = remoteMessage.getNotification().getBody();
+            isNotification = true;
 //            showDialog(this, remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
 //            showDialog();
         }
@@ -156,6 +162,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+
+    /**
+     * Gửi token của thiết bị lên firestore
+     * Đường dẫn collection: type(restaurant hoặc client) / userId
+     * @param context context của activity
+     * @param type loại token (restaurant, client)
+     */
     public static void fetchTokenAndSendToServer(final Context context,String type) {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
@@ -172,7 +185,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String msg = context.getString(R.string.msg_token_fmt, token);
                 Log.d(TAG, msg);
                 Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-
                 // Send the Instance ID token to your app server.
                 FireBase.sendRegistrationToServer(token,type);
             }

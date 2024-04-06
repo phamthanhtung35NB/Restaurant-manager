@@ -1,10 +1,16 @@
 package com.example.restaurantmanager.MenuRestaurant.Order;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,6 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,6 +77,42 @@ public class OderActivity extends AppCompatActivity {
         readDataFromFireBase();
         oderAdapter = new OrderAdapter(OderActivity.this, R.layout.food_order, dataOrder);
         listViewOrder.setAdapter(oderAdapter);
+
+        // Khởi tạo Handler và Runnable
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                checkVariable();
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        // Bắt đầu kiểm tra
+        runnable.run();
+
+    }
+    public void showDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_notification_dialog);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == Gravity.BOTTOM) {
+            dialog.setCancelable(true);
+        } else {
+            dialog.setCancelable(false);
+        }
+        dialog.show();
     }
     void init() throws WriterException {
         listViewOrder = findViewById(R.id.listViewOrder);
@@ -149,5 +192,31 @@ public class OderActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        });
 
+    }
+    private Handler handler;
+    private Runnable runnable;
+
+
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Dừng kiểm tra khi Activity bị hủy
+        handler.removeCallbacks(runnable);
+    }
+
+    private void checkVariable() {
+
+        if (MyFirebaseMessagingService.isNotification==true) {
+            // Biến staticBooleanVariable trong OtherClass đang có giá trị true
+            showDialog();
+            System.out.println("có tb mới");
+            MyFirebaseMessagingService.isNotification = false;
+        } else {
+            // Biến staticBooleanVariable trong OtherClass đang có giá trị false
+//            showDialog();
+        }
     }
 }

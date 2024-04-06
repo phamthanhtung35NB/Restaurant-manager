@@ -2,6 +2,7 @@ package com.example.restaurantmanager.Client;
 
 import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +22,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.restaurantmanager.Notifications.FireBase;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -30,6 +34,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
 import model.Account;
 import model.HistoryRestaurant;
@@ -201,10 +206,10 @@ public class HomeClientActivity extends AppCompatActivity {
         //lấy token từ uri của user
         String token = FireBase.tokenRtn;
         System.out.println("token: " + token);
-        System.out.println(FireBase.tokenRtn);
+//        System.out.println(FireBase.tokenRtn);
         //gửi thông báo đến token
-        sendMessageToToken(token);
-        sendMessageFromUser1ToUser2(token);
+        sendMessageToToken(content);
+        sendMessageFromUser1ToUser2(content);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode,@Nullable Intent data) {
@@ -233,7 +238,22 @@ public class HomeClientActivity extends AppCompatActivity {
                 //lấy id của nhà hàng
                 String[] arr = content.split("/");
                 String userId1 = arr[0];
-                FireBase.getUserToken("restaurant", userId1);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("restaurant").document(userId1)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    Map<String, Object> accountData = documentSnapshot.getData();
+                                    String token = accountData.get("token").toString();
+                                    Log.d(ContentValues.TAG, "Summmmmmmmmm: " + token);
+                                    sendNotification(token);
+                                } else {
+                                    Log.d(ContentValues.TAG, "No such document");
+                                }
+                            }
+                        });
 
                 startActivity(intent);
                 //đóng activity

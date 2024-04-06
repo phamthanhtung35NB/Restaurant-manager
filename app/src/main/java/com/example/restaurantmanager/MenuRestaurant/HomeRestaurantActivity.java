@@ -43,18 +43,20 @@ public class HomeRestaurantActivity extends AppCompatActivity {
         type = intentGet.getStringExtra("type");
     }
     void addEvents(){
+        //Quản lý thực đơn
         lineButtonsMenu.setOnClickListener(v -> {
-
             Intent intent = new Intent(HomeRestaurantActivity.this, ShowMenuActivity.class);
             intent.putExtra("type", type);
             intent.putExtra("uid", accountId);
             startActivity(intent);
         });
+        //Quản lý bàn ăn
         lineButtonsTable.setOnClickListener(v -> {
             Intent intent = new Intent(HomeRestaurantActivity.this, DinnerTableActivity.class);
             intent.putExtra("uid", accountId);
             startActivity(intent);
         });
+        //Thống kê
         lineButtonsStatistical.setOnClickListener(v -> {
             Intent intent = new Intent(HomeRestaurantActivity.this, StatisticalActivity.class);
             startActivity(intent);
