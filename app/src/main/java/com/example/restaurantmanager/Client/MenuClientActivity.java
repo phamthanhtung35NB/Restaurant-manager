@@ -82,7 +82,9 @@ public class MenuClientActivity extends AppCompatActivity {
         dataMenuViewClient = new ArrayList<>();
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
 //        listViewClient.setAdapter(menuClientAdapter);
+
         readDataFromFireBase();
+
     }
     void addEvents() {
         imageButtonGioHang.setOnClickListener(v -> {

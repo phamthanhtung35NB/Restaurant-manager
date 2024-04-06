@@ -5,16 +5,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.NOTIFICATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<!--    // cấp quyền truy cập vào thông báo-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- // cấp quyền truy cập vào thông báo -->
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
-
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,14 +25,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
-        <!--        android:name=".MyApplication"-->
+        <activity
+            android:name=".NotificationActivity"
+            android:exported="false" />
+        <!-- android:name=".MyApplication" -->
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name=".Notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".Client.OrderClientActivity"
             android:exported="false" />

@@ -2,7 +2,7 @@ package com.example.restaurantmanager;
 
 //import android.app.Activity;
 
-import static com.google.firebase.appcheck.internal.util.Logger.TAG;
+//import static com.example.restaurantmanager.Notifications.MyFirebaseMessagingService.PERMISSION_REQUEST_CODE;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -10,16 +10,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 
 
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,18 +35,14 @@ import android.widget.Toast;
 
 import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
+import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 
 import java.io.File;
@@ -53,8 +50,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import model.Account;
 import model.SqliteAccountHelper;
@@ -79,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     private RadioButton radioButtonClientLogin;
     SQLiteDatabase database=null;
     private FirebaseAuth mAuth;
+    private static final int PERMISSION_REQUEST_CODE = 123;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +89,27 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        // Check if the notification policy access has been granted for the app.
+        if (notificationManager != null && !notificationManager.isNotificationPolicyAccessGranted()) {
+            Intent intent = new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+            startActivity(intent);
+        }
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Quyền đã được cấp, gọi notify()
+                System.out.println("onRequestPermissionsResult-------------------------------------------------");
+            } else {
+                // Quyền không được cấp, bạn có thể hiển thị một thông báo hoặc thực hiện các hành động khác ở đây
+            }
+        }
+    }
+
     void init() {
         processCopy();
         textViewUsername = findViewById(R.id.textViewUsername);

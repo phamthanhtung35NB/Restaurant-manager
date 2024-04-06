@@ -1,7 +1,15 @@
 package com.example.restaurantmanager.Client;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -11,8 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
+import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,7 +63,9 @@ public class OrderClientActivity extends AppCompatActivity {
             return insets;
         });
         readDataFromFireBase();
+
     }
+
     void init() {
         listViewOrderClient = findViewById(R.id.listViewOrderClient);
         dataOrderClient = new ArrayList<>();
@@ -70,6 +82,7 @@ public class OrderClientActivity extends AppCompatActivity {
         HistoryRestaurant.checkSumDayAndInitialization(accountId);
         HistoryRestaurant.checkSumAndInitialization(accountId, table);
         textThongTinBanClient.setText(a);
+        HomeClientActivity.sendNotification(accountId);
     }
     void readDataFromFireBase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
