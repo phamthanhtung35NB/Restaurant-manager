@@ -26,9 +26,11 @@
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
         <activity
-            android:name=".DialogNotificationActivity"
+            android:name=".Client.PayTheBillClientActivity"
             android:exported="false" />
-        <!-- android:name=".MyApplication" -->
+        <activity
+            android:name=".DialogNotificationActivity"
+            android:exported="false" /> <!-- android:name=".MyApplication" -->
         <service
             android:name=".Notifications.MyFirebaseMessagingService"
             android:exported="false">

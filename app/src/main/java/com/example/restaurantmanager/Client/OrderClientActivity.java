@@ -1,19 +1,8 @@
 package com.example.restaurantmanager.Client;
 
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,10 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
-import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,10 +22,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import adapter.OrderAdapter;
 import adapter.OrderClientAdapter;
 import model.HistoryRestaurant;
 import model.MenuRestaurant;
+import com.example.restaurantmanager.Client.PayTheBillClientActivity;
 
 public class OrderClientActivity extends AppCompatActivity {
 
@@ -48,7 +34,7 @@ public class OrderClientActivity extends AppCompatActivity {
     public static OrderClientAdapter orderClientAdapter;
     public static ArrayList<MenuRestaurant> dataOrderClient;
 
-    public static double tong = 0;
+    public static double tong0 = 0;
     Button buttonThanhToanClient;
     TextView textThongTinBanClient;
     public static String URL = "";
@@ -66,8 +52,8 @@ public class OrderClientActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        // đọc dữ liệu từ firebase
         readDataFromFireBase();
-
     }
 
     void init() {
@@ -82,12 +68,70 @@ public class OrderClientActivity extends AppCompatActivity {
         String[] arr = text.split("/");
         accountId = arr[0];
         table = arr[1];
-        String a = "Bàn: " +table;
+        String showNameTable = "Bàn: " +table;
         HistoryRestaurant.checkSumDayAndInitialization(accountId);
         HistoryRestaurant.checkSumAndInitialization(accountId, table);
-        textThongTinBanClient.setText(a);
-        HomeClientActivity.sendNotification(accountId);
+        textThongTinBanClient.setText(showNameTable);
     }
+
+    void addEvents() {
+        buttonThanhToanClient.setOnClickListener(v -> {
+            // Xử lý sự kiện khi click vào nút thanh toán
+            //xóa dữ liệu preferences my_preferences
+//            SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.remove("key");
+//            editor.apply();
+            //tính tổng price trên firebase
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference refOrder = database.getReference(URL);
+            refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // Lặp qua tất cả child
+                    double tong = 0;
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        // Tạo instance mới của ClassTable
+                        MenuRestaurant menuOrder = new MenuRestaurant();
+                        if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+                            menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
+                            tong += menuOrder.getPrice();
+                        }
+                    }
+
+                    //tính tổng price
+                    System.out.println("tong: " + tong);
+                    //xóa dữ liệu trên firebase
+//                    refOrder.removeValue();
+                    //chuyển sang activity thanh toán
+//                    OrderClientActivity.tong0 = tong;
+
+
+                    HistoryRestaurant.addHistory(dataOrderClient, accountId, table, (long) tong);
+                    //xóa dữ liệu brrn trong url trên firebase
+                    removeOrder();
+                    Intent intent = new Intent(OrderClientActivity.this, PayTheBillClientActivity.class);
+                    System.out.println("khoi tao intent");
+                    intent.putExtra("accountId", accountId);
+                    intent.putExtra("table", table);
+                    intent.putExtra("bill", tong);
+                    startActivity(intent);
+                    System.out.println("start activity");
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Xử lý lỗi
+                    System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+                }
+
+            });
+        });
+    }
+
+    /**
+     * Hàm đọc dữ liệu từ firebase realtime database (các món ăn đã được chọn)
+     */
     void readDataFromFireBase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOrder = database.getReference(URL);
@@ -126,7 +170,7 @@ public class OrderClientActivity extends AppCompatActivity {
             }
         });
     }
-    public static void removeOrder() {
+    public void removeOrder() {
         // Khởi tạo Firebase Database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -138,6 +182,7 @@ public class OrderClientActivity extends AppCompatActivity {
             if (task.isSuccessful()) {
                 // Xóa thành công
                 System.out.println("Xóa order thành công!");
+
             } else {
                 // Xóa thất bại
                 Exception e = task.getException();
@@ -146,51 +191,5 @@ public class OrderClientActivity extends AppCompatActivity {
         });
     }
 
-    void addEvents() {
-        buttonThanhToanClient.setOnClickListener(v -> {
 
-            // Xử lý sự kiện khi click vào nút thanh toán
-            //xóa dữ liệu preferences my_preferences
-            SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.remove("key");
-            editor.apply();
-            //tính tổng price trên firebase
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference refOrder = database.getReference(URL);
-            refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Lặp qua tất cả child
-                    double tong = 0;
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        // Tạo instance mới của ClassTable
-                        MenuRestaurant menuOrder = new MenuRestaurant();
-                        if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
-                            menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
-                            tong += menuOrder.getPrice();
-                        }
-                    }
-
-                    //tính tổng price
-                    System.out.println("tong: " + tong);
-                    //xóa dữ liệu trên firebase
-//                    refOrder.removeValue();
-                    //chuyển sang activity thanh toán
-                    OrderClientActivity.tong = tong;
-                    textThongTinBanClient.setText("Tổng tiền: " + tong);
-                    HistoryRestaurant.addHistory(dataOrderClient, accountId, table, (long) tong);
-                    //xóa dữ liệu brrn trong url trên firebase
-                    removeOrder();
-
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Xử lý lỗi
-                    System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
-                }
-
-            });
-        });
-    }
 }

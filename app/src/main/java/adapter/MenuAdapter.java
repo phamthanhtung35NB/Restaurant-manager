@@ -38,6 +38,19 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         this.objects = objects;
     }
 
+    /**
+     * Hàm này sẽ được gọi khi những dòng dữ liệu muốn hiển thị lên giao diện
+     * @param position The position of the item within the adapter's data set of the item whose view
+     *        we want.
+     * @param convertView The old view to reuse, if possible. Note: You should check that this view
+     *        is non-null and of an appropriate type before using. If it is not possible to convert
+     *        this view to display the correct data, this method can create a new view.
+     *        Heterogeneous lists can specify their number of view types, so that this View is
+     *        always of the right type (see {@link #getViewTypeCount()} and
+     *        {@link #getItemViewType(int)}).
+     * @param parent The parent that this view will eventually be attached to
+     * @return
+     */
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = this.context.getLayoutInflater();
@@ -59,8 +72,6 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         Picasso.get()
                 .load(menuRestaurant.getImage())
                 .into(imageViewFood);
-//        imageViewFood.setImageResource(R.drawable.rice);
-//        imageViewFood.setImageBitmap(BitmapFactory.decodeFile(menuRestaurant.getImage()));
         imageButtonSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

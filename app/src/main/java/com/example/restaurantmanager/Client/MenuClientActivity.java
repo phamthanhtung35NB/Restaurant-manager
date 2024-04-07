@@ -37,6 +37,7 @@ import adapter.MenuAdapter;
 import adapter.MenuClientAdapter;
 import adapter.OrderAdapter;
 import model.MenuRestaurant;
+import model.SetTableStateEmptyRealtime;
 
 public class MenuClientActivity extends AppCompatActivity {
 
@@ -82,7 +83,7 @@ public class MenuClientActivity extends AppCompatActivity {
         dataMenuViewClient = new ArrayList<>();
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
 //        listViewClient.setAdapter(menuClientAdapter);
-
+        SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang sử dụng");
         readDataFromFireBase();
 
     }
