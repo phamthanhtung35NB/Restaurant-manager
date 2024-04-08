@@ -1,5 +1,6 @@
 package com.example.restaurantmanager.MenuRestaurant;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.restaurantmanager.R;
 import com.github.mikephil.charting.charts.BarChart;
@@ -29,9 +31,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import model.HistoryRestaurant;
+
 public class StatisticalActivity extends AppCompatActivity {
     private List<String> xValues = Arrays.asList("1", "2", "3", "4", "5");
     BarChart barChartTK;
+    TextView textViewToday;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +51,16 @@ public class StatisticalActivity extends AppCompatActivity {
         });
     }
     void init(){
+        textViewToday = findViewById(R.id.textViewToday);
+        initChart();
+        Intent intentGet = getIntent();
+        double tonngSumDay = intentGet.getLongExtra("sumDay", 0);
+        textViewToday.setText(tonngSumDay + " VNĐ");
+
+    }
+    void addEvents(){
+    }
+    void initChart(){
         barChartTK = findViewById(R.id.barChartTK);
         barChartTK.getAxisRight().setDrawLabels(false);
         ArrayList<BarEntry> entries = new ArrayList<>();
@@ -109,7 +124,5 @@ public class StatisticalActivity extends AppCompatActivity {
         barChartTK.getXAxis().setGranularity(1f);
 
         barChartTK.getXAxis().setGranularityEnabled(true);
-    }
-    void addEvents(){
     }
 }

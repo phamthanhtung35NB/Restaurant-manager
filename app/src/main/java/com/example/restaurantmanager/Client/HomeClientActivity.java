@@ -81,7 +81,7 @@ public class HomeClientActivity extends AppCompatActivity {
         //tách chuỗi
         String[] arr = preferences.getString("key", "").split("/");
 //        String userId = arr[0];
-//        HistoryRestaurant.readSumDayFromFireBase("Kj44x84LCzcwIXOpsR7wCU4pepB3");
+
     }
     void addEvents() {
         imageButtonScan.setOnClickListener(v -> {

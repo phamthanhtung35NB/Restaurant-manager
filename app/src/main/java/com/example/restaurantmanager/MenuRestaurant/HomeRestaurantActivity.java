@@ -14,6 +14,8 @@ import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
 import com.example.restaurantmanager.R;
 
+import model.HistoryRestaurant;
+
 public class HomeRestaurantActivity extends AppCompatActivity {
 
     LinearLayout lineButtonsMenu;
@@ -41,6 +43,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
         Intent intentGet = getIntent();
         accountId = intentGet.getStringExtra("uid");
         type = intentGet.getStringExtra("type");
+        HistoryRestaurant.readSumDayFromFireBase(accountId);
     }
     void addEvents(){
         //Quản lý thực đơn
@@ -59,6 +62,7 @@ public class HomeRestaurantActivity extends AppCompatActivity {
         //Thống kê
         lineButtonsStatistical.setOnClickListener(v -> {
             Intent intent = new Intent(HomeRestaurantActivity.this, StatisticalActivity.class);
+            intent.putExtra("sumDay", HistoryRestaurant.sumDay);
             startActivity(intent);
         });
     }

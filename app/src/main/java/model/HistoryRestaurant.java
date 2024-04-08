@@ -192,6 +192,7 @@ public class HistoryRestaurant {
                     }
                 });
     }
+    public static long sumDay=0;
     public static void readSumDayFromFireBase(String accountId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -214,6 +215,7 @@ public class HistoryRestaurant {
                             } else {
                                 Log.d(TAG, "Tài liệu không tồn tại");
                             }
+                            sumDay = totalSum;
                             Log.d(TAG, "Total sum: " + totalSum);
                         }
                         //lưu tổng bill của ngày hôm đó
