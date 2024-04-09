@@ -2,8 +2,12 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.RestaurantManager" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="android:background">@color/white</item>
+
+
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
+
 
     <style name="Theme.RestaurantManager" parent="Base.Theme.RestaurantManager" />
 </resources>

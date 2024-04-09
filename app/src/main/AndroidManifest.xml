@@ -26,6 +26,9 @@
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
         <activity
+            android:name=".MenuRestaurant.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".Client.PayTheBillClientActivity"
             android:exported="false" />
         <activity

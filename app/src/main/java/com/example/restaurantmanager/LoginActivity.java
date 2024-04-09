@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
+import com.example.restaurantmanager.MenuRestaurant.MainActivity;
 import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -206,7 +207,7 @@ public class LoginActivity extends AppCompatActivity {
                     String email = document.getString("email");
                     Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();
                     String uid1 = mAuth.getCurrentUser().getUid();
-                    Intent intent = new Intent(LoginActivity.this, HomeClientActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("type", "client");
                     intent.putExtra("uid", uid1);
                     //lấy token của thiết bị và gửi lên server
