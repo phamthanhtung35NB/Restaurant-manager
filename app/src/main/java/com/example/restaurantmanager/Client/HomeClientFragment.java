@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -121,14 +123,23 @@ public class HomeClientFragment extends Fragment {
 //                SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
                 // Lưu trữ giá trị
 //                preferences.edit().putString("key", content).apply();
-                Intent intent = new Intent(getActivity(), PayTheBillClientActivity.class);
-                intent.putExtra("url", content);
-                //lấy id của nhà hàng
+                //tách chuỗi
                 String[] arr = content.split("/");
-                String userId1 = arr[0];
+                String userId = arr[0];
+                String numberTable = arr[1];
+                // Tạo một Bundle để chứa dữ liệu
+                Bundle bundle = new Bundle();
+                bundle.putString("url", content);
+                System.out.println("url: " + content);
+                bundle.putString("accountId", userId);
+                System.out.println("userId: " + userId);
+                bundle.putString("numberTable", numberTable);
+                System.out.println("numberTable: " + numberTable);
+//                Intent intent = new Intent(getActivity(), PayTheBillClientActivity.class);
+
                 //lấy token của nhà hàng từ firebase
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("restaurant").document(userId1).get()
+                db.collection("restaurant").document(userId).get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -143,9 +154,23 @@ public class HomeClientFragment extends Fragment {
                                 }
                             }
                         });
-                startActivity(intent);
+//                startActivity(intent);
+                // Tạo một instance mới của MenuClientFragment
+                MenuClientFragment menuClientFragment = new MenuClientFragment();
+                menuClientFragment.setArguments(bundle);
+
+                // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng MenuClientFragment
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                // Thay thế và thêm vào back stack
+                fragmentTransaction.replace(R.id.fragment_container, menuClientFragment);
+                fragmentTransaction.addToBackStack(null);
+
+                // Commit thao tác
+                fragmentTransaction.commit();
                 //đóng activity
-                getActivity().finish();
+//                getActivity().finish();
 
             } else {
                 textView.setText("Không tìm thấy mã QR");

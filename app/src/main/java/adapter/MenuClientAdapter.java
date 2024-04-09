@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.restaurantmanager.Client.MenuClientActivity;
+import com.example.restaurantmanager.Client.MenuClientFragment;
 import com.example.restaurantmanager.MenuRestaurant.Menu.EditFoodActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DatabaseError;
@@ -69,7 +70,7 @@ public class MenuClientAdapter extends ArrayAdapter<MenuRestaurant> {
 //
                 //them vao order(menuRestaurant);
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference(MenuClientActivity.URL+"/"+menuRestaurant.getId()+"");
+                DatabaseReference myRef = database.getReference(MenuClientFragment.URL+"/"+menuRestaurant.getId()+"");
                 myRef.setValue(menuRestaurant, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError error, DatabaseReference ref) {
@@ -80,7 +81,7 @@ public class MenuClientAdapter extends ArrayAdapter<MenuRestaurant> {
                         }
                     }
                 });
-                Toast.makeText(context, "đã xóa", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "đã thêm", Toast.LENGTH_SHORT).show();
 
             }
         });

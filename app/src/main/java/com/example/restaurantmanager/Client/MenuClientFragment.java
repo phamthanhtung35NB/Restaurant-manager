@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,12 +36,7 @@ import adapter.MenuClientAdapter;
 import model.MenuRestaurant;
 import model.SetTableStateEmptyRealtime;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MenuClientFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
+
 public class MenuClientFragment extends Fragment {
     public static ListView listViewClient;
 
@@ -61,19 +58,30 @@ public class MenuClientFragment extends Fragment {
     }
 
     void init(View view) {
-        SharedPreferences preferences = getActivity().getSharedPreferences("my_data", getActivity().MODE_PRIVATE);
-        String text = preferences.getString("key", "");
-        URL=text;
-        String[] parts = text.split("/");
+        System.out.println("đầu init");
+//        SharedPreferences preferences = getActivity().getSharedPreferences("my_data", getActivity().MODE_PRIVATE);
+//        String text = preferences.getString("key", "");
+//        URL=text;
+//        String[] parts = text.split("/");
+//
+//        // Truy cập từng chuỗi con
+//        accountId = parts[0];
+//        numberTable= parts[1];
+//        String order = parts[2];
 
-        // Truy cập từng chuỗi con
-        accountId = parts[0];
-        numberTable= parts[1];
-        String order = parts[2];
-
-
+//        đọc dữ liệu từ FragmentMenuClient
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            URL = bundle.getString("url");
+            System.out.println("URL: "+URL);
+            accountId = bundle.getString("accountId");
+            System.out.println("accountId: "+accountId);
+            numberTable = bundle.getString("numberTable");
+            System.out.println("numberTable: "+numberTable);
+            // Sử dụng các giá trị tại đây...
+        }
         textViewInformation = view.findViewById(R.id.textViewInformation);
-        textViewInformation.setText(text);
+        textViewInformation.setText(URL);
         listViewClient = view.findViewById(R.id.listViewClient);
         imageButtonGioHang = view.findViewById(R.id.imageButtonGioHang);
         dataMenuViewClient = new ArrayList<>();
@@ -81,16 +89,40 @@ public class MenuClientFragment extends Fragment {
 //        listViewClient.setAdapter(menuClientAdapter);
         SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang sử dụng");
         readDataFromFireBase();
-
+        System.out.println("cuối init");
     }
-    void addEvents() {
+    void addEvents(View view) {
         imageButtonGioHang.setOnClickListener(v -> {
-            Intent intent = new Intent(MenuClientActivity.this, OrderClientActivity.class);
-            startActivity(intent);
+            // Tạo một Bundle để chứa dữ liệu
+            Bundle bundle = new Bundle();
+            bundle.putString("url", URL);
+            System.out.println("URL: "+URL);
+            bundle.putString("accountId", accountId);
+            System.out.println("accountId: "+accountId);
+            bundle.putString("numberTable", numberTable);
+            System.out.println("numberTable: "+numberTable);
+
+            // Tạo một instance mới của FragmentC
+            OrderClientFragment fragmentC = new OrderClientFragment();
+
+            // Đặt Arguments cho Fragment
+            fragmentC.setArguments(bundle);
+
+            // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Thay thế và thêm vào back stack
+            fragmentTransaction.replace(R.id.fragment_container, fragmentC);
+            fragmentTransaction.addToBackStack(null);
+
+            // Commit thao tác
+            fragmentTransaction.commit();
         });
     }
 
     private void readDataFromFireBase() {
+        System.out.println("đầu readDataFromFireBase");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(type).document(accountId)
                 .get()
@@ -120,7 +152,7 @@ public class MenuClientFragment extends Fragment {
                                     System.out.println("-----------------------------(-1))");
                                 }
                                 System.out.println("-----------------------------0");
-                                menuClientAdapter = new MenuClientAdapter(MenuClientActivity.this, R.layout.food_show_client, dataMenuViewClient);
+                                menuClientAdapter = new MenuClientAdapter(getActivity(), R.layout.food_show_client, dataMenuViewClient);
                                 listViewClient.setAdapter(menuClientAdapter);
 
                                 System.out.println("----------------------1");
