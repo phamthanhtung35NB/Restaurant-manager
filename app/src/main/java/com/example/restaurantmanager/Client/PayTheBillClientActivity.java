@@ -92,7 +92,7 @@ public class PayTheBillClientActivity extends AppCompatActivity {
 
         if (SetTableStateEmptyRealtime.tableIsUsing.equals("Trống")) {
             System.out.println("Đã thanh toán thành công");
-            Intent intent = new Intent(PayTheBillClientActivity.this, HomeClientActivity.class);
+//            Intent intent = new Intent(PayTheBillClientActivity.this, HomeClientActivity.class);
         } else {
             System.out.println("Đang chờ thanh toán");
         }

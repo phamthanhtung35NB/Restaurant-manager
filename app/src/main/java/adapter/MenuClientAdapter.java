@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.Client.MenuClientActivity;
+//import com.example.restaurantmanager.Client.MenuClientActivity;
 import com.example.restaurantmanager.Client.MenuClientFragment;
 import com.example.restaurantmanager.MenuRestaurant.Menu.EditFoodActivity;
 import com.example.restaurantmanager.R;

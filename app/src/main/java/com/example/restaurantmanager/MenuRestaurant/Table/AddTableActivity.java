@@ -23,7 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.restaurantmanager.Client.MenuClientActivity;
+//import com.example.restaurantmanager.Client.MenuClientActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.AddFoodActivity;
 import com.example.restaurantmanager.R;
 import com.example.restaurantmanager.UploadImageToFirebase;

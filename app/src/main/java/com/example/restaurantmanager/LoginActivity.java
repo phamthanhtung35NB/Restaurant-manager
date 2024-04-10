@@ -10,6 +10,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 
 
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -29,9 +30,8 @@ import android.widget.Toast;
 
 //import adapter.MenuAdapter;
 
-import com.example.restaurantmanager.Client.HomeClientActivity;
+//import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
-import com.example.restaurantmanager.MenuRestaurant.MainActivity;
 import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void init() {
-        processCopy();
+//        processCopy();
         textViewUsername = findViewById(R.id.textViewUsername);
         textPassword = findViewById(R.id.textPassword2);
         buttonLogin = findViewById(R.id.buttonLogin);
@@ -110,6 +110,12 @@ public class LoginActivity extends AppCompatActivity {
         radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
+        if (preferences.getString("uid", "") != "") {
+            String text = preferences.getString("uid", "");
+            textViewUsername.setText(preferences.getString("email", ""));
+            textPassword.setText(preferences.getString("password", ""));
+        }
     }
 
 
@@ -145,12 +151,20 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+        //kiểm tra xem có kết nối internet không
+
         mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // kiểm tra user uid của người dùng thuộc collection client hay collection restaurant
                     String uid = mAuth.getCurrentUser().getUid();
+                    SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("email", textViewUsername.getText().toString());
+                    editor.putString("password", textPassword.getText().toString());
+                    editor.putString("uid", uid);
+                    editor.apply();
                     if (radioButtonClientLogin.isChecked()) {
                         loginClient(uid);
                     } else if (radioButtonRestaurantLogin.isChecked()) {
@@ -158,6 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
                     }
+
                 } else {
                     Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                 }
@@ -210,7 +225,8 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("type", "client");
                     intent.putExtra("uid", uid1);
-                    //lấy token của thiết bị và gửi lên server
+
+                    //lấy token của thiết bị và gửi lên server (server sẽ lưu token của thiết bị) để gửi thông báo
                     MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "client");
                     startActivity(intent);
                 } else {

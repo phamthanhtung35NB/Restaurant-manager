@@ -56,6 +56,8 @@ public class HomeClientFragment extends Fragment {
     void init(View view) {
         imageButtonScan = view.findViewById(R.id.imageButtonScan);
         textView = view.findViewById(R.id.textView);
+        //cái ảnh nút quét mã QR
+        imageButtonScan.setImageResource(R.drawable.qrcode);
 //        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         // Lấy giá trị đã lưu kiểm tra xem đã quét mã QR chưa
         // Nếu chưa quét mã QR thì hiển thị Activity MenuClientActivity

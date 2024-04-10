@@ -14,7 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.Client.OrderClientActivity;
+//import com.example.restaurantmanager.Client.OrderClientActivity;
+import com.example.restaurantmanager.Client.OrderClientFragment;
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DatabaseReference;
@@ -71,13 +72,13 @@ public class OrderClientAdapter extends ArrayAdapter<MenuRestaurant> {
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-                DatabaseReference ref = database.getReference(OrderClientActivity.URL).child(menuRestaurant.getId());
+                DatabaseReference ref = database.getReference(OrderClientFragment.URL).child(menuRestaurant.getId());
 
                 // Xóa dữ liệu
                 ref.removeValue();
 //                làm mới lại listview
-                OrderClientActivity.dataOrderClient.remove(position);
-                OrderClientActivity.orderClientAdapter.notifyDataSetChanged();
+                OrderClientFragment.dataOrderClient.remove(position);
+                OrderClientFragment.orderClientAdapter.notifyDataSetChanged();
 
 
             }
