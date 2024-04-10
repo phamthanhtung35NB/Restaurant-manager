@@ -1,4 +1,4 @@
-package com.example.restaurantmanager.Notifications;
+package com.example.restaurantmanager.FireBase.Notifications;
 
 
 import android.app.Dialog;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.example.restaurantmanager.FireBase.FireBase;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

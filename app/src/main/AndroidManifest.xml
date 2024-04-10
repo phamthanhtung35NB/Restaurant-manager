@@ -38,7 +38,7 @@
             android:name=".DialogNotificationActivity"
             android:exported="false" /> <!-- android:name=".MyApplication" -->
         <service
-            android:name=".Notifications.MyFirebaseMessagingService"
+            android:name=".FireBase.Notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -95,7 +95,7 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".Account.RegisterActivity"
             android:exported="false" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/actions" /> -->
@@ -119,7 +119,7 @@
             android:exported="false"
             android:label="@string/title_activity_login" /> <!-- màn hình chạy trước -->
         <activity
-            android:name=".LoginActivity"
+            android:name=".Account.LoginActivity"
             android:exported="true">
 
             <!-- màn này chạy trước -->

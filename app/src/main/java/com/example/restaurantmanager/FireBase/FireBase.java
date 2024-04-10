@@ -1,4 +1,4 @@
-package com.example.restaurantmanager.Notifications;
+package com.example.restaurantmanager.FireBase;
 
 import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 

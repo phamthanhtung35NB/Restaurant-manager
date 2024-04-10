@@ -1,7 +1,5 @@
 package com.example.restaurantmanager.Client;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import adapter.OrderClientAdapter;
+import adapter.Client.OrderClientAdapter;
 import model.HistoryRestaurant;
 import model.MenuRestaurant;
 

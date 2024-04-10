@@ -1,4 +1,4 @@
-package adapter;
+package adapter.Restaurant;
 
 //import static com.example.restaurantmanager.MenuRestaurant.Menu.MainActivity.oderAdapter;
 

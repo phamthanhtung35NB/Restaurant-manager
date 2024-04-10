@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.FireBase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

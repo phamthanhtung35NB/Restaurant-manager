@@ -2,15 +2,9 @@ package com.example.restaurantmanager.Client;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Map;
 
-import adapter.MenuClientAdapter;
+import adapter.Client.MenuClientAdapter;
 import model.MenuRestaurant;
 import model.SetTableStateEmptyRealtime;
 

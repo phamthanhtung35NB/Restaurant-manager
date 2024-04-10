@@ -23,7 +23,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
+import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,7 +37,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import java.util.ArrayList;
 
-import adapter.OrderAdapter;
+import adapter.Restaurant.OrderAdapter;
 import model.MenuRestaurant;
 
 public class OderActivity extends AppCompatActivity {

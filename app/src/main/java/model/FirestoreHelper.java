@@ -7,7 +7,7 @@
 //
 //import androidx.annotation.NonNull;
 //
-//import com.example.restaurantmanager.LoginActivity;
+//import com.example.restaurantmanager.Account.LoginActivity;
 //import com.example.restaurantmanager.MenuRestaurant.Menu.MainActivity;
 //import com.example.restaurantmanager.R;
 //import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +25,7 @@
 //import java.util.Map;
 //import java.util.concurrent.CompletableFuture;
 //
-//import adapter.MenuAdapter;
+//import adapter.Restaurant.MenuAdapter;
 //
 //public class FirestoreHelper {
 //    private static FirebaseFirestore db;

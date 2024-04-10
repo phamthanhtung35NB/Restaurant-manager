@@ -4,14 +4,8 @@ import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.restaurantmanager.Notifications.FireBase;
+import com.example.restaurantmanager.FireBase.FireBase;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;

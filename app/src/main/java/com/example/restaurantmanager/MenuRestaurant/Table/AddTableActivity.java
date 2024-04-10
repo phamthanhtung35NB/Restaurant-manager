@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,24 +23,19 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 //import com.example.restaurantmanager.Client.MenuClientActivity;
-import com.example.restaurantmanager.MenuRestaurant.Menu.AddFoodActivity;
 import com.example.restaurantmanager.R;
-import com.example.restaurantmanager.UploadImageToFirebase;
+import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
-import model.MenuRestaurant;
 import model.Table;
 
 public class AddTableActivity extends AppCompatActivity {

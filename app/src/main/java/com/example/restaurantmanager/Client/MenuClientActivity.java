@@ -33,9 +33,9 @@
 //import java.util.ArrayList;
 //import java.util.Map;
 //
-//import adapter.MenuAdapter;
-//import adapter.MenuClientAdapter;
-//import adapter.OrderAdapter;
+//import adapter.Restaurant.MenuAdapter;
+//import adapter.Client.MenuClientAdapter;
+//import adapter.Restaurant.OrderAdapter;
 //import model.MenuRestaurant;
 //import model.SetTableStateEmptyRealtime;
 //

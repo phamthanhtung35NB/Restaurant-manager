@@ -25,7 +25,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.restaurantmanager.R;
-import com.example.restaurantmanager.UploadImageToFirebase;
+import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;

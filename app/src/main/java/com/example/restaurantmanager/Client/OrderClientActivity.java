@@ -22,7 +22,7 @@
 //
 //import java.util.ArrayList;
 //
-//import adapter.OrderClientAdapter;
+//import adapter.Client.OrderClientAdapter;
 //import model.HistoryRestaurant;
 //import model.MenuRestaurant;
 //import com.example.restaurantmanager.Client.PayTheBillClientActivity;

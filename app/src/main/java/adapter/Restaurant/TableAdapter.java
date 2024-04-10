@@ -1,4 +1,4 @@
-package adapter;
+package adapter.Restaurant;
 
 import android.app.Activity;
 import android.content.Intent;

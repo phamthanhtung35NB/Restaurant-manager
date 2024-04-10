@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import adapter.TableAdapter;
+import adapter.Restaurant.TableAdapter;
 import model.Table;
 
 

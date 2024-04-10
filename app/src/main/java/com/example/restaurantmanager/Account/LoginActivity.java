@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.Account;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -28,13 +28,14 @@ import android.widget.Toast;
 
 
 
-//import adapter.MenuAdapter;
+//import adapter.Restaurant.MenuAdapter;
 
 //import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.Client.MainActivity;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
 import com.example.restaurantmanager.MenuRestaurant.RestaurantMainActivity;
-import com.example.restaurantmanager.Notifications.MyFirebaseMessagingService;
+import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
+import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
