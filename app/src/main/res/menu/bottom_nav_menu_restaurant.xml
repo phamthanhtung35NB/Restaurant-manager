@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border"
+        android:alphabeticModifiers="META"
+        android:icon="@drawable/food_load"
+        android:iconTintMode="add"
+        android:title="Home"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/navMenu"
+        android:icon="@drawable/chair"
+        android:background="@drawable/textview_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Menu" />
+    <item
+        android:id="@+id/navTable"
+        android:background="@drawable/textview_border"
+        android:icon="@drawable/chair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Table" />
+    <item
+        android:id="@+id/navSetting"
+        android:background="@drawable/textview_border"
+        android:icon="@drawable/baseline_app_settings_alt_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="Setting" />
+</menu>

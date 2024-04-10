@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/navHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:alphabeticModifiers="META"
         android:background="#00FFFFFF"
-        android:icon="@drawable/baseline_home_24"
-        android:title="Home" />
-    <item
-        android:id="@+id/navProfile"
-        android:background="#00FFFFFF"
-        android:icon="@drawable/baseline_area_chart_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="Profile" />
+        android:icon="@drawable/food_load"
+        android:iconTintMode="add"
+        android:title="@string/title_home"
+        app:showAsAction="never" />
     <item
         android:id="@+id/navSetting"
         android:background="#00FFFFFF"
         android:icon="@drawable/baseline_app_settings_alt_24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="Setting" />
+        android:title="@string/title_setting" />
 </menu>

@@ -1,0 +1,41 @@
+<resources>
+<!--    <string name="app_name">RestaurantManager</string>-->
+<!--    <string name="title_activity_login">LoginActivity</string>-->
+<!--    <string name="prompt_email">Email</string>-->
+<!--    <string name="prompt_password">Password</string>-->
+<!--    <string name="action_sign_in">Sign in or register</string>-->
+<!--    <string name="action_sign_in_short">Sign in</string>-->
+<!--    <string name="welcome">"Welcome !"</string>-->
+<!--    <string name="invalid_username">Not a valid username</string>-->
+<!--    <string name="invalid_password">Password must be >5 characters</string>-->
+<!--    <string name="login_failed">"Login failed"</string>-->
+<!--    <string name="title_activity_maps">MapsActivity</string>-->
+<!--    <string name="msg_token_fmt">FCM Token: %s</string>-->
+<!--    &lt;!&ndash; TODO: Remove or change this placeholder text &ndash;&gt;-->
+<!--    <string name="hello_blank_fragment">Hello blank fragment</string>-->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mật Khẩu</string>
+    <string name="action_sign_in">Đăng Nhập hoặc Đăng Kí Mới</string>
+    <string name="action_sign_in_short">Đăng Nhập</string>
+    <string name="welcome">Xin Chào</string>
+    <string name="invalid_username">Tên người dùng không hợp lệ</string>
+    <string name="invalid_password">Mật khẩu phải >5 ký tự</string>
+    <string name="login_failed">Đăng nhập thất bại</string>
+    <string name="msg_token_fmt">FCM Token: %s</string>
+    <string name="hello_blank_fragment">Xin chào mảnh trống</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_maps">MapsActivity</string>
+        <string name="app_name">Quản lý nhà hàng</string>
+    <string name="title_home">Trang Chủ</string>
+    <string name="title_setting">Cài Đặt</string>
+    <string name="title_profile">Hồ Sơ</string>
+    <string name="title_table">Bàn</string>
+    <string name="title_statistical">Thống Kê</string>
+    <string name="title_menu">Thực Đơn</string>
+    <string name="title_order">Đặt Món</string>
+    <string name="title_login">Đăng Nhập</string>
+    <string name="title_register">Đăng Ký</string>
+    <string name="title_show_menu">Show Menu</string>
+    <string name="title_show_table">Show Table</string>
+    <string name="title_statistical_activity">Statistical Activity</string>
+</resources>

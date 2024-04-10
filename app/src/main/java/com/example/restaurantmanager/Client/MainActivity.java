@@ -1,4 +1,4 @@
-package com.example.restaurantmanager;
+package com.example.restaurantmanager.Client;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.restaurantmanager.Client.HomeClientFragment;
+import com.example.restaurantmanager.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     }
     void init(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setBackground(null);
         fragmentContainer = findViewById(R.id.fragment_container);
         replaceFragment(new HomeClientFragment(), false);
         Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
@@ -52,10 +53,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("navHome");
                     replaceFragment(new HomeClientFragment(), false);
                     Toast.makeText(MainActivity.this, "navHome", Toast.LENGTH_SHORT).show();
-                } else if (itemId == R.id.navProfile){
-                System.out.println("navProfile");
-                Toast.makeText(MainActivity.this, "navProfile", Toast.LENGTH_SHORT).show();
-//                    replaceFragment(new MenuClientActivity());
                 } else if (itemId == R.id.navSetting){
                 System.out.println("navSetting");
                 Toast.makeText(MainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();

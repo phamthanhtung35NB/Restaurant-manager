@@ -14,8 +14,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
+//import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
+import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
 import com.squareup.picasso.Picasso;
 
@@ -68,10 +69,15 @@ public class TableAdapter extends ArrayAdapter<Table> {
         textViewNameTable.setText(table.getName());
         textViewStatus.setText(table.getStateEmpty());
         textViewDescribe.setText(table.getDescribe()+"");
+        String imageShow = table.getImage();
         //lấy hình ảnh từ database
-        Picasso.get()
-                .load(table.getImage())
-                .into(imageViewPhoto);
+        if (imageShow.length()>5){
+            Picasso.get()
+                    .load(imageShow)
+                    .into(imageViewPhoto);
+        }else {
+            imageViewPhoto.setImageResource(R.drawable.chair);
+        }
         /**
          * Xử lý sự kiện khi click vào 1 bàn (item trong GridView)
          */
@@ -80,7 +86,7 @@ public class TableAdapter extends ArrayAdapter<Table> {
             public void onClick(View v) {
                 Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, OderActivity.class);
-                String qr = ShowTableActivity.accountId+"/"+table.getId()+"/order";
+                String qr = ShowTableRestaurantFragment.accountId+"/"+table.getId()+"/order";
                 intent.putExtra("url", qr);
                 context.startActivity(intent);
 //                //add vào sqlite

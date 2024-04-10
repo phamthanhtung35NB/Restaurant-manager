@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 //import com.example.restaurantmanager.Client.OrderClientActivity;
-import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
+//import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DatabaseReference;
@@ -62,9 +62,15 @@ public class OrderAdapter extends ArrayAdapter<MenuRestaurant> {
         textViewDescription.setText(menuRestaurant.getDescription());
         textViewPrice.setText(menuRestaurant.getPrice()+"");
         //lấy hình ảnh từ database
-        Picasso.get()
-                .load(menuRestaurant.getImage())
-                .into(imageViewFood);
+        String imageShow = menuRestaurant.getImage();
+        //lấy hình ảnh từ database
+        if (imageShow.length()>5){
+            Picasso.get()
+                    .load(imageShow)
+                    .into(imageViewFood);
+        }else {
+            imageViewFood.setImageResource(R.drawable.food_load);
+        }
 //        imageViewFood.setImageResource(R.drawable.rice);
 //        imageViewFood.setImageBitmap(BitmapFactory.decodeFile(menuRestaurant.getImage()));
         imageButtonDelFood.setOnClickListener(new View.OnClickListener() {

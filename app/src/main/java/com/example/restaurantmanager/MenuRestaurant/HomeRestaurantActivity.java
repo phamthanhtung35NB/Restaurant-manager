@@ -10,8 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
-import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
+//import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuActivity;
+//import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableActivity;
 import com.example.restaurantmanager.R;
 
 import model.HistoryRestaurant;
@@ -48,22 +48,22 @@ public class HomeRestaurantActivity extends AppCompatActivity {
     void addEvents(){
         //Quản lý thực đơn
         lineButtonsMenu.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeRestaurantActivity.this, ShowMenuActivity.class);
-            intent.putExtra("type", type);
-            intent.putExtra("uid", accountId);
-            startActivity(intent);
+//            Intent intent = new Intent(HomeRestaurantActivity.this, ShowMenuActivity.class);
+//            intent.putExtra("type", type);
+//            intent.putExtra("uid", accountId);
+//            startActivity(intent);
         });
         //Quản lý bàn ăn
         lineButtonsTable.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeRestaurantActivity.this, ShowTableActivity.class);
-            intent.putExtra("uid", accountId);
-            startActivity(intent);
+//            Intent intent = new Intent(HomeRestaurantActivity.this, ShowTableActivity.class);
+//            intent.putExtra("uid", accountId);
+//            startActivity(intent);
         });
         //Thống kê
         lineButtonsStatistical.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeRestaurantActivity.this, StatisticalActivity.class);
-            intent.putExtra("sumDay", HistoryRestaurant.sumDay);
-            startActivity(intent);
+//            Intent intent = new Intent(HomeRestaurantActivity.this, StatisticalActivity.class);
+//            intent.putExtra("sumDay", HistoryRestaurant.sumDay);
+//            startActivity(intent);
         });
     }
 }

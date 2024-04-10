@@ -3,10 +3,17 @@ package adapter;
 //import static com.example.restaurantmanager.MenuRestaurant.Menu.MainActivity.oderAdapter;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -68,10 +75,17 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         textViewName.setText(menuRestaurant.getName());
         textViewDescription.setText(menuRestaurant.getDescription());
         textViewPrice.setText(menuRestaurant.getPrice()+"");
+        String imageShow = menuRestaurant.getImage();
         //lấy hình ảnh từ database
-        Picasso.get()
-                .load(menuRestaurant.getImage())
-                .into(imageViewFood);
+        if (imageShow.length()>5){
+            Picasso.get()
+                    .load(imageShow)
+                    .into(imageViewFood);
+        }else {
+            imageViewFood.setImageResource(R.drawable.food_load);
+        }
+
+
         imageButtonSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,5 +111,5 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         });
         return row;
     }
-
+    
 }

@@ -42,11 +42,12 @@ public class EditFoodActivity extends AppCompatActivity {
     ImageView imageViewFood;
     ImageButton imageButtonSave;
     private ProgressBar progressBarEditFood;
+    String imageShow;
 
     // Define a static final int for the camera request code
     //CAMERA_REQUEST_CODE có tác dụng như một ID để xác định rằng bạn đang yêu cầu kết quả từ máy ảnh.
     private static final int CAMERA_REQUEST_CODE = 100;
-    String accountId = ShowMenuActivity.accountId;
+    String accountId = ShowMenuRestaurantFragment.accountId;
     public static final String type = "restaurant";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class EditFoodActivity extends AppCompatActivity {
         });
     }
     void init() {
+        System.out.println("đầu init");
         //ánh xạ
         textViewId = findViewById(R.id.textViewId);
         edtName = findViewById(R.id.textViewNameOrder);
@@ -72,7 +74,7 @@ public class EditFoodActivity extends AppCompatActivity {
         progressBarEditFood = findViewById(R.id.progressBarEditFood);
         // Ẩn ProgressBar
         progressBarEditFood.setVisibility(View.GONE);
-
+        System.out.println("giua init");
         //lấy dữ liệu từ intent và hiển thị lên view
         Intent intent = getIntent();
         textViewId.setText(intent.getStringExtra("id"));
@@ -82,7 +84,16 @@ public class EditFoodActivity extends AppCompatActivity {
         String priceString = String.valueOf(price); // Convert double to String
         edtPrice.setText(priceString);
         //lấy hình ảnh từ database
-        Picasso.get().load(intent.getStringExtra("image")).into(imageViewFood);
+        imageShow=intent.getStringExtra("image");
+        //lấy hình ảnh từ database
+        if (imageShow.length()>5){
+            Picasso.get()
+                    .load(imageShow)
+                    .into(imageViewFood);
+        }else {
+            imageViewFood.setImageResource(R.drawable.food_load);
+        }
+        System.out.println("cuối init");
     }
     void addEvents() {
         imageViewFood.setOnClickListener(v -> {
@@ -94,10 +105,13 @@ public class EditFoodActivity extends AppCompatActivity {
             String description = edtDescription.getText().toString();
             double price = Double.parseDouble(edtPrice.getText().toString());
             String image = UploadImageToFirebase.imageUrl;
+            if (image.equals("")) {
+                image = imageShow;
+            }
             String id = getIntent().getStringExtra("id");
             MenuRestaurant updatedMenuRestaurant = new MenuRestaurant(id, name, description, price, image);
             updateDataInFireBase(id, updatedMenuRestaurant);
-            Intent intent = new Intent(EditFoodActivity.this, ShowMenuActivity.class);
+            Intent intent = new Intent(EditFoodActivity.this, ShowMenuRestaurantFragment.class);
             startActivity(intent);
             finish();
         });

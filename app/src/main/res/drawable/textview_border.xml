@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#00FFFFFF"/> <!-- màu nền của TextView -->
+    <corners android:radius="1dp" /> <!-- bán kính của góc, tùy chỉnh theo ý muốn -->
+    <stroke android:color="@color/gray" android:width="2dp"/> <!-- màu và độ rộng của viền -->
+</shape>

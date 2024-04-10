@@ -30,8 +30,10 @@
         <EditText
             android:id="@+id/textViewUsername"
             android:layout_width="306dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
             android:drawableLeft="@android:drawable/sym_action_email"
+            android:background="@drawable/textview_border"
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true" />
@@ -43,9 +45,11 @@
 
         <EditText
             android:id="@+id/textPassword2"
-            android:layout_width="305dp"
-            android:layout_height="wrap_content"
+            android:layout_width="306dp"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
             android:drawableLeft="@android:drawable/ic_secure"
+            android:background="@drawable/textview_border"
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionDone"
@@ -76,6 +80,8 @@
                 android:id="@+id/radioButtonClientLogin"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="@drawable/textview_border"
                 android:gravity="center"
                 android:text="Login Client  " />
 
@@ -83,6 +89,8 @@
                 android:id="@+id/radioButtonRestaurantLogin"
                 android:layout_width="260dp"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="@drawable/textview_border"
                 android:gravity="center"
 
                 android:text="Login Restaurant" />
@@ -97,6 +105,8 @@
             android:id="@+id/buttonLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/gray"
+            android:textColor="@color/black"
             android:drawableLeft="@android:drawable/ic_menu_send"
             android:text="Login"
             android:textCursorDrawable="@android:drawable/ic_menu_send" />
@@ -110,6 +120,8 @@
             android:id="@+id/buttonCreateNewAccount"
             android:layout_width="151dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/gray"
+            android:textColor="@color/black"
             android:drawableLeft="@android:drawable/ic_menu_add"
             android:text="Create Account" />
     </LinearLayout>

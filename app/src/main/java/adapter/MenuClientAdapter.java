@@ -59,9 +59,15 @@ public class MenuClientAdapter extends ArrayAdapter<MenuRestaurant> {
         textViewDescription.setText(menuRestaurant.getDescription());
         textViewPrice.setText(menuRestaurant.getPrice()+"");
         //lấy hình ảnh từ database
-        Picasso.get()
-                .load(menuRestaurant.getImage())
-                .into(imageViewFood);
+        String imageShow = menuRestaurant.getImage();
+        //lấy hình ảnh từ database
+        if (imageShow.length()>5){
+            Picasso.get()
+                    .load(imageShow)
+                    .into(imageViewFood);
+        }else {
+            imageViewFood.setImageResource(R.drawable.food_load);
+        }
 //        imageViewFood.setImageResource(R.drawable.rice);
 //        imageViewFood.setImageBitmap(BitmapFactory.decodeFile(menuRestaurant.getImage()));
         imageButtonAddOrder.setOnClickListener(new View.OnClickListener() {

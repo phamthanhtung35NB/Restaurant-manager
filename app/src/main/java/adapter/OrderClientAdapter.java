@@ -58,10 +58,16 @@ public class OrderClientAdapter extends ArrayAdapter<MenuRestaurant> {
         textViewName.setText(menuRestaurant.getName());
         textViewDescription.setText(menuRestaurant.getDescription());
         textViewPrice.setText(menuRestaurant.getPrice()+"");
+
+        String imageShow = menuRestaurant.getImage();
         //lấy hình ảnh từ database
-        Picasso.get()
-                .load(menuRestaurant.getImage())
-                .into(imageViewFood);
+        if (imageShow.length()>5){
+            Picasso.get()
+                    .load(imageShow)
+                    .into(imageViewFood);
+        }else {
+            imageViewFood.setImageResource(R.drawable.food_load);
+        }
 //        imageViewFood.setImageResource(R.drawable.rice);
 //        imageViewFood.setImageBitmap(BitmapFactory.decodeFile(menuRestaurant.getImage()));
         imageButtonDelFood.setOnClickListener(new View.OnClickListener() {
