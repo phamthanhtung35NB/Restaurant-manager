@@ -24,6 +24,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.restaurantmanager.MenuRestaurant.RestaurantMainActivity;
 import com.example.restaurantmanager.R;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -105,13 +106,13 @@ public class EditFoodActivity extends AppCompatActivity {
             String description = edtDescription.getText().toString();
             double price = Double.parseDouble(edtPrice.getText().toString());
             String image = UploadImageToFirebase.imageUrl;
-            if (image.equals("")) {
-                image = imageShow;
+            if (image.length()>5){
+                imageShow=image ;
             }
             String id = getIntent().getStringExtra("id");
-            MenuRestaurant updatedMenuRestaurant = new MenuRestaurant(id, name, description, price, image);
+            MenuRestaurant updatedMenuRestaurant = new MenuRestaurant(id, name, description, price, imageShow);
             updateDataInFireBase(id, updatedMenuRestaurant);
-            Intent intent = new Intent(EditFoodActivity.this, ShowMenuRestaurantFragment.class);
+            Intent intent = new Intent(EditFoodActivity.this, RestaurantMainActivity.class);
             startActivity(intent);
             finish();
         });

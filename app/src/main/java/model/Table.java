@@ -5,7 +5,6 @@ import java.util.TreeMap;
 public class Table {
     private int id;
     private String name;
-
     private String describe;
     private String stateEmpty;
     private String image;

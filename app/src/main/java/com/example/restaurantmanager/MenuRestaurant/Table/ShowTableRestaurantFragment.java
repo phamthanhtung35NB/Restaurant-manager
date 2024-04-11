@@ -11,7 +11,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
+//import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -58,9 +58,10 @@ public class ShowTableRestaurantFragment extends Fragment {
     }
     public void addEvents(View view){
         imageButtonExit.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), HomeRestaurantActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), HomeRestaurantActivity.class);
+//            startActivity(intent);
 //            finish();
+            System.out.println("click exit");
         });
         System.out.println("hết event-----------------------------");
         imageButtonAddTable.setOnClickListener(v -> {

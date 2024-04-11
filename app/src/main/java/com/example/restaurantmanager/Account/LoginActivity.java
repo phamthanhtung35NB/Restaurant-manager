@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 //import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.Client.MainActivity;
-import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
+//import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
 import com.example.restaurantmanager.MenuRestaurant.RestaurantMainActivity;
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
@@ -52,7 +52,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import model.Account;
-import model.SqliteAccountHelper;
+//import model.SqliteAccountHelper;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -149,11 +149,11 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         //1 account cố định để test
-        if (username.equals("admin") && password.equals("admin")) {
-            Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
-            startActivity(intent);
-            finish();
-        }
+//        if (username.equals("admin") && password.equals("admin")) {
+//            Intent intent = new Intent(LoginActivity.this, HomeRestaurantActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
         //kiểm tra xem có kết nối internet không
 
         mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -238,11 +238,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    void insertAccount(String type, String username, String password, String phone, String email, String address){
-        SqliteAccountHelper databaseHelper =new SqliteAccountHelper(this);
-        databaseHelper.addAccountLogin(new Account(type, username, password, phone, email, address));
-        System.out.println("insertAccount------------------Done------------------------------");
-    }
+//    void insertAccount(String type, String username, String password, String phone, String email, String address){
+//        SqliteAccountHelper databaseHelper =new SqliteAccountHelper(this);
+//        databaseHelper.addAccountLogin(new Account(type, username, password, phone, email, address));
+//        System.out.println("insertAccount------------------Done------------------------------");
+//    }
     //////////////////////////////////////////KHỞI TẠO DATABASE SQLITE//////////////////////////////////////////
     private void processCopy() {
         File dbFile = getDatabasePath(DATABASE_NAME);

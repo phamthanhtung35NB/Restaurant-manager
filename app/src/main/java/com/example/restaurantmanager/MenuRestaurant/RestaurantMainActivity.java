@@ -26,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 public class RestaurantMainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout fragmentContainer;
+    public static Fragment lastFragment = null; // Biến để lưu trạng thái Fragment cuối cùng
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,39 +41,45 @@ public class RestaurantMainActivity extends AppCompatActivity {
             return insets;
         });
     }
+    @Override
+    public void onBackPressed() {
+        Fragment currentFragment = getCurrentFragment();
+        if (currentFragment instanceof StatisticalFragment) {
+            lastFragment = new HomeRestaurantFragment();
+            replaceFragment(lastFragment, false);
+        } else {
+            super.onBackPressed();
+        }
+    }
+    public Fragment getCurrentFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        return currentFragment;
+    }
     void init(){
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);
         fragmentContainer = findViewById(R.id.fragment_container);
-//        replaceFragment(new HomeClientFragment(), false);
+        if (lastFragment == null || (lastFragment instanceof HomeRestaurantFragment)) {
+            lastFragment = new HomeRestaurantFragment();
+            replaceFragment(lastFragment, false);
+        }
         Toast.makeText(RestaurantMainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
-//        replaceFragment(new HomeClientActivity());
     }
     void addEvents(){
-        //Quản lý thực đơn
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NotNull MenuItem item) {
                 int itemId = item.getItemId();
                 if (itemId == R.id.navHome){
-                    System.out.println("navHome");
-//                    replaceFragment(new ShowMenuRestaurantFragment(), false);
-                    Toast.makeText(RestaurantMainActivity.this, "navHome", Toast.LENGTH_SHORT).show();
+                    replaceFragment(lastFragment, false);
                 } else if (itemId == R.id.navMenu){
-                    System.out.println("navMenu");
                     replaceFragment(new ShowMenuRestaurantFragment(), false);
-                    Toast.makeText(RestaurantMainActivity.this, "navMenu", Toast.LENGTH_SHORT).show();
-//                    replaceFragment(new MenuClientActivity());
                 }else if (itemId == R.id.navTable){
-                    System.out.println("navOrder");
                     replaceFragment(new ShowTableRestaurantFragment(), false);
-                    Toast.makeText(RestaurantMainActivity.this, "navOrder", Toast.LENGTH_SHORT).show();
                 }else if (itemId == R.id.navSetting){
-                    System.out.println("navSetting");
-                    Toast.makeText(RestaurantMainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();
-//                    replaceFragment(new CartClientActivity());
+                    // Handle the setting fragment here
                 }
-//                replaceFragment(selectedFragment);
                 return true;
             }
         });

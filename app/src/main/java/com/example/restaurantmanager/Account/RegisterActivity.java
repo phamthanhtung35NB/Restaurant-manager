@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import model.HistoryRestaurant;
 import model.MenuRestaurant;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -167,8 +168,8 @@ public class RegisterActivity extends AppCompatActivity {
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                         });
-                        //kiểm tra xem tạo thành công document chưa
-
+                        //tao lich su
+                        HistoryRestaurant.createPast30DaysDocuments(uid);
                         finish(); // Kết thúc activity hiện tại sau khi đăng nhập thành công
                     } else {
                         Toast.makeText(RegisterActivity.this,"Đã có lỗi xảy ra",Toast.LENGTH_SHORT);

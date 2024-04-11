@@ -8,8 +8,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.restaurantmanager.MenuRestaurant.Menu.AddFoodActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -20,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class HistoryRestaurant {
     public static void addHistory(ArrayList<MenuRestaurant> dataOrderClient, String accountId, String table, long bill) {
@@ -192,8 +196,10 @@ public class HistoryRestaurant {
                     }
                 });
     }
-    public static long sumDay=0;
-    public static void readSumDayFromFireBase(String accountId) {
+
+    // Đọc tổng bill của ngày hôm đó
+    public static long totalSumDay=0;
+    public static void readAndSaveSumDay(String accountId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("history").document(accountId).collection(getDay())
@@ -215,12 +221,15 @@ public class HistoryRestaurant {
                             } else {
                                 Log.d(TAG, "Tài liệu không tồn tại");
                             }
-                            sumDay = totalSum;
+                            totalSumDay = totalSum;
                             Log.d(TAG, "Total sum: " + totalSum);
                         }
                         //lưu tổng bill của ngày hôm đó
-                        db.collection("history").document(accountId)
-                                .update(getDay()+"sumDay", totalSum)
+                        Map<String, Object> dataSumDay = new HashMap<>();
+                        dataSumDay.put("sumDay", totalSum);
+                        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                        db2.collection("history").document(accountId).collection(getDay()).document("sumDay"+getDay())
+                                .set(dataSumDay)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -243,7 +252,74 @@ public class HistoryRestaurant {
                     // ... (Mã xử lý lỗi hiện có của bạn)
                 });
     }
+    // Đọc tổng bill của tuần
+    public static long totalSumWeek = 0;
+    public static int i = 0;
+    public static void readAndSaveSumWeek(String accountId) {
+        FirebaseFirestore db3 = FirebaseFirestore.getInstance();
+        totalSumWeek = 0;
+        for (i = 0; i < 7; i++) {
+            String day = getDay(i);
+            DocumentReference docRef = db3.collection("history").document(accountId).collection(day).document("sumDay" + day);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Long sum = (Long) document.get("sumDay");
+                            if (sum != null) {
+                                totalSumWeek += sum;
+                            }
+                        }
 
+                    } else {
+                        Log.d(TAG, "Failed with: ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+    public static long totalSumMonth = 0;
+    public static int ii = 0;
+    public static void readAndSaveSumMonth(String accountId) {
+        FirebaseFirestore db5 = FirebaseFirestore.getInstance();
+        totalSumMonth = 0;
+        for (ii = 0; ii < 30; ii++) {
+
+            String day = getDay(ii);
+            System.out.println(day);
+            DocumentReference docRef = db5.collection("history").document(accountId).collection(day).document("sumDay" + day);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Long sum = (Long) document.get("sumDay");
+                            if (sum != null) {
+                                totalSumMonth += sum;
+                                System.out.println("sum in month" + totalSumMonth);
+                            }
+                        }
+
+                    } else {
+                        Log.d(TAG, "Failed with: ", task.getException());
+                    }
+                }
+            });
+        }
+
+
+
+    }
+
+    private static String getDay(int daysAgo) {
+        long currentTime = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(daysAgo);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy", Locale.getDefault());
+        String timestamp = sdf.format(new Date(currentTime));
+        return timestamp;
+    }
     private static String getDay() {
         // Lấy thời gian hiện tại
         long currentTime = System.currentTimeMillis();
@@ -260,5 +336,28 @@ public class HistoryRestaurant {
         SimpleDateFormat sdf = new SimpleDateFormat("HH_mm", Locale.getDefault());
         String timestamp = sdf.format(new Date(currentTime));
         return timestamp;
+    }
+    public static void createPast30DaysDocuments(String accountId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        for (int i = 30; i >= 0; i--) {
+            String day = getDay(i);
+            Map<String, Object> dataSumDay = new HashMap<>();
+            dataSumDay.put("sumDay", 0);
+            FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+            db2.collection("history").document(accountId).collection(day).document("sumDay"+getDay())
+                    .set(dataSumDay)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "Data added successfully for account: " + accountId);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "Error adding data for account: " + accountId, e);
+                        }
+                    });
+        }
     }
 }
