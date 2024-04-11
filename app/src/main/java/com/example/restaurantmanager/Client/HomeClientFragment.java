@@ -4,6 +4,7 @@ import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -71,7 +72,24 @@ public class HomeClientFragment extends Fragment {
         //tách chuỗi
 //        String[] arr = preferences.getString("key", "").split("/");
 //        String userId = arr[0];
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        String a = sharedPreferences.getString("url", "");
+        if (a.length()>2){
+            // Tạo một instance mới của MenuClientFragment
+            MenuClientFragment menuClientFragment = new MenuClientFragment();
 
+
+            // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng MenuClientFragment
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Thay thế và thêm vào back stack
+            fragmentTransaction.replace(R.id.fragment_container, menuClientFragment);
+            fragmentTransaction.addToBackStack(null);
+
+            // Commit thao tác
+            fragmentTransaction.commit();
+        }
     }
     void addEvents(View view) {
         imageButtonScan.setOnClickListener(v -> {
@@ -132,6 +150,13 @@ public class HomeClientFragment extends Fragment {
                 bundle.putString("numberTable", numberTable);
                 System.out.println("numberTable: " + numberTable);
 //                Intent intent = new Intent(getActivity(), PayTheBillClientActivity.class);
+//                tạo sharedPreferences lưu mã QR
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("url", content);
+                editor.putString("accountId", userId);
+                editor.putString("numberTable", numberTable);
+                editor.apply();
 
                 //lấy token của nhà hàng từ firebase
                 FirebaseFirestore db = FirebaseFirestore.getInstance();

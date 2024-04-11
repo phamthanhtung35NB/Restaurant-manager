@@ -2,6 +2,7 @@ package com.example.restaurantmanager.Client;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -64,15 +65,25 @@ public class MenuClientFragment extends Fragment {
 //        String order = parts[2];
 
 //        đọc dữ liệu từ FragmentMenuClient
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            URL = bundle.getString("url");
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            URL = bundle.getString("url");
+//            System.out.println("URL: "+URL);
+//            accountId = bundle.getString("accountId");
+//            System.out.println("accountId: "+accountId);
+//            numberTable = bundle.getString("numberTable");
+//            System.out.println("numberTable: "+numberTable);
+//            // Sử dụng các giá trị tại đây...
+//        }
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        String ktra = sharedPreferences.getString("url", "");
+        if (ktra.length()>3) {
+            System.out.println("vào ______________");
+            URL = ktra;
             System.out.println("URL: "+URL);
-            accountId = bundle.getString("accountId");
+            accountId = sharedPreferences.getString("accountId", "");
             System.out.println("accountId: "+accountId);
-            numberTable = bundle.getString("numberTable");
-            System.out.println("numberTable: "+numberTable);
-            // Sử dụng các giá trị tại đây...
+            numberTable = sharedPreferences.getString("numberTable", "");
         }
         textViewInformation = view.findViewById(R.id.textViewInformation);
         textViewInformation.setText(URL);
