@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MenuRestaurant.RestaurantMainActivity">
+
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="412dp"
-        android:layout_height="99dp"
-        android:background="#00FFFFFF"
+        android:layout_height="40dp"
+        android:background="@color/gray"
         android:scaleType="centerCrop"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/dialog_holo_light_frame"
         tools:layout_editor_absoluteX="-1dp" />
 
     <FrameLayout

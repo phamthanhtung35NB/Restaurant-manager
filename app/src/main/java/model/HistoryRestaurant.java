@@ -254,22 +254,35 @@ public class HistoryRestaurant {
     }
     // Đọc tổng bill của tuần
     public static long totalSumWeek = 0;
+    public static long getTotalSumWeekArray[] = new long[7];
+    public static long totalSumWeekMax = 0;
     public static int i = 0;
     public static void readAndSaveSumWeek(String accountId) {
         FirebaseFirestore db3 = FirebaseFirestore.getInstance();
         totalSumWeek = 0;
+        System.out.println("totalSumWeek" + totalSumWeek);
         for (i = 0; i < 7; i++) {
             String day = getDay(i);
+            final int finalI = i;
+            System.out.println(day);
             DocumentReference docRef = db3.collection("history").document(accountId).collection(day).document("sumDay" + day);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    System.out.println("da vao trong");
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
+//                            System.out.println("da vao trong 2");
                             Long sum = (Long) document.get("sumDay");
                             if (sum != null) {
+                                getTotalSumWeekArray[finalI] = sum;
                                 totalSumWeek += sum;
+                                if (totalSumWeekMax < sum) {
+                                    totalSumWeekMax = sum;
+                                }
+//                                System.out.println("Sum" + sum);
+//                                System.out.println("totalSumWeek" + totalSumWeek);
                             }
                         }
 
@@ -280,13 +293,16 @@ public class HistoryRestaurant {
             });
         }
     }
+
+    public static long getTotalSumMonthArray[] = new long[30];
+    public static long totalSumMonthMax=0;
     public static long totalSumMonth = 0;
     public static int ii = 0;
     public static void readAndSaveSumMonth(String accountId) {
         FirebaseFirestore db5 = FirebaseFirestore.getInstance();
         totalSumMonth = 0;
         for (ii = 0; ii < 30; ii++) {
-
+            final int finalIi = ii;
             String day = getDay(ii);
             System.out.println(day);
             DocumentReference docRef = db5.collection("history").document(accountId).collection(day).document("sumDay" + day);
@@ -299,6 +315,10 @@ public class HistoryRestaurant {
                             Long sum = (Long) document.get("sumDay");
                             if (sum != null) {
                                 totalSumMonth += sum;
+                                getTotalSumMonthArray[finalIi] = sum;
+                                if (totalSumMonthMax < sum) {
+                                    totalSumMonthMax = sum;
+                                }
                                 System.out.println("sum in month" + totalSumMonth);
                             }
                         }
@@ -314,7 +334,7 @@ public class HistoryRestaurant {
 
     }
 
-    private static String getDay(int daysAgo) {
+    public static String getDay(int daysAgo) {
         long currentTime = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(daysAgo);
         SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy", Locale.getDefault());
         String timestamp = sdf.format(new Date(currentTime));
@@ -344,7 +364,7 @@ public class HistoryRestaurant {
             Map<String, Object> dataSumDay = new HashMap<>();
             dataSumDay.put("sumDay", 0);
             FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-            db2.collection("history").document(accountId).collection(day).document("sumDay"+getDay())
+            db2.collection("history").document(accountId).collection(day).document("sumDay"+getDay(i))
                     .set(dataSumDay)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

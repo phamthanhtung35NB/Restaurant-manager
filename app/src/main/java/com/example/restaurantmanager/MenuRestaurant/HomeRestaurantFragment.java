@@ -44,6 +44,7 @@ public class HomeRestaurantFragment extends Fragment {
         HistoryRestaurant.readAndSaveSumMonth(accountId);
         System.out.println("đọc xong tháng");
         System.out.println("đọc xong");
+//        HistoryRestaurant.createPast30DaysDocuments( accountId);
     }
 
     void addEvents(View view){
