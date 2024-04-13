@@ -54,7 +54,7 @@ public class ShowMenuRestaurantFragment extends Fragment {
     private void init(View view) {
         System.out.println("đầu tiên");
         //lấy Intent từ activity trước
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("dataLogin", getActivity().MODE_PRIVATE);
         accountId = sharedPreferences.getString("uid", "");
         System.out.println(accountId);
 

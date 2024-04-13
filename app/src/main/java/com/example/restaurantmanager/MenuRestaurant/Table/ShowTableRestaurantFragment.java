@@ -43,7 +43,7 @@ public class ShowTableRestaurantFragment extends Fragment {
     }
     public void init(View view){
         System.out.println("đầu tiên");
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("dataLogin", getActivity().MODE_PRIVATE);
         accountId = sharedPreferences.getString("uid", "");
         System.out.println(accountId);
 

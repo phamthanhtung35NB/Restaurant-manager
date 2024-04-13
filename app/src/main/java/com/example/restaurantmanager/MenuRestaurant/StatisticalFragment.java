@@ -57,7 +57,7 @@ public class StatisticalFragment extends Fragment {
         initChart(view);
         initLineChart(view);
         System.out.println("show chart");
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("dataLogin", getActivity().MODE_PRIVATE);
         accountId = sharedPreferences.getString("uid", "");
 
             String dayTam0 = HistoryRestaurant.getDay(6);
@@ -92,12 +92,14 @@ public class StatisticalFragment extends Fragment {
     }
     public void pushdataTo( String accountId, double totalSumMonth, double totalSumWeek){
         System.out.println("da vao day");
+        System.out.println("accountId: "+accountId);
+        System.out.println("totalSumMonth: "+totalSumMonth);
+        System.out.println("totalSumWeek: "+totalSumWeek);
         FirebaseFirestore db6 = FirebaseFirestore.getInstance();
         Map<String, Object> dataSumMonth = new HashMap<>();
         dataSumMonth.put("sumMonth", totalSumMonth);
         db6.collection("history").document(accountId).collection("sumMonthCollection").document("sumMonth")
                 .set(dataSumMonth);
-
 
             FirebaseFirestore db4 = FirebaseFirestore.getInstance();
             Map<String, Object> dataSumWeek = new HashMap<>();

@@ -33,8 +33,10 @@ public class HomeRestaurantFragment extends Fragment {
     void init(View view){
         System.out.println("đầu init");
         lineButtonsStatistical = view.findViewById(R.id.lineButtonsStatistical);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("dataLogin", getActivity().MODE_PRIVATE);
         accountId = sharedPreferences.getString("uid", "");
+        System.out.println("lấy ra được id------------");
+        System.out.println(accountId);
         //Lấy dữ liệu sum cả ngày từ firebase
         HistoryRestaurant.readAndSaveSumDay(accountId);
         System.out.println("đọc xong ngày");

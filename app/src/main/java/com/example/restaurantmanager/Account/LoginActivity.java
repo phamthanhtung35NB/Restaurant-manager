@@ -160,6 +160,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     // kiểm tra user uid của người dùng thuộc collection client hay collection restaurant
                     String uid = mAuth.getCurrentUser().getUid();
+                    //kiểm tra xem có sharedPreferences chưa nếu chưa thì tạo mới
+
+
                     SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", textViewUsername.getText().toString());
@@ -196,9 +199,9 @@ public class LoginActivity extends AppCompatActivity {
 //                                insertAccount("client", username, password, phone, email, address);
                     String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, MainRestaurantActivity.class);
-                    //uid của người dùng
-                    intent.putExtra("type", "restaurant");
-                    intent.putExtra("uid", uid1);
+//                    //uid của người dùng
+//                    intent.putExtra("type", "restaurant");
+//                    intent.putExtra("uid", uid1);
                     //lấy token của thiết bị và gửi lên server
                     MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "restaurant");
                     startActivity(intent);
