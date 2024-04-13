@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_marginStart="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/opoLayout"
+            android:layout_marginEnd="100dp">
+            <TextView
+                android:id="@+id/opoMessage"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:background="@drawable/opo_msg_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="Hello"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/opoTime"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14-04-2024 03:26 AM"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_alignParentEnd="true"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/myLayout"
+            android:layout_marginStart="100dp">
+            <TextView
+                android:id="@+id/myMessage"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:background="@drawable/my_msg_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:text="My"
+                android:textSize="18sp" />
+            <TextView
+                android:layout_gravity="end"
+                android:id="@+id/myTime"
+                android:layout_marginTop="5dp"
+                android:textSize="10sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14-04-2024 03:26 AM"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

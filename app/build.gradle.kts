@@ -57,6 +57,8 @@ dependencies {
     //MPAndroidChart
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    //anh tron
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
     //add ZXing
     implementation("com.google.zxing:core:3.4.1")
     implementation("com.journeyapps:zxing-android-embedded:4.2.0")

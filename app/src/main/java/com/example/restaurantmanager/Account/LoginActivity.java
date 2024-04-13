@@ -31,6 +31,7 @@ import android.widget.Toast;
 //import adapter.Restaurant.MenuAdapter;
 
 //import com.example.restaurantmanager.Client.HomeClientActivity;
+import com.example.restaurantmanager.ChatActivity;
 import com.example.restaurantmanager.Client.MainActivity;
 //import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
@@ -102,6 +103,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void init() {
+        Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+        startActivity(intent);
+        finish();
 //        processCopy();
         textViewUsername = findViewById(R.id.textViewUsername);
         textPassword = findViewById(R.id.textPassword2);

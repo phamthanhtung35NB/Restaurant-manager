@@ -26,6 +26,12 @@
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
         <activity
+            android:name=".Chat.ChatMessagesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuRestaurant.MainRestaurantActivity"
             android:exported="false" />
         <activity
@@ -33,48 +39,43 @@
             android:exported="false" />
         <activity
             android:name=".Client.PayTheBillClientActivity"
-            android:exported="false" />
-        <activity
-            android:name=".DialogNotificationActivity"
-            android:exported="false" /> <!-- android:name=".MyApplication" -->
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".DialogNotificationActivity" -->
+        <!-- android:exported="false" /> &lt;!&ndash; android:name=".MyApplication" &ndash;&gt; -->
         <service
             android:name=".FireBase.Notifications.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <activity
-            android:name=".Client.OrderClientActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Client.MenuClientActivity"
-            android:exported="false" />
+        </service> <!-- <activity -->
+        <!-- android:name=".Client.OrderClientActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".Client.MenuClientActivity" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".MenuRestaurant.Table.AddTableActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HandleQrActivity"
-            android:exported="false" />
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".HandleQrActivity" -->
+        <!-- android:exported="false" /> -->
         <activity
             android:name=".MenuRestaurant.Menu.AddFoodActivity"
             android:exported="false" />
         <activity
             android:name=".MenuRestaurant.Menu.EditFoodActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Client.HomeClientActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MenuRestaurant.Table.ShowTableActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MenuRestaurant.StatisticalActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MenuRestaurant.HomeRestaurantActivity"
-            android:exported="false" />
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".Client.HomeClientActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".MenuRestaurant.Table.ShowTableActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".MenuRestaurant.StatisticalActivity" -->
+        <!-- android:exported="false" /> -->
+        <!-- <activity -->
+        <!-- android:name=".MenuRestaurant.HomeRestaurantActivity" -->
+        <!-- android:exported="false" /> -->
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -88,12 +89,10 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:value="YOUR_API_KEY" /> <!-- <activity -->
+        <!-- android:name=".MapsActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/title_activity_maps" /> -->
         <activity
             android:name=".Account.RegisterActivity"
             android:exported="false" /> <!-- <meta-data -->
@@ -114,10 +113,10 @@
         <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity
-            android:name=".MenuRestaurant.Menu.ShowMenuActivity"
-            android:exported="false"
-            android:label="@string/title_activity_login" /> <!-- màn hình chạy trước -->
+        <!-- <activity -->
+        <!-- android:name=".MenuRestaurant.Menu.ShowMenuActivity" -->
+        <!-- android:exported="false" -->
+        <!-- android:label="@string/title_activity_login" /> &lt;!&ndash; màn hình chạy trước &ndash;&gt; -->
         <activity
             android:name=".Account.LoginActivity"
             android:exported="true">
