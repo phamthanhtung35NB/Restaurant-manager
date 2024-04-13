@@ -1,5 +1,8 @@
 package com.example.restaurantmanager.Client;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -84,6 +87,13 @@ public class OrderClientFragment extends Fragment {
 //            editor.remove("key");
 //            editor.apply();
             //tính tổng price trên firebase
+            // xóa dữ liệu SharedPreferences
+            SharedPreferences preferences = getActivity().getSharedPreferences("data", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove("url");
+            editor.remove("accountId");
+            editor.remove("numberTable");
+            editor.apply();
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refOrder = database.getReference(URL);
             refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -141,6 +151,8 @@ public class OrderClientFragment extends Fragment {
                 }
 
             });
+
+
         });
         System.out.println("cuối addEvents order");
     }

@@ -1,6 +1,5 @@
 package com.example.restaurantmanager.MenuRestaurant;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.NumberFormat;
@@ -82,7 +80,7 @@ public class StatisticalFragment extends Fragment {
             tongSumMonth = HistoryRestaurant.totalSumMonth;
         }
         pushdataTo(accountId, tongSumMonth, tongSumWeek);
-        RestaurantMainActivity.lastFragment = new StatisticalFragment();
+        MainRestaurantActivity.lastFragment = new StatisticalFragment();
         textViewToday.setText(formatNumber(tongSumDay) + " VNĐ");
         textViewWeek.setText(formatNumber(tongSumWeek) + " VNĐ");
         textViewMonth.setText(formatNumber(tongSumMonth) + " VNĐ");

@@ -142,13 +142,13 @@ public class HomeClientFragment extends Fragment {
                 String userId = arr[0];
                 String numberTable = arr[1];
                 // Tạo một Bundle để chứa dữ liệu
-                Bundle bundle = new Bundle();
-                bundle.putString("url", content);
-                System.out.println("url: " + content);
-                bundle.putString("accountId", userId);
-                System.out.println("userId: " + userId);
-                bundle.putString("numberTable", numberTable);
-                System.out.println("numberTable: " + numberTable);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("url", content);
+//                System.out.println("url: " + content);
+//                bundle.putString("accountId", userId);
+//                System.out.println("userId: " + userId);
+//                bundle.putString("numberTable", numberTable);
+//                System.out.println("numberTable: " + numberTable);
 //                Intent intent = new Intent(getActivity(), PayTheBillClientActivity.class);
 //                tạo sharedPreferences lưu mã QR
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
@@ -178,7 +178,7 @@ public class HomeClientFragment extends Fragment {
 //                startActivity(intent);
                 // Tạo một instance mới của MenuClientFragment
                 MenuClientFragment menuClientFragment = new MenuClientFragment();
-                menuClientFragment.setArguments(bundle);
+//                menuClientFragment.setArguments(bundle);
 
                 // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng MenuClientFragment
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

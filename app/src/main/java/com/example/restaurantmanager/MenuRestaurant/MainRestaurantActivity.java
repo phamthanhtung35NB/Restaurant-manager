@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.restaurantmanager.Client.HomeClientFragment;
-import com.example.restaurantmanager.Client.MainActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
@@ -23,7 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class RestaurantMainActivity extends AppCompatActivity {
+public class MainRestaurantActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout fragmentContainer;
     public static Fragment lastFragment = null; // Biến để lưu trạng thái Fragment cuối cùng
@@ -64,7 +62,7 @@ public class RestaurantMainActivity extends AppCompatActivity {
             lastFragment = new HomeRestaurantFragment();
             replaceFragment(lastFragment, false);
         }
-        Toast.makeText(RestaurantMainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainRestaurantActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
     }
     void addEvents(){
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

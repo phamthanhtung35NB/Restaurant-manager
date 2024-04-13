@@ -33,7 +33,7 @@ import android.widget.Toast;
 //import com.example.restaurantmanager.Client.HomeClientActivity;
 import com.example.restaurantmanager.Client.MainActivity;
 //import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
-import com.example.restaurantmanager.MenuRestaurant.RestaurantMainActivity;
+import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,8 +50,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import model.Account;
 //import model.SqliteAccountHelper;
 
 public class LoginActivity extends AppCompatActivity {
@@ -113,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
-        SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
         if (preferences.getString("uid", "") != "") {
             String text = preferences.getString("uid", "");
             textViewUsername.setText(preferences.getString("email", ""));
@@ -162,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     // kiểm tra user uid của người dùng thuộc collection client hay collection restaurant
                     String uid = mAuth.getCurrentUser().getUid();
-                    SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", textViewUsername.getText().toString());
                     editor.putString("password", textPassword.getText().toString());
@@ -197,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Login với tài khoản nhà hàng phone: " + phone, Toast.LENGTH_SHORT).show();
 //                                insertAccount("client", username, password, phone, email, address);
                     String uid1 = mAuth.getCurrentUser().getUid();
-                    Intent intent = new Intent(LoginActivity.this, RestaurantMainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainRestaurantActivity.class);
                     //uid của người dùng
                     intent.putExtra("type", "restaurant");
                     intent.putExtra("uid", uid1);
