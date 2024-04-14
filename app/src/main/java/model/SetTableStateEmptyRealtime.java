@@ -10,31 +10,11 @@ import com.google.firebase.database.ValueEventListener;
 public class SetTableStateEmptyRealtime {
     public static String tableIsUsing = "Đang sử dụng";
     public static void setTableIsUsing(String account, String table, String state) {
-
+        System.out.println("=====-0---- tableIsUsing: "+tableIsUsing);
         String url = account+"/"+table;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refTable = database.getReference(url);
-        refTable.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Lặp qua tất cả child
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    // Tạo instance mới của ClassTable
-                    if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
-                        String id = childSnapshot.child("id").getValue(String.class);
-                        if (id.equals(table)) {
-                            childSnapshot.child( "stateEmpty").getRef().setValue(state);
-                            tableIsUsing = state;
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Xử lý lỗi
-                System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
-            }
-        });
+        refTable.child("stateEmpty").setValue(state);
     }
     //đock biến staticBooleanVariable trong real-time database
     public static void getTableIsUsingString (String account, String table) {

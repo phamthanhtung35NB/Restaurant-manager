@@ -84,9 +84,10 @@ public class ShowTableRestaurantFragment extends Fragment {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference(accountId);
         // Lắng nghe giá trị của tất cả child
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                arrTableData.clear();
                 // lặp qua tất cả child
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     // tạo instance mới của ClassTable

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import adapter.Client.OrderClientAdapter;
 import model.HistoryRestaurant;
 import model.MenuRestaurant;
+import model.SetTableStateEmptyRealtime;
 
 
 public class OrderClientFragment extends Fragment {
@@ -94,6 +95,7 @@ public class OrderClientFragment extends Fragment {
             editor.remove("accountId");
             editor.remove("numberTable");
             editor.apply();
+            SetTableStateEmptyRealtime.setTableIsUsing(accountId, numberTable, "Trống");
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refOrder = database.getReference(URL);
             refOrder.addListenerForSingleValueEvent(new ValueEventListener() {

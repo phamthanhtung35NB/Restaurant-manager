@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -157,18 +158,39 @@ public class OderActivity extends AppCompatActivity {
         imageViewQr.setImageBitmap(bitmap);
     }
 
+    void checkStateEmpty() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refState = database.getReference("uri/1/stateEmpty");
+        refState.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String currentState = dataSnapshot.getValue(String.class);
+                if (currentState != null && currentState.equals("đang sử dụng")) {
+                    Toast.makeText(OderActivity.this, "Bàn đang sử dụng", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error reading data: " + databaseError.getMessage());
+            }
+        });
+    }
     /**
      * Đọc dữ liệu từ Firebase Database và hiển thị lên ListView
      */
     void readDataFromFireBase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOrder = database.getReference(url);
-        refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+        refOrder.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Lặp qua tất cả child
+                // Clear the old data as new data is available
+                dataOrder.clear();
+
+                // Loop through all children
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    // Tạo instance mới của ClassTable
+                    // Create a new instance of ClassTable
                     MenuRestaurant menuOrder = new MenuRestaurant();
                     if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
                         menuOrder.setId(childSnapshot.child("id").getValue(String.class));
@@ -177,7 +199,6 @@ public class OderActivity extends AppCompatActivity {
                         menuOrder.setImage(childSnapshot.child("image").getValue(String.class));
                         menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
 
-                        menuOrder.toString();
                         dataOrder.add(menuOrder);
                     }
                 }
@@ -186,11 +207,42 @@ public class OderActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Xử lý lỗi
-                System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+                // Handle error
+                System.out.println("Error reading data: " + databaseError.getMessage());
             }
         });
     }
+//    void readDataFromFireBase(){
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference refOrder = database.getReference(url);
+//        refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // Lặp qua tất cả child
+//                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                    // Tạo instance mới của ClassTable
+//                    MenuRestaurant menuOrder = new MenuRestaurant();
+//                    if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+//                        menuOrder.setId(childSnapshot.child("id").getValue(String.class));
+//                        menuOrder.setName(childSnapshot.child("name").getValue(String.class));
+//                        menuOrder.setDescription(childSnapshot.child("describe").getValue(String.class));
+//                        menuOrder.setImage(childSnapshot.child("image").getValue(String.class));
+//                        menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
+//
+//                        menuOrder.toString();
+//                        dataOrder.add(menuOrder);
+//                    }
+//                }
+//                oderAdapter = new OrderAdapter(OderActivity.this, R.layout.food_order, dataOrder);
+//                listViewOrder.setAdapter(oderAdapter);
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Xử lý lỗi
+//                System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+//            }
+//        });
+//    }
 
     private Handler handler;
     private Runnable runnable;
