@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -120,6 +122,11 @@ public class RegisterActivity extends AppCompatActivity {
                         System.out.println("tạo tài khoản thành công-----------------------------------------");
                         // lấy user uid của người dùng hiện tại
                         String uid = mAuth.getCurrentUser().getUid();
+                        //tạo đường dẫn đến database user/uri
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference.child("user").child(uid).child("type").setValue("client");
+                        databaseReference.child("user").child(uid).child("username").setValue(username);
+                        databaseReference.child("user").child(uid).child("phone").setValue(phone);
                         // thêm thông tin người dùng vào firestore  dựa vào uid
                         Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
                         // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
@@ -150,6 +157,11 @@ public class RegisterActivity extends AppCompatActivity {
                         System.out.println("tạo tài khoản thành công-----------------------------------------");
                         // lấy user uid của người dùng hiện tại
                         String uid = mAuth.getCurrentUser().getUid();
+                        //tạo đường dẫn đến database user/uri
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference.child("user").child(uid).child("type").setValue("restaurant");
+                        databaseReference.child("user").child(uid).child("username").setValue(username);
+                        databaseReference.child("user").child(uid).child("phone").setValue(phone);
                         // thêm thông tin người dùng vào firestore  dựa vào uid
                         Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
                         // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
@@ -162,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("idMax", 0);
                         user.put("idTableMax", 0);
                         user.put("menuRestaurant", new HashMap<String, MenuRestaurant>());
+
 //                        // thêm thông tin menu vào firestore document uid của người dùng
 //                        MenuRestaurant menuRestaurant = new MenuRestaurant();
 //                        user.put("menu", menuRestaurant);
@@ -181,6 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
+
 
 
 

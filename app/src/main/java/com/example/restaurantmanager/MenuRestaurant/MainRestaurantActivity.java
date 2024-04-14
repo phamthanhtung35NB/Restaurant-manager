@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
+import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -63,6 +64,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
             replaceFragment(lastFragment, false);
         }
         Toast.makeText(MainRestaurantActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
+//        ListMessagesFragment.getProfileData();
     }
     void addEvents(){
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -75,7 +77,10 @@ public class MainRestaurantActivity extends AppCompatActivity {
                     replaceFragment(new ShowMenuRestaurantFragment(), false);
                 }else if (itemId == R.id.navTable){
                     replaceFragment(new ShowTableRestaurantFragment(), false);
-                }else if (itemId == R.id.navSetting){
+                }else if(itemId==R.id.navMessage){
+                    replaceFragment(new ListMessagesFragment(), false);
+                }
+                else if (itemId == R.id.navSetting){
                     // Handle the setting fragment here
                 }
                 return true;

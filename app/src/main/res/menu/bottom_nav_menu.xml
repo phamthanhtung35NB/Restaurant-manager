@@ -13,6 +13,13 @@
         android:title="@string/title_home"
         app:showAsAction="never" />
     <item
+        android:id="@+id/navMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_border"
+        android:icon="@android:drawable/ic_dialog_email"
+        android:title="Message" />
+    <item
         android:id="@+id/navSetting"
         android:background="#00FFFFFF"
         android:icon="@drawable/baseline_app_settings_alt_24"

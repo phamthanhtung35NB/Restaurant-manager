@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -53,7 +54,10 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("navHome");
                     replaceFragment(new HomeClientFragment(), false);
                     Toast.makeText(MainActivity.this, "navHome", Toast.LENGTH_SHORT).show();
-                } else if (itemId == R.id.navSetting){
+                }else if(itemId==R.id.navMessage){
+                    replaceFragment(new ListMessagesFragment(), false);
+                }
+                else if (itemId == R.id.navSetting){
                 System.out.println("navSetting");
                 Toast.makeText(MainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();
 //                    replaceFragment(new CartClientActivity());

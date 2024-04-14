@@ -103,9 +103,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void init() {
-        Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
-        startActivity(intent);
-        finish();
+//        Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
+//        startActivity(intent);
+//        finish();
 //        processCopy();
         textViewUsername = findViewById(R.id.textViewUsername);
         textPassword = findViewById(R.id.textPassword2);
@@ -167,12 +167,7 @@ public class LoginActivity extends AppCompatActivity {
                     //kiểm tra xem có sharedPreferences chưa nếu chưa thì tạo mới
 
 
-                    SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("email", textViewUsername.getText().toString());
-                    editor.putString("password", textPassword.getText().toString());
-                    editor.putString("uid", uid);
-                    editor.apply();
+
                     if (radioButtonClientLogin.isChecked()) {
                         loginClient(uid);
                     } else if (radioButtonRestaurantLogin.isChecked()) {
@@ -198,8 +193,14 @@ public class LoginActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String phone = document.getString("phone");
                     String email = document.getString("email");
-
-                    Toast.makeText(LoginActivity.this, "Login với tài khoản nhà hàng phone: " + phone, Toast.LENGTH_SHORT).show();
+                    SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("email", textViewUsername.getText().toString());
+                    editor.putString("phone", phone);
+                    editor.putString("password", textPassword.getText().toString());
+                    editor.putString("uid", uid);
+                    editor.apply();
+//                    Toast.makeText(LoginActivity.this, "Login với tài khoản nhà hàng phone: " + phone, Toast.LENGTH_SHORT).show();
 //                                insertAccount("client", username, password, phone, email, address);
                     String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, MainRestaurantActivity.class);
@@ -228,6 +229,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String phone = document.getString("phone");
                     String email = document.getString("email");
+                    SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("email", textViewUsername.getText().toString());
+                    editor.putString("phone", phone);
+                    editor.putString("password", textPassword.getText().toString());
+                    editor.putString("uid", uid);
+                    editor.apply();
                     Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();
                     String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
