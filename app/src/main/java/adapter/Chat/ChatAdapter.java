@@ -35,18 +35,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ChatList list2 = chatList.get(position);
-        if (list2.getPhone().equals("userMobeile")) {
+        System.out.println("ChatAdapter.onBindViewHolder");
+        if (list2.getPhone().equals("123456789")) {
             holder.myLayout.setVisibility(View.VISIBLE);
             holder.opoLayout.setVisibility(View.GONE);
 
             holder.myMessage.setText(list2.getMessage());
-            holder.myTime.setText(list2.getTime());
+            holder.myTime.setText(list2.getDate()+" "+list2.getTime());
         } else {
             holder.myLayout.setVisibility(View.GONE);
             holder.opoLayout.setVisibility(View.VISIBLE);
 
             holder.opoMessage.setText(list2.getMessage());
-            holder.opoTime.setText(list2.getTime());
+            holder.opoTime.setText(list2.getDate()+" "+list2.getTime());
         }
 
     }
@@ -56,9 +57,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     public int getItemCount() {
         return chatList.size();
     }
-    public void updateList(List<ChatList> list){
+    public void updateChatList(List<ChatList> list){
         this.chatList = list;
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout opoLayout,myLayout;
@@ -68,8 +69,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
             super(itemView);
             opoLayout = itemView.findViewById(R.id.opoLayout);
             myLayout = itemView.findViewById(R.id.myLayout);
+
             opoMessage = itemView.findViewById(R.id.opoMessage);
             myMessage = itemView.findViewById(R.id.myMessage);
+
             opoTime = itemView.findViewById(R.id.opoTime);
             myTime = itemView.findViewById(R.id.myTime);
         }

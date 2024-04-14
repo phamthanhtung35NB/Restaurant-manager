@@ -41,10 +41,11 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
         System.out.println("--------------------");
         System.out.println("MessagesAdapter.onBindViewHolder");
         MessagesList list2 = messagesList.get(position);
-        if (list2.getProfilePic().equals("")) {
+        String profilePic = list2.getProfilePic();
+        if (profilePic == null || profilePic.equals("")) {
             holder.profilePic.setImageResource(R.drawable.account);
         } else {
-            Picasso.get().load(list2.getProfilePic()).into(holder.profilePic);
+            Picasso.get().load(profilePic).into(holder.profilePic);
         }
         holder.name.setText(list2.getName());
         holder.lastMessage.setText(list2.getLastMessage());
@@ -58,6 +59,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             public void onClick(View v) {
                 Intent intent = new Intent(context, ChatMessagesActivity.class);
                 intent.putExtra("name", list2.getName());
+                intent.putExtra("profilePic", list2.getProfilePic());
                 intent.putExtra("phone", list2.getPhone());
                 intent.putExtra("chatKey", list2.getChatKey());
                 context.startActivity(intent);

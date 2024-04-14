@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/opoLayout"
-            android:layout_marginEnd="100dp">
+            android:layout_marginEnd="50dp">
             <TextView
                 android:id="@+id/opoMessage"
                 android:paddingTop="20dp"
@@ -43,7 +43,7 @@
             android:orientation="vertical"
             android:layout_marginEnd="20dp"
             android:id="@+id/myLayout"
-            android:layout_marginStart="100dp">
+            android:layout_marginStart="50dp">
             <TextView
                 android:id="@+id/myMessage"
                 android:paddingTop="20dp"

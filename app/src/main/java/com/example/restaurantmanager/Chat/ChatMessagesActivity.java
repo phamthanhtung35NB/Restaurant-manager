@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,11 +46,14 @@ public class ChatMessagesActivity extends AppCompatActivity {
     ImageView sendBtn;
     String name,phone;
     String chatKey;
-    String userMobeile = "1234";
+
+    String getPhone;
+//    String userMobeile = "1234";
+    String getUserMobeile = "1234";
     private RecyclerView chattingRecyclerView;
     private ChatAdapter chatAdapter;
     private boolean loadFirstTime = true;
-    List<ChatList> chatList= new ArrayList<>();
+    final List<ChatList> chatList= new ArrayList<>();
     DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,71 +65,96 @@ public class ChatMessagesActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        init();
+
+//        create chat
+        createChat();
+
+        addEvents();
+    }
+    void createChat(){
+        //create chat
+
+    }
+    void init(){
         backBtn = findViewById(R.id.backBtn);
-         nameTV = findViewById(R.id.name);
-         messageEditText= findViewById( R.id.messageEditTxt);
-         profilePic = findViewById(R.id.profilePic);
-         sendBtn = findViewById(R.id.sendBtn);
+        nameTV = findViewById(R.id.name);
+        messageEditText= findViewById( R.id.messageEditTxt);
+        profilePic = findViewById(R.id.profilePic);
+        sendBtn = findViewById(R.id.sendBtn);
         chattingRecyclerView = findViewById(R.id.chattingRecyclerView);
-        name = getIntent().getStringExtra("name");
+
+
+
+        String getName = getIntent().getStringExtra("name");
+        String getProfilePic = getIntent().getStringExtra("profilePic");
         phone = getIntent().getStringExtra("phone");
-        nameTV.setText(name);
         chatKey = getIntent().getStringExtra("chatKey");
 
+        getUserMobeile= 123456789+"";
+        nameTV.setText(getName);
         chattingRecyclerView.setHasFixedSize(true);
         chattingRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chatAdapter = new ChatAdapter(chatList,ChatMessagesActivity.this);
         chattingRecyclerView.setAdapter(chatAdapter);
-
-            //create chat
-            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (chatKey.isEmpty()){
-                         chatKey = "3525252525252525252525252";
-                        if (snapshot.hasChild("chat")){
-                            chatKey = snapshot.child("chat").getChildrenCount() + "";
-                        }
-                    }
+        Picasso.get().load(getProfilePic).into(profilePic);
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (chatKey.isEmpty()){
+                    chatKey = "1";
                     if (snapshot.hasChild("chat")){
-                        if (snapshot.child("chat").child(chatKey).hasChild("message")){
-                            for (DataSnapshot dataSnapshot : snapshot.child("chat").child(chatKey).child("message").getChildren()){
-                               chatList.clear();
-                                Log.d(TAG, "onDataChange: " + dataSnapshot.child("msg").getValue());
-                                if (dataSnapshot.hasChild("msg")&&dataSnapshot.hasChild("phone")){
-                                    final String messageTimeStamps = dataSnapshot.getKey();
-                                    final String getMsg = dataSnapshot.child("msg").getValue().toString();
-                                    final String getPhone = dataSnapshot.child("phone").getValue().toString();
-//                                    if ()
-                                   java.sql.Timestamp timestamp = new java.sql.Timestamp(Long.parseLong(messageTimeStamps));
-Date date = new Date(timestamp.getTime());
-SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
-ChatList chatList1 = new ChatList("2143","1234",getMsg,simpleDateFormat.format(date),simpleTimeFormat.format(date));
-                                    chatList.add(chatList1);
-                                    chatAdapter.updateList(chatList);
-                                    if (loadFirstTime || Long.parseLong(messageTimeStamps) > Long.parseLong(chatList.get(chatList.size()-1).getTime())){
-                                        chattingRecyclerView.smoothScrollToPosition(chatList.size()-1);
-                                        chatAdapter.updateList(chatList );
-                                        chattingRecyclerView.smoothScrollToPosition(chatList.size()-1);
-                                        loadFirstTime = false;
-                                    }
+                        chatKey = String.valueOf(snapshot.child("chat").getChildrenCount());
+                        System.out.println("chatKey: " + chatKey);
+                    }
+                }
+                System.out.println("ChatMessagesActivity.onCreate.onDataChange");
+                if (snapshot.hasChild("chat")){
+                    System.out.println("ChatMessagesActivity.onCreate.onDataChange2");
+                    if (snapshot.child("chat").child(chatKey).hasChild("message")){
+                        System.out.println("ChatMessagesActivity.onCreate.onDataChange3");
+                            loadFirstTime = false;
+                            chatList.clear();
+                        for (DataSnapshot dataSnapshot : snapshot.child("chat").child(chatKey).child("message").getChildren()){
+                            System.out.println("ChatMessagesActivity.onCreate.onDataChange4");
+
+                            Log.d(TAG, "onDataChange: " + dataSnapshot.child("msg").getValue());
+                            if (dataSnapshot.hasChild("msg")&&dataSnapshot.hasChild("phone")){
+                                final String messageTimeStamps = dataSnapshot.getKey();
+                                final String getMsg = dataSnapshot.child("msg").getValue().toString();
+                                final String getPhone = dataSnapshot.child("phone").getValue().toString();
+
+                                java.sql.Timestamp timestamp = new java.sql.Timestamp(Long.parseLong(messageTimeStamps));
+                                Date date = new Date(timestamp.getTime());
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                                SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("hh:mm aa", Locale.getDefault());
+                                ChatList chatList1 = new ChatList(getPhone,getName,getMsg,simpleDateFormat.format(date),simpleTimeFormat.format(date));
+                                chatList.add(chatList1);
+                                if (loadFirstTime==true){
+//                                        chattingRecyclerView.smoothScrollToPosition(chatList.size()-1);
+                                    chatAdapter.updateChatList(chatList );
+
+                                    chattingRecyclerView.setAdapter(chatAdapter);
+                                    chattingRecyclerView.smoothScrollToPosition(chatList.size()-1);
+                                    loadFirstTime = false;
                                 }
                             }
                         }
-
                     }
 
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.d(TAG, "onCancelled: " + error.getMessage());
-                }
-            });
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, "onCancelled: " + error.getMessage());
+            }
+        });
 
-        addEvents();
+        chatAdapter = new ChatAdapter(chatList,ChatMessagesActivity.this);
+        chattingRecyclerView.setAdapter(chatAdapter);
     }
     void addEvents(){
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -134,11 +163,12 @@ ChatList chatList1 = new ChatList("2143","1234",getMsg,simpleDateFormat.format(d
                    String message = messageEditText.getText().toString();
                    if (!message.isEmpty()){
                           //send message
-                       String currentDateTimeString = String.valueOf(System.currentTimeMillis()).substring(0,10);
-                          databaseReference.child("chat").child(chatKey).child("restaurant").setValue("restaurant");
+                       System.out.println("ChatMessagesActivity.onCreate.addEvents.onClick");
+                            String currentDateTimeString = String.valueOf(System.currentTimeMillis()).substring(0,10);
+                            databaseReference.child("chat").child(chatKey).child("restaurant").setValue("restaurant");
                             databaseReference.child("chat").child(chatKey).child("client").setValue("client");
                             databaseReference.child("chat").child(chatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
-                       databaseReference.child("chat").child(chatKey).child("message").child(currentDateTimeString).child("phone").setValue(userMobeile);
+                            databaseReference.child("chat").child(chatKey).child("message").child(currentDateTimeString).child("phone").setValue(getUserMobeile);
                           messageEditText.setText("");
 
                     }
