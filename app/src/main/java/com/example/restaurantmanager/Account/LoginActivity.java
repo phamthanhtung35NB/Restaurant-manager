@@ -229,11 +229,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String phone = document.getString("phone");
                     String email = document.getString("email");
+                    String username = document.getString("username");
                     SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", textViewUsername.getText().toString());
                     editor.putString("phone", phone);
                     editor.putString("password", textPassword.getText().toString());
+                    editor.putString("username", username);
                     editor.putString("uid", uid);
                     editor.apply();
                     Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();

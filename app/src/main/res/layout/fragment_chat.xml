@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/topbar"
             android:layout_width="match_parent"
@@ -20,27 +21,30 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_alignParentStart="true"
-                android:paddingEnd="2dp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
+                android:paddingEnd="2dp"
                 android:src="@drawable/back_button" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profilePic"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_toEndOf="@id/backBtn"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
+                android:layout_toEndOf="@id/backBtn"
                 android:src="@drawable/account" />
+
             <LinearLayout
-                android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:orientation="vertical"
-                android:layout_toEndOf="@id/profilePic">
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/profilePic"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
@@ -50,6 +54,7 @@
                     android:textColor="@color/blue"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -64,11 +69,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chattingRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="384dp"
+            android:layout_height="488dp"
             android:layout_above="@+id/bottombar"
             android:layout_below="@+id/topbar"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp"
+            android:layout_toStartOf="@+id/bottombar" />
 
         <RelativeLayout
             android:id="@+id/bottombar"
@@ -77,15 +83,16 @@
             android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
             android:paddingBottom="10dp">
+
             <EditText
                 android:id="@+id/messageEditTxt"
                 android:layout_width="match_parent"
-                android:layout_toStartOf="@+id/sendBtn"
                 android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:hint="Type something..."
+                android:layout_toStartOf="@+id/sendBtn"
                 android:backgroundTint="@color/blue"
+                android:hint="Type something..."
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -93,9 +100,9 @@
                 android:id="@+id/sendBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
                 android:background="@color/black"
-                tools:srcCompat="@android:drawable/ic_menu_send"
-                android:layout_alignParentEnd="true"/>
+                tools:srcCompat="@android:drawable/ic_menu_send" />
         </RelativeLayout>
     </LinearLayout>
 </FrameLayout>

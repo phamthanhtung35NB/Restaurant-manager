@@ -1,6 +1,7 @@
 package adapter.Chat;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         ChatList list2 = chatList.get(position);
         System.out.println("ChatAdapter.onBindViewHolder");
-        if (list2.getPhone().equals("123456789")) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("dataLogin", context.MODE_PRIVATE);
+        String myPhone=sharedPreferences.getString("phone","");
+        System.out.println("myPhone+++++: "+myPhone);
+        if (list2.getPhone().equals(myPhone)) {
             holder.myLayout.setVisibility(View.VISIBLE);
             holder.opoLayout.setVisibility(View.GONE);
 
@@ -59,7 +63,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
     public void updateChatList(List<ChatList> list){
         this.chatList = list;
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout opoLayout,myLayout;

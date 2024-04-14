@@ -78,11 +78,11 @@ public class ListMessagesFragment extends Fragment {
                 chatKey = "";
                 for (DataSnapshot dataSnapshot : snapshot.child("user").getChildren()){
 
-                    final String getUid = dataSnapshot.getKey().trim();
+                    final String chatKey = dataSnapshot.getKey().trim();
                     dataSet = false;
-                    System.out.println("getUid: " + getUid);  ;
+                    System.out.println("getUid: " + chatKey);  ;
                     System.out.println("uid: " + uid);
-                    if (!getUid.equals(uid)){
+                    if (!chatKey.equals(uid)){
                         final String getProfile_pic = dataSnapshot.child("profile_pic").getValue(String.class);
                         String getName = dataSnapshot.child("username").getValue(String.class);
                         lastMessage = dataSnapshot.child("lastMessage").getValue(String.class);
@@ -94,7 +94,7 @@ public class ListMessagesFragment extends Fragment {
                         System.out.println("dataSet: " + dataSet);
                         if (!dataSet){
                             dataSet = true;
-                            MessagesList mesagesList = new MessagesList( getName, getUid, lastMessage, getProfile_pic, unseenMessages, chatKey);
+                            MessagesList mesagesList = new MessagesList( getName, "getUid", lastMessage, getProfile_pic, unseenMessages, chatKey);
                             messagesLists.add(mesagesList);
                             messagesAdapter.updateList(messagesLists);
                         }
@@ -111,8 +111,8 @@ public class ListMessagesFragment extends Fragment {
                                         if (dataSnapshot1.hasChild("restaurant") && dataSnapshot1.hasChild("client")&& dataSnapshot1.hasChild("messages")) {
                                             String getUserOne = dataSnapshot1.child("restaurant").getValue(String.class);
                                             String getUserTwo = dataSnapshot1.child("client").getValue(String.class);
-                                            if ((getUserOne.equals(getUid) && getUserTwo.equals(uid))||
-                                                    (getUserOne.equals(uid) && getUserTwo.equals(getUid))) {
+                                            if ((getUserOne.equals("getUid") && getUserTwo.equals(uid))||
+                                                    (getUserOne.equals(uid) && getUserTwo.equals("getUid"))) {
                                                 for (DataSnapshot chatDataSnapshot : dataSnapshot1.child("messages").getChildren()) {
                                                     long getMessageKey = Long.parseLong(chatDataSnapshot.getKey());
                                                     long getLastMessage = 10;
