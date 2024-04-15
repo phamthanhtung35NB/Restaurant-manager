@@ -68,7 +68,6 @@ dependencies {
     implementation("com.google.firebase:firebase-inappmessaging:20.0.0")
 
     //add sqlite
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

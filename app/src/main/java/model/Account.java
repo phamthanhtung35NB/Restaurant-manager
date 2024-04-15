@@ -11,6 +11,10 @@ public class Account {
     private String phone;
     private String email;
     private String address;
+    //tọa độ của người dùng
+    private String location;
+    //link ảnh đại diện
+    private String profilePic;
     private TreeMap<String,MenuRestaurant> menuRestaurant=new TreeMap<>();
     //constructor
     public Account() {
@@ -25,13 +29,15 @@ public class Account {
         MenuRestaurant menuRestaurant1 = new MenuRestaurant(id2, name, description, price, image);
         this.menuRestaurant.put(id2,menuRestaurant1);
     }
-    public Account(String type,String username, String password, String phone, String email, String address) {
+    public Account(String type,String username, String password, String phone, String email, String address,String location,String profilePic) {
         this.type = type;
         this.username = username;
         this.password = password;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.location=location;
+        this.profilePic=profilePic;
 //        MenuRestaurant menuRestaurant1 = new MenuRestaurant(id2, name, description, price, image);
 //        this.menuRestaurant.put(id2,menuRestaurant1);
         this.menuRestaurant = new TreeMap<>();
@@ -47,6 +53,22 @@ public class Account {
 //        this.menuRestaurant.getDescription()=menuRestaurant.getDescription();
 //    }
     //getter and setter
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
 
     public String getType() {
         return type;

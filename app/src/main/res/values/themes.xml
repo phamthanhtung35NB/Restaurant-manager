@@ -10,4 +10,8 @@
 
 
     <style name="Theme.RestaurantManager" parent="Base.Theme.RestaurantManager" />
+    <style name="DinalogTheme">
+        <item name="android:windowEnterAnimation">@anim/slide_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out</item>
+    </style>
 </resources>

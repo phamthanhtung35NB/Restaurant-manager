@@ -198,6 +198,11 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("email", textViewUsername.getText().toString());
                     editor.putString("phone", phone);
                     editor.putString("password", textPassword.getText().toString());
+                    editor.putString("username", document.getString("username"));
+                    editor.putString("address", document.getString("address"));
+                    editor.putString("location", document.getString("location"));
+                    editor.putString("profilePic", document.getString("profilePic"));
+                    editor.putString("type", "restaurant");
                     editor.putString("uid", uid);
                     editor.apply();
 //                    Toast.makeText(LoginActivity.this, "Login với tài khoản nhà hàng phone: " + phone, Toast.LENGTH_SHORT).show();
@@ -236,6 +241,10 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("phone", phone);
                     editor.putString("password", textPassword.getText().toString());
                     editor.putString("username", username);
+                    editor.putString("address", document.getString("address"));
+                    editor.putString("location", document.getString("location"));
+                    editor.putString("profilePic", document.getString("profilePic"));
+                    editor.putString("type", "client");
                     editor.putString("uid", uid);
                     editor.apply();
                     Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();

@@ -1,42 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/navHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/textview_border"
-        android:alphabeticModifiers="META"
-        android:icon="@drawable/baseline_home_24"
-        android:title="Home"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/navHome"-->
+<!--        android:icon="@drawable/baseline_home_24"-->
+<!--        android:title="Home" />-->
     <item
         android:id="@+id/navMenu"
         android:icon="@drawable/avata"
-        android:background="@drawable/textview_border"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="Menu" />
     <item
         android:id="@+id/navTable"
-        android:background="@drawable/textview_border"
         android:icon="@drawable/chair"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="Table" />
     <item
+        android:title=""/>
+    <item
         android:id="@+id/navMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/textview_border"
         android:icon="@android:drawable/ic_dialog_email"
         android:title="Message" />
     <item
         android:id="@+id/navSetting"
-        android:background="@drawable/textview_border"
         android:icon="@drawable/baseline_app_settings_alt_24"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:title="Setting" />
 </menu>

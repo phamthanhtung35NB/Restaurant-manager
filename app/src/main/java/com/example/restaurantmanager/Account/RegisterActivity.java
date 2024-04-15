@@ -38,6 +38,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText textPhone;
     private EditText textEmail;
     private Button buttonLogin2;
+    private String location;
+    private String profilePic;
 
     private RadioButton radioButtonRestaurant;
     private RadioButton radioButtonClient;
@@ -90,6 +92,8 @@ public class RegisterActivity extends AppCompatActivity {
         String password = textPassword2.getText().toString();
         String password2 = textPassword3.getText().toString();
         String phone = textPhone.getText().toString();
+        String location = "";
+        String profilePic = "";
 
         String type = "";
         if (username.equals("") || password.equals("") || password2.equals("") || phone.equals("") || email.equals("")) {
@@ -127,6 +131,10 @@ public class RegisterActivity extends AppCompatActivity {
                         databaseReference.child("user").child(uid).child("type").setValue("client");
                         databaseReference.child("user").child(uid).child("username").setValue(username);
                         databaseReference.child("user").child(uid).child("phone").setValue(phone);
+                        databaseReference.child("user").child(uid).child("email").setValue(email);
+                        databaseReference.child("user").child(uid).child("location").setValue(location);
+                        databaseReference.child("user").child(uid).child("profilePic").setValue(profilePic);
+
                         // thêm thông tin người dùng vào firestore  dựa vào uid
                         Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
                         // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
@@ -136,6 +144,9 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("username", username);
                         user.put("phone", phone);
                         user.put("email", email);
+                        user.put("location", location);
+                        user.put("profilePic", profilePic);
+
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                         });
@@ -162,6 +173,9 @@ public class RegisterActivity extends AppCompatActivity {
                         databaseReference.child("user").child(uid).child("type").setValue("restaurant");
                         databaseReference.child("user").child(uid).child("username").setValue(username);
                         databaseReference.child("user").child(uid).child("phone").setValue(phone);
+                        databaseReference.child("user").child(uid).child("email").setValue(email);
+                        databaseReference.child("user").child(uid).child("location").setValue(location);
+                        databaseReference.child("user").child(uid).child("profilePic").setValue(profilePic);
                         // thêm thông tin người dùng vào firestore  dựa vào uid
                         Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
                         // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
@@ -173,6 +187,9 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("email", email);
                         user.put("idMax", 0);
                         user.put("idTableMax", 0);
+                        user.put("location", location);
+                        user.put("profilePic", profilePic);
+
                         user.put("menuRestaurant", new HashMap<String, MenuRestaurant>());
 
 //                        // thêm thông tin menu vào firestore document uid của người dùng
@@ -194,19 +211,5 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
-
-
-
-//                    FirestoreHelper.addAccount(type,new Account(type,username, password, phone, email, ""));
-//                    Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-//            startActivity(intent);
-
-
-
-
-
     }
 }

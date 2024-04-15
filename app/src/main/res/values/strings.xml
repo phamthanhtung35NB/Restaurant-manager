@@ -25,4 +25,6 @@
     <string name="title_show_menu">Show Menu</string>
     <string name="title_show_table">Show Table</string>
     <string name="title_statistical_activity">Statistical Activity</string>
+    <string name="open_nav">Open Navigation</string>
+    <string name="close_nav">Close Navigation</string>
 </resources>

@@ -8,8 +8,7 @@
     android:layout_margin="16dp"
     android:background="@drawable/bg_white_corner_16"
     android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".DialogNotificationActivity">
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
