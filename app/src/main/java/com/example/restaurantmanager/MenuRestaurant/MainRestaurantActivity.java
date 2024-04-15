@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
+import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -78,7 +79,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 }else if (itemId == R.id.navTable){
                     replaceFragment(new ShowTableRestaurantFragment(), false);
                 }else if(itemId==R.id.navMessage){
-                    replaceFragment(new ListMessagesFragment(), false);
+                    replaceFragment(new ListMessagesRestaurantFragment(), false);
                 }
                 else if (itemId == R.id.navSetting){
                     // Handle the setting fragment here

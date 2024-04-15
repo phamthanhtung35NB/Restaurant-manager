@@ -69,20 +69,17 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chattingRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="488dp"
+            android:layout_height="398dp"
             android:layout_above="@+id/bottombar"
             android:layout_below="@+id/topbar"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="20dp"
-            android:layout_toStartOf="@+id/bottombar" />
+            android:layout_marginBottom="20dp" />
 
         <RelativeLayout
             android:id="@+id/bottombar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="10dp"
-            android:paddingBottom="10dp">
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/messageEditTxt"
@@ -101,7 +98,6 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
-                android:background="@color/black"
                 tools:srcCompat="@android:drawable/ic_menu_send" />
         </RelativeLayout>
     </LinearLayout>

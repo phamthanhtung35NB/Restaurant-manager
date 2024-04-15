@@ -89,49 +89,41 @@ public class ChatFragment extends Fragment {
         chattingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         chatAdapter = new ChatAdapter(chatList, getActivity());
         profilePic.setImageResource(R.drawable.account);
-
-        databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").addChildEventListener(new ChildEventListener() {
+        chatList.clear();
+        databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.hasChild("msg")&&dataSnapshot.hasChild("phone")){
-                    final String messageTimeStamps = dataSnapshot.getKey();
-                    final String getMsg = dataSnapshot.child("msg").getValue().toString();
-                    final String getPhone = dataSnapshot.child("phone").getValue().toString();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chatList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.hasChild("msg") && snapshot.hasChild("phone")) {
+                        System.out.println("có tin nhắn mới");
+                        final String messageTimeStamps = snapshot.getKey();
+                        final String getMsg = snapshot.child("msg").getValue().toString();
+                        final String getPhone = snapshot.child("phone").getValue().toString();
 
-                    SimpleDateFormat inputFormat = new SimpleDateFormat("ddMMyyyyHHmmss", new Locale("vi", "VN"));
-                    try {
-                        Date date = inputFormat.parse(messageTimeStamps);
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", new Locale("vi", "VN"));
-                        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm aa", new Locale("vi", "VN"));
-                        String formattedDate = simpleDateFormat.format(date);
-                        String formattedTime = simpleTimeFormat.format(date);
-                        formattedTime = formattedTime.replace("SA", "AM").replace("CH", "PM");
-                        ChatList chatList1 = new ChatList(getPhone, myName, getMsg, formattedDate, formattedTime);
-                        chatList.add(chatList1);
-
-                        chatAdapter.updateChatList(chatList);
-                        chattingRecyclerView.setAdapter(chatAdapter);
-                        chattingRecyclerView.scrollToPosition(chatList.size() - 1);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("ddMMyyyyHHmmss", new Locale("vi", "VN"));
+                        try {
+                            Date date = inputFormat.parse(messageTimeStamps);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", new Locale("vi", "VN"));
+                            SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm aa", new Locale("vi", "VN"));
+                            String formattedDate = simpleDateFormat.format(date);
+                            String formattedTime = simpleTimeFormat.format(date);
+                            formattedTime = formattedTime.replace("SA", "AM").replace("CH", "PM");
+                            ChatList chatList1 = new ChatList(getPhone, myName, getMsg, formattedDate, formattedTime);
+                            chatList.add(chatList1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                chatAdapter.updateChatList(chatList);
+                chattingRecyclerView.setAdapter(chatAdapter);
+                chattingRecyclerView.scrollToPosition(chatList.size() - 1);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                System.out.println("Error reading data: " + databaseError.getMessage());
             }
         });
     }
@@ -297,7 +289,9 @@ public class ChatFragment extends Fragment {
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
                     messageEditText.setText("");
+
                 }
+                init(view);
             }
         });
         profilePic.setOnClickListener(new View.OnClickListener() {
