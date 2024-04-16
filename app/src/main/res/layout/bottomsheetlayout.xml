@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/orange"
     android:background="@drawable/dinalogbkg">
 
     <ImageView
@@ -15,16 +16,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#00000000"
         android:orientation="horizontal">
 
         <TextView
+            android:backgroundTint="#00000000"
             android:id="@+id/createText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"
             android:text="Create"
             android:padding="8dp"
-            android:textColor="@color/lavender"
+            android:textColor="@color/black"
             android:layout_marginStart="12dp"
             android:layout_marginTop="5dp"
             android:textSize="25dp" />
@@ -46,18 +49,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:backgroundTint="#00000000"
         android:padding="10dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
             android:src="@drawable/ic_baseline_upload_24"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
             android:text="Upload a video"
-            android:textColor="@color/lavender"
+            android:textColor="@color/black"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
 
@@ -66,6 +72,7 @@
     <LinearLayout
         android:id="@+id/layoutShorts"
         android:orientation="horizontal"
+        android:backgroundTint="#00000000"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">
@@ -74,13 +81,15 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
             android:src="@drawable/ic_baseline_whatshot_24"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Create a short"
-            android:textColor="@color/lavender"
+            android:backgroundTint="#00000000"
+            android:textColor="@color/black"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
 
@@ -90,6 +99,7 @@
         android:id="@+id/layoutLive"
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:backgroundTint="#00000000"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
@@ -100,13 +110,15 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="#00000000"
             android:src="@drawable/ic_baseline_vibration_24"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Go live"
-            android:textColor="@color/lavender"
+            android:textColor="@color/black"
+            android:backgroundTint="#00000000"
             android:layout_marginLeft="30dp"
             android:textSize="16sp"/>
 

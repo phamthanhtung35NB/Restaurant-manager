@@ -45,6 +45,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
     FloatingActionButton fab;
     private BottomNavigationView bottomNavigationView;
     DrawerLayout drawerLayout;
+//    FrameLayout drawerLayout;
     private FrameLayout fragmentContainer;
     public static Fragment lastFragment = null; // Biến để lưu trạng thái Fragment cuối cùng
 
@@ -61,6 +62,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //        slideOutAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out);;
         fab = findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.main);
+        fragmentContainer = findViewById(R.id.fragment_container);
         NavigationView navigationView = findViewById(R.id.navigationView);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -114,6 +116,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
     public void replaceFragment(Fragment fragment, boolean isAppInit){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        System.out.println("Fragment: " + fragment);
         if (!isAppInit){
             fragmentTransaction.replace(R.id.fragment_container, fragment);
         }else {

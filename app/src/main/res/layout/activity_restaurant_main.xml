@@ -13,19 +13,72 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
+        <TextView
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:background="@color/orange"
+            android:layout_height="30dp" />
+
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:elevation="4dp"
-            android:background="@color/lavender"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:textDirection="firstStrongLtr"
+            android:tooltipText="@string/title_setting"
+            android:background="@color/orange"
+            android:elevation="40dp"
+            android:gravity="center"/>
+<!--            android:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
+<!--            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="507dp"
+            android:layout_above="@+id/bottomAppBar" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:layout_gravity="center">
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottomAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:background="@color/white"
+                app:fabCradleMargin="10dp"
+                android:layout_marginBottom="0dp"
+                app:fabCradleRoundedCornerRadius="50dp">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottomNavigationView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginEnd="20dp"
+                    android:background="@android:color/transparent"
+                    app:labelVisibilityMode="labeled"
+
+                    android:layout_marginBottom="0dp"
+                    app:menu="@menu/bottom_nav_menu_restaurant" />
+
+            </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_baseline_add_24"
+                app:maxImageSize="40dp"
+                app:tint="@color/lavender" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
 
@@ -39,43 +92,5 @@
         app:itemIconTint="@color/lavender"
         app:itemTextColor="@color/lavender"/>
 
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/white"
-            app:fabCradleMargin="10dp"
-            app:fabCradleRoundedCornerRadius="50dp">
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottomNavigationView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:background="@android:color/transparent"
-                app:labelVisibilityMode="labeled"
-                app:menu="@menu/bottom_nav_menu_restaurant" />
-
-        </com.google.android.material.bottomappbar.BottomAppBar>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/ic_baseline_add_24"
-            app:layout_anchor="@id/bottomAppBar"
-            app:maxImageSize="40dp"
-            android:id="@+id/fab"
-            app:tint="@color/lavender" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.drawerlayout.widget.DrawerLayout>

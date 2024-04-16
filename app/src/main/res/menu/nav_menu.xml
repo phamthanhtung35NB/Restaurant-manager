@@ -25,7 +25,7 @@
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/baseline_cast_connected_24"
-            android:title="About Us"/>
+            android:title="----"/>
     </group>
     <item
         android:title="">

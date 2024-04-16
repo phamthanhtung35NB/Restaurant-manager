@@ -2,31 +2,40 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="176dp"
+    android:layout_width="wrap_content"
+    android:layout_height="196dp"
     android:gravity="bottom"
     android:padding="16dp"
     android:background="@drawable/headerbkg"
+    android:backgroundTint="@color/orange"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="#00000000"
         android:src="@drawable/aklogo"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Android Knowledge"
+        android:background="#00000000"
+        android:text="Android"
         android:textColor="@color/white"
         android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="contact@androidknowledge.com"
+        android:text="contact@"
         android:textColor="@color/white"
+        android:background="#00000000"
         android:textSize="14sp"
         android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#00000000"/>
 
 </LinearLayout>
