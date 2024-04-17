@@ -2,52 +2,49 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.RestaurantManager"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/nen"
     tools:context=".Account.LoginActivity">
-<!--    android:id="@+id/container"-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00FFFFFF"
+        android:background="?attr/android:colorBackground"
         android:gravity="center|top"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="-26dp"
-        tools:layout_editor_absoluteY="-14dp">
+        android:orientation="vertical">
 
-        <TextView
-            android:background="#00FFFFFF"
-            android:layout_width="3dp"
-            android:layout_height="120dp" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="75dp" />
 
         <EditText
             android:id="@+id/textViewUsername"
-            android:layout_width="306dp"
-            android:layout_height="50dp"
-            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="?attr/colorOnSurface"
             android:drawableLeft="@android:drawable/sym_action_email"
             android:background="@drawable/textview_border"
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true" />
 
-        <TextView
-            android:background="#00FFFFFF"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="12dp" />
 
         <EditText
             android:id="@+id/textPassword2"
-            android:layout_width="306dp"
-            android:layout_height="50dp"
-            android:textColor="@color/black"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="?attr/colorOnSurface"
             android:drawableLeft="@android:drawable/ic_secure"
             android:background="@drawable/textview_border"
             android:hint="@string/prompt_password"
@@ -56,72 +53,59 @@
             android:inputType="textPassword"
             android:selectAllOnFocus="true" />
 
-        <TextView
-            android:background="#00FFFFFF"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="34dp" />
 
         <RadioGroup
-            android:background="#00FFFFFF"
             android:id="@+id/radioGroupL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:background="#00FFFFFF"
-                android:backgroundTint="#00FFFFFF"
-                android:hapticFeedbackEnabled="false" />
-
             <RadioButton
                 android:id="@+id/radioButtonClientLogin"
-                android:layout_width="260dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:background="@drawable/textview_border"
                 android:gravity="center"
                 android:text="Login Client  " />
 
             <RadioButton
                 android:id="@+id/radioButtonRestaurantLogin"
-                android:layout_width="260dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnSurface"
                 android:background="@drawable/textview_border"
                 android:gravity="center"
-
                 android:text="Login Restaurant" />
         </RadioGroup>
 
-        <TextView
-            android:background="#00FFFFFF"
-            android:layout_width="3dp"
-            android:layout_height="20dp" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="38dp" />
 
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/gray"
-            android:textColor="@color/black"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
             android:drawableLeft="@android:drawable/ic_menu_send"
-            android:text="Login"
-            android:textCursorDrawable="@android:drawable/ic_menu_send" />
+            android:text="Login" />
 
-        <TextView
-            android:background="#00FFFFFF"
+        <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            android:layout_height="12dp" />
 
         <Button
             android:id="@+id/buttonCreateNewAccount"
-            android:layout_width="151dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/gray"
-            android:textColor="@color/black"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="?attr/colorOnPrimary"
             android:drawableLeft="@android:drawable/ic_menu_add"
             android:text="Create Account" />
     </LinearLayout>

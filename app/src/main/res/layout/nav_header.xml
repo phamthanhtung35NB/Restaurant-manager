@@ -7,8 +7,8 @@
     android:gravity="bottom"
     android:padding="16dp"
     android:background="@drawable/headerbkg"
-    android:backgroundTint="@color/orange"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:backgroundTint="?attr/colorPrimary"
+    android:theme="@style/Theme.RestaurantManager">
 
     <ImageView
         android:layout_width="70dp"

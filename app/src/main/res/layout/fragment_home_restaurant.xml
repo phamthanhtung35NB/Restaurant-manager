@@ -32,7 +32,8 @@
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Số món đang chờ" />
+                    android:text="Số món đang chờ"
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
             <LinearLayout
@@ -47,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Món Đang Chờ"
-                    android:textColor="#000000" />
+                    android:textColor="?attr/colorOnSurface" />
 
                 <ListView
                     android:layout_width="match_parent"
@@ -58,7 +59,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="#4CCA22" />
+            android:background="?attr/colorPrimary" />
         <LinearLayout
             android:id="@+id/lineButtonsStatistical"
             android:layout_width="match_parent"
@@ -83,9 +84,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:shadowColor="#CD0A0A"
                     android:text="Thống kê"
-                    android:textColor="#000000" />
+                    android:textColor="?attr/colorOnSurface" />
             </LinearLayout>
 
         </LinearLayout>

@@ -75,6 +75,7 @@ public class MenuAdapter extends ArrayAdapter<MenuRestaurant> {
         textViewName.setText(menuRestaurant.getName());
         textViewDescription.setText(menuRestaurant.getDescription());
         textViewPrice.setText(menuRestaurant.getPrice()+"");
+        imageButtonSet.setImageResource(android.R.drawable.ic_menu_edit);
         String imageShow = menuRestaurant.getImage();
         //lấy hình ảnh từ database
         if (imageShow.length()>5){

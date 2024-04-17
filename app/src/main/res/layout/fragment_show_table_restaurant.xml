@@ -22,14 +22,16 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/logout" />
+            app:srcCompat="@drawable/logout"
+            android:backgroundTint="?attr/colorOnSecondary" />
 
         <ImageButton
             android:id="@+id/imageButtonAddTable"
             android:layout_width="58dp"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/add" />
+            app:srcCompat="@drawable/add"
+            android:backgroundTint="?attr/colorOnSecondary" />
 
         <TextView
             android:layout_width="10dp"
@@ -40,16 +42,19 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="?attr/colorOnSecondary" />
     </LinearLayout>
 
-    <GridView
-        android:id="@+id/gvTable"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:cacheColorHint="#B60404"
-        android:gravity="center"
-        android:numColumns="2" />
+        <GridView
+            android:id="@+id/gvTable"
+            android:layout_width="match_parent"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:layout_height="761dp"
+            android:layout_gravity="center"
+            android:cacheColorHint="?attr/colorOnSecondary"
+            android:gravity="center"
+            android:numColumns="2" />
 </LinearLayout>
 </FrameLayout>

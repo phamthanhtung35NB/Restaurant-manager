@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--//background color of the bottom navigation bar-->
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?attr/colorPrimary">
 <!--    <item-->
 <!--        android:id="@+id/navHome"-->
 <!--        android:icon="@drawable/baseline_home_24"-->
 <!--        android:title="Home" />-->
     <item
         android:id="@+id/navMenu"
-        android:icon="@drawable/avata"
+        android:icon="@drawable/baseline_format_list_numbered_24"
+        android:borderlessButtonStyle="?attr/borderlessButtonStyle"
         android:title="Menu" />
     <item
         android:id="@+id/navTable"
         android:icon="@drawable/chair"
         android:title="Table" />
     <item
+        android:id="@+id/navHome"
         android:title=""/>
     <item
         android:id="@+id/navMessage"

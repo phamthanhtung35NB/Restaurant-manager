@@ -18,4 +18,63 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="lavender">#8692f7</color>
+
+
+
+    <!-- Colors for light theme -->
+    <color name="colorPrimaryLight">#0668e1</color>
+    <color name="colorPrimaryVariantLight">#f07c41</color>
+    <color name="colorSecondaryLight">#0450ae</color>
+    <color name="colorSecondaryVariantLight">#9dbcc2</color>
+    <color name="colorBackgroundLight">#c7eef5</color>
+    <color name="colorSurfaceLight">#ffffff</color>
+    <color name="colorOnPrimaryLight">#ffffff</color>
+    <color name="colorOnSecondaryLight">#022249</color>
+    <color name="colorOnBackgroundLight">#022249</color>
+    <color name="colorOnSurfaceLight">#022249</color>
+    <color name="colorErrorLight">#B00020</color>
+    <color name="colorOnErrorLight">#FFFFFF</color>
+
+    <!-- Colors for dark theme -->
+    <color name="colorPrimaryDark">#022249</color>
+    <color name="colorPrimaryVariantDark">#f07c41</color>
+    <color name="colorSecondaryDark">#55bdca</color>
+    <color name="colorSecondaryVariantDark">#95ffff</color>
+    <color name="colorBackgroundDark">#c7eef5</color>
+    <color name="colorSurfaceDark">#ffffff</color>
+    <color name="colorOnPrimaryDark">#ffffff</color>
+    <color name="colorOnSecondaryDark">#022249</color>
+    <color name="colorOnBackgroundDark">#022249</color>
+    <color name="colorOnSurfaceDark">#022249</color>
+    <color name="colorErrorDark">#B00020</color>
+    <color name="colorOnErrorDark">#FFFFFF</color>
+
+<!--   &lt;!&ndash; Colors for light theme &ndash;&gt;-->
+<!--<color name="colorPrimary">#022249</color> &lt;!&ndash; Màu chính cho theme sáng &ndash;&gt;-->
+<!--<color name="colorPrimaryVariant">#F07C41</color> &lt;!&ndash; Biến thể của màu chính cho theme sáng &ndash;&gt;-->
+<!--<color name="colorOnPrimary">#55BDAC</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu chính &ndash;&gt;-->
+<!--<color name="colorSecondary">#FF4081</color> &lt;!&ndash; Màu phụ cho theme sáng &ndash;&gt;-->
+<!--<color name="colorSecondaryVariant">#F50057</color> &lt;!&ndash; Biến thể của màu phụ cho theme sáng &ndash;&gt;-->
+<!--<color name="colorOnSecondary">#000000</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu phụ &ndash;&gt;-->
+<!--<color name="colorSurface">#FFFFFF</color> &lt;!&ndash; Màu của các bề mặt UI như card, sheet, và background &ndash;&gt;-->
+<!--<color name="colorOnSurface">#000000</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu bề mặt &ndash;&gt;-->
+<!--<color name="colorError">#B00020</color> &lt;!&ndash; Màu cho các trạng thái lỗi &ndash;&gt;-->
+<!--<color name="colorOnError">#FFFFFF</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu lỗi &ndash;&gt;-->
+<!--<color name="colorBackground">#FFFFFF</color> &lt;!&ndash; Màu nền cho theme sáng &ndash;&gt;-->
+<!--<color name="colorOnBackground">#000000</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu nền &ndash;&gt;-->
+
+<!--&lt;!&ndash; Colors for dark theme &ndash;&gt;-->
+<!--<color name="colorPrimaryDark">#BB86FC</color> &lt;!&ndash; Màu chính cho theme tối &ndash;&gt;-->
+<!--<color name="colorPrimaryVariantDark">#3700B3</color> &lt;!&ndash; Biến thể của màu chính cho theme tối &ndash;&gt;-->
+<!--<color name="colorOnPrimaryDark">#000000</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu chính trong theme tối &ndash;&gt;-->
+<!--<color name="colorSecondaryDark">#03DAC6</color> &lt;!&ndash; Màu phụ cho theme tối &ndash;&gt;-->
+<!--<color name="colorSecondaryVariantDark">#018786</color> &lt;!&ndash; Biến thể của màu phụ cho theme tối &ndash;&gt;-->
+<!--<color name="colorOnSecondaryDark">#000000</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu phụ trong theme tối &ndash;&gt;-->
+<!--<color name="colorSurfaceDark">#121212</color> &lt;!&ndash; Màu của các bề mặt UI như card, sheet, và background trong theme tối &ndash;&gt;-->
+<!--<color name="colorOnSurfaceDark">#FFFFFF</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu bề mặt trong theme tối &ndash;&gt;-->
+<!--<color name="colorErrorDark">#CF6679</color> &lt;!&ndash; Màu cho các trạng thái lỗi trong theme tối &ndash;&gt;-->
+<!--<color name="colorOnErrorDark">#000000</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu lỗi trong theme tối &ndash;&gt;-->
+<!--<color name="colorBackgroundDark">#121212</color> &lt;!&ndash; Màu nền cho theme tối &ndash;&gt;-->
+<!--<color name="colorOnBackgroundDark">#FFFFFF</color> &lt;!&ndash; Màu của văn bản và các thành phần khác trên màu nền trong theme tối &ndash;&gt;-->
+
 </resources>

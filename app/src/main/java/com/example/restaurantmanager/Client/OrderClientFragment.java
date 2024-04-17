@@ -98,6 +98,8 @@ public class OrderClientFragment extends Fragment {
             SetTableStateEmptyRealtime.setTableIsUsing(accountId, numberTable, "Trống");
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference refOrder = database.getReference(URL);
+            //cho phép quét mã QR
+            MainActivity.isCheckQR = false;
             refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

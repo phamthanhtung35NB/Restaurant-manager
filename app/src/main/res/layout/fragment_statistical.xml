@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MenuRestaurant.StatisticalFragment">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,23 +21,27 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center|left"
                 android:text="Hôm nay"
-                android:textColor="#F6DE00" /> <!-- Red color -->
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/textViewToday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#CED417" /> <!-- Green color -->
+                android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray" />
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChartTK"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="500dp" />
 
         <LinearLayout
             android:id="@+id/LinearLayoutWeek"
@@ -44,23 +50,28 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:text="7 Ngày Gần Đây"
-                android:textColor="#46FA14" /> <!-- Blue color -->
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/textViewWeek"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#61E60E" /> <!-- Yellow color -->
+                android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChartTK"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="500dp" />
 
         <LinearLayout
             android:id="@+id/LinearLayoutMonth"
@@ -69,23 +80,24 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:text="30 Ngày Gần Đây"
-                android:textColor="#FF0000" /> <!-- Magenta color -->
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/textViewMonth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#F80000" />
-
-            <!-- Cyan color -->
+                android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
 
-        <!-- Increased height -->
-        <!--            android:layout_marginTop="20dp" -->
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray" />
 
     </LinearLayout>
+    </ScrollView>
 </FrameLayout>

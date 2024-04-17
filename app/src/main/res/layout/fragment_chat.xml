@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     tools:context=".Client.Messages.ChatFragment">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Full Name"
-                    android:textColor="@color/blue"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -60,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:text="Online"
-                    android:textColor="@color/blue"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -69,8 +68,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chattingRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="720dp"
-            android:layout_weight="1" />
+            android:layout_height="659dp" />
 
         <LinearLayout
             android:id="@+id/bottombar"
@@ -81,35 +79,26 @@
 
             <EditText
                 android:id="@+id/messageEditTxt"
-                android:layout_width="362dp"
+                android:layout_width="300dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="0dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="0dp"
+                android:background="@drawable/textview_border"
                 android:layout_toStartOf="@+id/sendBtn"
                 android:layout_weight="1"
-                android:backgroundTint="@color/blue"
+
                 android:hint="Type something..."
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnSecondary"
                 android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/sendBtn"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_weight="1"
-                tools:srcCompat="@android:drawable/ic_menu_send" />
+                android:background="@android:drawable/ic_menu_send"/>
         </LinearLayout>
     </LinearLayout>
-
-    <!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:orientation="vertical">-->
-
-<!--        &lt;!&ndash;            android:layout_marginTop="0dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginBottom="10dp"&ndash;&gt;-->
-
-
-<!--    </LinearLayout>-->
 </FrameLayout>

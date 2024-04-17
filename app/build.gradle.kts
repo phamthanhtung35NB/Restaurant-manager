@@ -66,7 +66,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging:21.1.0")
     implementation(libs.firebase.inappmessaging.display)
     implementation("com.google.firebase:firebase-inappmessaging:20.0.0")
-
+    implementation ("androidx.legacy:legacy-support-v4:1.0.0")
     //add sqlite
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

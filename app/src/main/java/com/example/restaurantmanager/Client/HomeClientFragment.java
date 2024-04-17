@@ -77,7 +77,7 @@ public class HomeClientFragment extends Fragment {
         if (a.length()>2){
             // Tạo một instance mới của MenuClientFragment
             MenuClientFragment menuClientFragment = new MenuClientFragment();
-
+            MainActivity.isCheckQR = true;
 
             // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng MenuClientFragment
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -175,7 +175,6 @@ public class HomeClientFragment extends Fragment {
                                 }
                             }
                         });
-//                startActivity(intent);
                 // Tạo một instance mới của MenuClientFragment
                 MenuClientFragment menuClientFragment = new MenuClientFragment();
 //                menuClientFragment.setArguments(bundle);

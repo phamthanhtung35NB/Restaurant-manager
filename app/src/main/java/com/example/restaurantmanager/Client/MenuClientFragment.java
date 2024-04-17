@@ -97,6 +97,7 @@ public class MenuClientFragment extends Fragment {
         listViewClient = view.findViewById(R.id.listViewClient);
         imageButtonGioHang = view.findViewById(R.id.imageButtonGioHang);
         dataMenuViewClient = new ArrayList<>();
+        MainActivity.isCheckQR= true;
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
 //        listViewClient.setAdapter(menuClientAdapter);
         SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang sử dụng");

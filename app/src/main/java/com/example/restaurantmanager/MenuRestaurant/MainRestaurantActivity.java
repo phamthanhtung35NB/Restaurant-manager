@@ -81,7 +81,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
 
             int itemId = item.getItemId();
             if (itemId == R.id.navMenu) {
-                replaceFragment(new HomeRestaurantFragment(), false);
+                replaceFragment(new ShowMenuRestaurantFragment(), false);
             } else if (itemId == R.id.navTable) {
                 System.out.println("Table");
                 replaceFragment(new ShowTableRestaurantFragment(), false);
@@ -89,6 +89,8 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 replaceFragment(new ListMessagesRestaurantFragment(), false);
             } else if (itemId == R.id.navSetting) {
                 System.out.println("Setting");
+//                replaceFragment(new HomeRestaurantFragment(), false);
+            } else if(itemId == R.id.navHome){
                 replaceFragment(new HomeRestaurantFragment(), false);
             }
 
@@ -98,7 +100,8 @@ public class MainRestaurantActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBottomDialog();
+//                showBottomDialog();
+                replaceFragment(new HomeRestaurantFragment(), false);
             }
         });
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

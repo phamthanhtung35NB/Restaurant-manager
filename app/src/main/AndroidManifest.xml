@@ -33,13 +33,15 @@
             android:exported="false" />
         <activity
             android:name=".MenuRestaurant.MainRestaurantActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".Client.MainActivity"
             android:exported="false" />
         <activity
             android:name=".Client.PayTheBillClientActivity"
-            android:exported="false" /> <!-- <activity -->
+            android:exported="false" />
+        <!-- <activity -->
         <!-- android:name=".DialogNotificationActivity" -->
         <!-- android:exported="false" /> &lt;!&ndash; android:name=".MyApplication" &ndash;&gt; -->
         <service

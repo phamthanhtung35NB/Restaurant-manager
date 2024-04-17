@@ -67,41 +67,6 @@ public class MessagesRestaurantAdapter extends RecyclerView.Adapter<MessagesRest
         holder.rootLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                    int getChatCount = (int) snapshot.getChildrenCount();
-//                    System.out.println("getChatCount: " + getChatCount);
-//                    if (getChatCount > 0){
-//
-//                        for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
-//                            String chatKey = dataSnapshot1.getKey();
-//                            if (dataSnapshot1.hasChild("restaurant") && dataSnapshot1.hasChild("client")&& dataSnapshot1.hasChild("messages")) {
-//                                String getUserOne = dataSnapshot1.child("restaurant").getValue(String.class);
-//                                String getUserTwo = dataSnapshot1.child("client").getValue(String.class);
-//                                if ((getUserOne.equals(getUid) && getUserTwo.equals(uid))||
-//                                        (getUserOne.equals(uid) && getUserTwo.equals(getUid))) {
-//                                    for (DataSnapshot chatDataSnapshot : dataSnapshot1.child("messages").getChildren()) {
-//                                        long getMessageKey = Long.parseLong(chatDataSnapshot.getKey());
-//                                        long getLastMessage = 10;
-//                                        lastMessage = chatDataSnapshot.child("msg").getValue(String.class);
-//                                        if (getMessageKey>getLastMessage) {
-//                                            unseenMessages++;
-//                                        }
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//
-//
-//                    }
-//                }
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                }
-//            });
                 // Tạo một instance mới của ChatFragment
                 ChatRestaurantFragment chatFragment = new ChatRestaurantFragment();
 

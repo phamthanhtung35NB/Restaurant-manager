@@ -1,32 +1,78 @@
 package com.example.restaurantmanager.Client;
 
+import static com.google.firebase.appcheck.internal.util.Logger.TAG;
+
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
+import com.example.restaurantmanager.FireBase.FireBase;
+import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantFragment;
 import com.example.restaurantmanager.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity {
 
+    FloatingActionButton fab;
+    DrawerLayout drawerLayout;
     private BottomNavigationView bottomNavigationView;
     private FrameLayout fragmentContainer;
+    static boolean isCheckQR = false;
+    public static final String SERVER_KEY = "AAAAl-xT4ko:APA91bGASnqgklF4OfVR6ls42PxiSI1Lzj2Aj8qYqdlCgk4LKApgGGpE1oH_GzLgBqjheSfQqHc3_qrdcsT4cwOGAbGCwgdUNpLmLx-tdGLo_NtbC-rZrqiDBtcP5qI6xI_YrefHOAtX";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        fab = findViewById(R.id.fab);
+        drawerLayout = findViewById(R.id.main);
+        fragmentContainer = findViewById(R.id.fragment_container);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setBackground(null);
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeClientFragment()).commit();
+            navigationView.setCheckedItem(R.id.navHome);
+        }
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         init();
         addEvents();
@@ -37,10 +83,8 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
     void init(){
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setBackground(null);
-        fragmentContainer = findViewById(R.id.fragment_container);
-        replaceFragment(new HomeClientFragment(), false);
+
+        replaceFragment(new HomeClientFragment(), true);
         Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 //        replaceFragment(new HomeClientActivity());
     }
@@ -57,13 +101,36 @@ public class MainActivity extends AppCompatActivity {
                 }else if(itemId==R.id.navMessage){
                     replaceFragment(new ListMessagesFragment(), false);
                 }
-                else if (itemId == R.id.navSetting){
-                System.out.println("navSetting");
-                Toast.makeText(MainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();
-//                    replaceFragment(new CartClientActivity());
+                else if (itemId == R.id.navQR){
+                    if (isCheckQR==false){
+
+                    System.out.println("navSetting");
+                    Toast.makeText(MainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();
+                    // Xử lý sự kiện khi click vào nút quét mã QR
+                    IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+                    integrator.setOrientationLocked(true);
+                    integrator.setPrompt("Quét mã QR để xem menu");
+                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                    integrator.initiateScan();
+                    replaceFragment(new HomeRestaurantFragment(), false);
+                    }
                 }
-//                replaceFragment(selectedFragment);
                 return true;
+            }
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isCheckQR==false){
+// Xử lý sự kiện khi click vào nút quét mã QR
+                IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+                integrator.setOrientationLocked(true);
+                integrator.setPrompt("Quét mã QR để xem menu");
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+//            integrator.setCaptureActivity(400);
+                integrator.initiateScan();
+                replaceFragment(new HomeRestaurantFragment(), false);
+                }
             }
         });
     }
@@ -77,5 +144,194 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fragmentTransaction.commit();
+    }
+    /**
+     * Hàm này sẽ được gọi sau khi quét mã QR xong
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            // Xử lý kết quả quét mã QR
+            String content = result.getContents();
+            if (content != null) {
+
+                //tách chuỗi
+                String[] arr = content.split("/");
+                String userId = arr[0];
+                String numberTable = arr[1];
+
+//                tạo sharedPreferences lưu mã QR
+                SharedPreferences sharedPreferences = getSharedPreferences("data", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("url", content);
+                editor.putString("accountId", userId);
+                editor.putString("numberTable", numberTable);
+                editor.apply();
+
+                //lấy token của nhà hàng từ firebase
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("restaurant").document(userId).get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                if (documentSnapshot.exists()) {
+                                    Map<String, Object> accountData = documentSnapshot.getData();
+                                    String token = accountData.get("token").toString();
+                                    Log.d(ContentValues.TAG, "Summmmmmmmmm: " + token);
+                                    //gửi thông báo đến nhà hàng
+                                    sendNotification(token);
+                                } else {
+                                    Log.d(ContentValues.TAG, "No such document");
+                                }
+                            }
+                        });
+                //chuyển sang màn hình xem menu của nhà hàng\
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                fragmentTransaction.replace(R.id.fragment_container, new MenuClientFragment());
+
+
+                fragmentTransaction.commitAllowingStateLoss();
+
+//                // Tạo một instance mới của MenuClientFragment
+//                MenuClientFragment menuClientFragment = new MenuClientFragment();
+//
+//
+//                // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng MenuClientFragment
+//                FragmentManager fragmentManager =getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                // Thay thế và thêm vào back stack
+//                fragmentTransaction.replace(R.id.fragment_container, menuClientFragment);
+//                fragmentTransaction.addToBackStack(null);
+//
+//                // Commit thao tác
+//                fragmentTransaction.commit();
+
+            } else {
+
+            }
+        }else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    /**
+     * Hàm gửi thông báo đến Restaurant
+     * @param content Token của nhà hàng
+     */
+    public static void sendNotification(String content) {
+        //lấy token từ uri của user
+        String token = FireBase.tokenRtn;
+        System.out.println("token: " + token);
+        //gửi thông báo đến token
+        sendMessageToToken(content,"Thông báo","Có khách hàng mới đến quét mã QR");
+        sendMessageFromUser1ToUser2(content,"Thông báo","Có khách hàng mới đến quét mã QR");
+    }
+
+    //gửi thông báo in app cho user
+    public static void sendMessageFromUser1ToUser2(String user2Token,String title,String body) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Create URL instance.
+                    URL url = new URL("https://fcm.googleapis.com/fcm/send");
+                    // Create connection
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    // Set method as POST
+                    connection.setRequestMethod("POST");
+                    // Set headers
+                    connection.setRequestProperty("Authorization", "key=" + SERVER_KEY);
+                    connection.setRequestProperty("Content-Type", "application/json");
+                    // Enable input and output streams
+                    connection.setDoOutput(true);
+                    // Create the message content
+                    String jsonInputString = "{\"to\": \"" + user2Token + "\", \"notification\": {\"title\": \""+title+"\", \"body\": \""+body+"\"}}";
+                    // Write the output
+                    try(OutputStream os = connection.getOutputStream()) {
+                        byte[] input = jsonInputString.getBytes("utf-8");
+                        os.write(input, 0, input.length);
+                    }
+                    // Get the response
+                    int responseCode = connection.getResponseCode();
+                    try(BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        Log.d(TAG, "Response: " + response.toString());
+                    }
+                    connection.disconnect();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error sending FCM message", e);
+                }
+            }
+        });
+        thread.start();
+    }
+
+    //gửi thông báo đến token
+    public static void sendMessageToToken(String token,String title,String body) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Create URL instance.
+                    URL url = new URL("https://fcm.googleapis.com/fcm/send");
+
+                    // Create connection
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+                    // Set method as POST
+                    connection.setRequestMethod("POST");
+
+                    // Set headers
+                    connection.setRequestProperty("Authorization", "key=" + SERVER_KEY);
+                    connection.setRequestProperty("Content-Type", "application/json");
+
+                    // Enable input and output streams
+                    connection.setDoOutput(true);
+
+                    // Create the message content
+                    String jsonInputString = "{\"to\": \"" + token + "\", \"notification\": {\"title\": \""+title+"\", \"body\": \""+body+"\"}}";
+
+                    // Write the output
+                    try(OutputStream os = connection.getOutputStream()) {
+                        byte[] input = jsonInputString.getBytes("utf-8");
+                        os.write(input, 0, input.length);
+                    }
+                    // Get the response
+                    int responseCode = connection.getResponseCode();
+                    try(BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream(), "utf-8"))) {
+                        StringBuilder response = new StringBuilder();
+                        String responseLine = null;
+                        while ((responseLine = br.readLine()) != null) {
+                            response.append(responseLine.trim());
+                        }
+                        Log.d(TAG, "Response: " + response.toString());
+                    }
+
+                    connection.disconnect();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error sending FCM message", e);
+                }
+            }
+        });
+
+        thread.start();
     }
 }
