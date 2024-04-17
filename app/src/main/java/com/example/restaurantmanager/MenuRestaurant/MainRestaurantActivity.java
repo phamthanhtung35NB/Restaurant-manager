@@ -1,37 +1,35 @@
 package com.example.restaurantmanager.MenuRestaurant;
 
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.Toast;
 //import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
 
-import com.example.restaurantmanager.Client.MainActivity;
+import com.example.restaurantmanager.Account.LoginActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
-import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
@@ -39,11 +37,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
-import org.jetbrains.annotations.NotNull;
-
 public class MainRestaurantActivity extends AppCompatActivity {
+    //drak mode
+
     FloatingActionButton fab;
     private BottomNavigationView bottomNavigationView;
+    private NavigationView navigationView;
     DrawerLayout drawerLayout;
 //    FrameLayout drawerLayout;
     private FrameLayout fragmentContainer;
@@ -63,6 +62,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.main);
         fragmentContainer = findViewById(R.id.fragment_container);
+
         NavigationView navigationView = findViewById(R.id.navigationView);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -89,11 +89,42 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 replaceFragment(new ListMessagesRestaurantFragment(), false);
             } else if (itemId == R.id.navSetting) {
                 System.out.println("Setting");
+                showBottomDialogSetting();
 //                replaceFragment(new HomeRestaurantFragment(), false);
             } else if(itemId == R.id.navHome){
                 replaceFragment(new HomeRestaurantFragment(), false);
             }
 
+            return true;
+        });
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_header_home) {
+                //đóng navigation
+                drawerLayout.closeDrawers();
+                replaceFragment(new HomeRestaurantFragment(), false);
+            } else if (itemId == R.id.nav_header_settings) {
+                showBottomDialogSetting();
+                drawerLayout.closeDrawers();
+
+            } else if (itemId == R.id.nav_header_share) {
+                Toast.makeText(MainRestaurantActivity.this, "Share", Toast.LENGTH_SHORT).show();
+
+            } else if (itemId == R.id.nav_header_feedback) {
+                //mở link liên kết github
+                Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/phamthanhtung35NB/Restaurant-manager"));
+                startActivity(intent);
+            } else if(itemId == R.id.nav_header_logout){
+                //xóa dữ liệu đăng nhập
+                SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                //chuyển màn hình login
+                Intent intent = new Intent(MainRestaurantActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+            }
             return true;
         });
 
@@ -129,10 +160,63 @@ public class MainRestaurantActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    private void showBottomDialogSetting() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_bottom_setting_restaurant_layout);
+
+        Switch darkModeSwitch = dialog.findViewById(R.id.darkModeSwitch);
+        Switch closedSwitch = dialog.findViewById(R.id.closedSwitch);
+//        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
+//        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
+//        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            darkModeSwitch.setChecked(true);
+        }
+
+        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+        closedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Toast.makeText(MainRestaurantActivity.this,"Closed",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainRestaurantActivity.this,"Open",Toast.LENGTH_SHORT).show();
+            }
+        });
+//        videoLayout.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            Toast.makeText(MainRestaurantActivity.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
+//        });
+//
+//        shortsLayout.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            Toast.makeText(MainRestaurantActivity.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
+//        });
+//
+//        liveLayout.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            Toast.makeText(MainRestaurantActivity.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
+//        });
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_out;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
     private void showBottomDialog() {
     final Dialog dialog = new Dialog(this);
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    dialog.setContentView(R.layout.bottomsheetlayout);
+    dialog.setContentView(R.layout.dialog_bottom_sheet_layout);
 
     LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
     LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);

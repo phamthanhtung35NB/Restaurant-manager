@@ -53,29 +53,15 @@ public class HomeRestaurantFragment extends Fragment {
 
         //Thống kê
         lineButtonsStatistical.setOnClickListener(v -> {
-            // Tạo một Bundle để chứa dữ liệu
-//            Bundle bundle = new Bundle();
-//            bundle.putString("url", URL);
-//            System.out.println("URL: "+URL);
-//            bundle.putString("accountId", accountId);
-//            System.out.println("accountId: "+accountId);
-//            bundle.putString("numberTable", numberTable);
-//            System.out.println("numberTable: "+numberTable);
-
             // Tạo một instance mới của FragmentC
             StatisticalFragment statisticalFragment = new StatisticalFragment();
-
             // Đặt Arguments cho Fragment
-//            fragmentC.setArguments(bundle);
-
             // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
             // Thay thế và thêm vào back stack
             fragmentTransaction.replace(R.id.fragment_container, statisticalFragment);
             fragmentTransaction.addToBackStack(null);
-
             // Commit thao tác
             fragmentTransaction.commit();
         });

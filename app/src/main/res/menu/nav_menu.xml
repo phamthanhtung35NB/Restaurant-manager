@@ -8,31 +8,31 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_header_home"
             android:icon="@drawable/home"
             android:title="Home"/>
 
         <item
-            android:id="@+id/nav_settings"
+            android:id="@+id/nav_header_settings"
             android:icon="@drawable/setting"
             android:title="Settings"/>
 
         <item
-            android:id="@+id/nav_share"
+            android:id="@+id/nav_header_share"
             android:icon="@drawable/baseline_contactless_24"
             android:title="Share"/>
 
         <item
-            android:id="@+id/nav_about"
+            android:id="@+id/nav_header_feedback"
             android:icon="@drawable/baseline_cast_connected_24"
-            android:title="----"/>
+            android:title="Phản Hồi"/>
     </group>
     <item
         android:title="">
 
         <menu>
             <item
-                android:id="@+id/nav_logout"
+                android:id="@+id/nav_header_logout"
                 android:icon="@drawable/logout"
                 android:title="Logout"/>
         </menu>

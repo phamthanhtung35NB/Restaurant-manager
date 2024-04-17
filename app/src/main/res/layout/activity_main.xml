@@ -18,15 +18,15 @@
         android:background="?attr/colorPrimary"
         android:layout_height="30dp" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:textDirection="firstStrongLtr"
-        android:tooltipText="@string/title_setting"
-        android:background="?attr/colorPrimary"
-        android:elevation="40dp"
-        android:gravity="center"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="?attr/colorPrimary"
+            android:elevation="40dp"
+            android:gravity="center"
+            android:textDirection="firstStrongLtr"
+            android:tooltipText="@string/title_setting" />
 
         <ScrollView
             android:layout_width="match_parent"

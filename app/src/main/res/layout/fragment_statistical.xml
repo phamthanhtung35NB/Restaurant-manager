@@ -6,7 +6,7 @@
     tools:context=".MenuRestaurant.StatisticalFragment">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,60 +18,70 @@
             android:id="@+id/LinearLayoutToday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:gravity="center|left"
-                android:text="Hôm nay"
+                android:text="Hôm nay: "
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/textViewToday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="aa"
+                android:gravity="center|left"
+                android:textSize="25dp"
                 android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="8dp"
             android:background="@color/gray" />
+
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChartTK"
             android:layout_width="match_parent"
-            android:layout_height="500dp" />
+            android:layout_height="470dp" />
 
         <LinearLayout
             android:id="@+id/LinearLayoutWeek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="7 Ngày Gần Đây"
+                android:text="7 Ngày Gần Đây: "
+                android:gravity="center|left"
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/textViewWeek"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center|left"
+                android:text="1111"
+                android:textSize="25dp"
                 android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="8dp"
             android:background="@color/gray" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChartTK"
             android:layout_width="match_parent"
-            android:layout_height="500dp" />
+            android:layout_height="460dp" />
 
         <LinearLayout
             android:id="@+id/LinearLayoutMonth"
@@ -80,22 +90,25 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="30 Ngày Gần Đây"
+                android:text="30 Ngày Gần Đây: "
+                android:gravity="center|left"
                 android:textColor="?attr/colorOnBackground"
                 android:textSize="25dp" />
 
             <TextView
                 android:id="@+id/textViewMonth"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
+                android:textSize="25dp"
+                android:gravity="center|left"
                 android:textColor="?attr/colorOnSecondary" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="8dp"
             android:background="@color/gray" />
 
     </LinearLayout>

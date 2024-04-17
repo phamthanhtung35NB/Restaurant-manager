@@ -76,8 +76,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         init();
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         addEvents();
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -105,26 +106,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void init() {
-//        Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
-//        startActivity(intent);
-//        finish();
-//        processCopy();
         textViewUsername = findViewById(R.id.textViewUsername);
         textPassword = findViewById(R.id.textPassword2);
-        buttonLogin = findViewById(R.id.buttonLogin);
-        buttonCreateNewAccount = findViewById(R.id.buttonCreateNewAccount);
-        radioButtonRestaurantLogin = findViewById(R.id.radioButtonRestaurantLogin);
-        radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         SharedPreferences preferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
         if (preferences.getString("uid", "") != "") {
-            String text = preferences.getString("uid", "");
-            textViewUsername.setText(preferences.getString("email", ""));
-            textPassword.setText(preferences.getString("password", ""));
+            String email = preferences.getString("email", "");
+            String password = preferences.getString("password", "");
+            String type = preferences.getString("type", "");
+            loginWithSavedAccount(email,password,type);
+            textViewUsername.setText(email);
+            textPassword.setText(password);
         }
+        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonCreateNewAccount = findViewById(R.id.buttonCreateNewAccount);
+        radioButtonRestaurantLogin = findViewById(R.id.radioButtonRestaurantLogin);
+        radioButtonClientLogin = findViewById(R.id.radioButtonClientLogin);
+
     }
 
+    //login bằng tài khoản đã lưu
+    void loginWithSavedAccount(String email, String password, String type) {
+
+        if (email.equals("") || password.equals("") || type.equals("")) {
+            return;
+        }
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String uid = mAuth.getCurrentUser().getUid();
+                if (type.equals("client")) {
+                    loginClient(uid);
+                } else if (type.equals("restaurant")) {
+                    loginRestaurant(uid);
+                }
+            }else {
+                Toast.makeText(LoginActivity.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        });
+    }
 
     void addEvents() {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +189,6 @@ public class LoginActivity extends AppCompatActivity {
                     String uid = mAuth.getCurrentUser().getUid();
                     //kiểm tra xem có sharedPreferences chưa nếu chưa thì tạo mới
 
-
-
                     if (radioButtonClientLogin.isChecked()) {
                         loginClient(uid);
                     } else if (radioButtonRestaurantLogin.isChecked()) {
@@ -195,6 +214,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String phone = document.getString("phone");
                     String email = document.getString("email");
+
+                    //lưu thông tin người dùng vào sharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", textViewUsername.getText().toString());
@@ -237,6 +258,7 @@ public class LoginActivity extends AppCompatActivity {
                     String phone = document.getString("phone");
                     String email = document.getString("email");
                     String username = document.getString("username");
+                    //lưu thông tin người dùng vào sharedPreferences
                     SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("email", textViewUsername.getText().toString());
@@ -249,7 +271,6 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("type", "client");
                     editor.putString("uid", uid);
                     editor.apply();
-                    Toast.makeText(LoginActivity.this, "Login với tài khoản khách hàng phone: " + phone, Toast.LENGTH_SHORT).show();
                     String uid1 = mAuth.getCurrentUser().getUid();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("type", "client");
@@ -259,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
                     MyFirebaseMessagingService.fetchTokenAndSendToServer(LoginActivity.this, "client");
                     startActivity(intent);
                 } else {
-                    Toast.makeText(LoginActivity.this, "Không tồn tại tài khoản khách hàng", Toast.LENGTH_SHORT).show();
+                    System.out.println("Không tồn tại tài khoản khách hàng");
                 }
             }
         });
@@ -270,49 +291,49 @@ public class LoginActivity extends AppCompatActivity {
 //        System.out.println("insertAccount------------------Done------------------------------");
 //    }
     //////////////////////////////////////////KHỞI TẠO DATABASE SQLITE//////////////////////////////////////////
-    private void processCopy() {
-        File dbFile = getDatabasePath(DATABASE_NAME);
-        if (!dbFile.exists()) {
-            try {
-                CopyDataBaseFromAsset();
-                Toast.makeText(this, "Sao chép cơ sở dữ liệu vào hệ thống thành công", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+//    private void processCopy() {
+//        File dbFile = getDatabasePath(DATABASE_NAME);
+//        if (!dbFile.exists()) {
+//            try {
+//                CopyDataBaseFromAsset();
+//                Toast.makeText(this, "Sao chép cơ sở dữ liệu vào hệ thống thành công", Toast.LENGTH_LONG).show();
+//            } catch (Exception e) {
+//                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 
-    public void CopyDataBaseFromAsset() {
-        try {
-            InputStream myInput;
-            myInput = getAssets().open(DATABASE_NAME);
-            // Path to the just created empty db
-            String outFileName = getDatabasePath();
-            // if the path doesn't exist first, create it
-            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
-            if (!f.exists())
-                f.mkdir();
-            // Open the empty db as the output stream
-            OutputStream myOutput = new FileOutputStream(outFileName);
-            // transfer bytes from the inputfile to the outputfile
-            // Truyền bytes dữ liệu từ input đến output
-            int size = myInput.available();
-            byte[] buffer = new byte[size];
-            myInput.read(buffer);
-            myOutput.write(buffer);
-            // Close the streams
-            myOutput.flush();
-            myOutput.close();
-            myInput.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+//    public void CopyDataBaseFromAsset() {
+//        try {
+//            InputStream myInput;
+//            myInput = getAssets().open(DATABASE_NAME);
+//            // Path to the just created empty db
+//            String outFileName = getDatabasePath();
+//            // if the path doesn't exist first, create it
+//            File f = new File(getApplicationInfo().dataDir + DB_PATH_SUFFIX);
+//            if (!f.exists())
+//                f.mkdir();
+//            // Open the empty db as the output stream
+//            OutputStream myOutput = new FileOutputStream(outFileName);
+//            // transfer bytes from the inputfile to the outputfile
+//            // Truyền bytes dữ liệu từ input đến output
+//            int size = myInput.available();
+//            byte[] buffer = new byte[size];
+//            myInput.read(buffer);
+//            myOutput.write(buffer);
+//            // Close the streams
+//            myOutput.flush();
+//            myOutput.close();
+//            myInput.close();
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
 
-    private String getDatabasePath() {
-        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
-    }
+//    private String getDatabasePath() {
+//        return getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
+//    }
 
 }
 //    onCreate(): Được gọi khi Activity được tạo. Đây là nơi bạn thường khởi tạo các thành phần của giao diện người dùng và các dữ liệu khác.

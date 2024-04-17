@@ -185,7 +185,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // Log and toast
                 String msg = context.getString(R.string.msg_token_fmt, token);
                 Log.d(TAG, msg);
-                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                 // Send the Instance ID token to your app server.
                 FireBase.sendRegistrationToServer(token,type);
             }

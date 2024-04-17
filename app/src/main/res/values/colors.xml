@@ -40,7 +40,7 @@
     <color name="colorPrimaryVariantDark">#f07c41</color>
     <color name="colorSecondaryDark">#55bdca</color>
     <color name="colorSecondaryVariantDark">#95ffff</color>
-    <color name="colorBackgroundDark">#c7eef5</color>
+    <color name="colorBackgroundDark">#383D3E</color>
     <color name="colorSurfaceDark">#ffffff</color>
     <color name="colorOnPrimaryDark">#ffffff</color>
     <color name="colorOnSecondaryDark">#022249</color>

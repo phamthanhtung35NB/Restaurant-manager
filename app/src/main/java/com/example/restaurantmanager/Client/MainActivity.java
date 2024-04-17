@@ -15,15 +15,19 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.restaurantmanager.Account.LoginActivity;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.FireBase;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantFragment;
+import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
+import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -45,8 +49,10 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+
     FloatingActionButton fab;
     DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     private BottomNavigationView bottomNavigationView;
     private FrameLayout fragmentContainer;
     static boolean isCheckQR = false;
@@ -89,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
 //        replaceFragment(new HomeClientActivity());
     }
     void addEvents(){
-        //Quản lý thực đơn
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NotNull MenuItem item) {
@@ -117,6 +122,36 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
+        });
+        navigationView.setNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_header_home) {
+                replaceFragment(new ShowMenuRestaurantFragment(), false);
+            } else if (itemId == R.id.nav_header_settings) {
+                Toast.makeText(MainActivity.this, "Setting", Toast.LENGTH_SHORT).show();
+
+            } else if (itemId == R.id.nav_header_share) {
+                Toast.makeText(MainActivity.this, "Share", Toast.LENGTH_SHORT).show();
+
+            } else if (itemId == R.id.nav_header_feedback) {
+                Toast.makeText(MainActivity.this, "Feedback", Toast.LENGTH_SHORT).show();
+                //mở link liên kết github
+                Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/phamthanhtung35NB/Restaurant-manager"));
+                startActivity(intent);
+            } else if(itemId == R.id.nav_header_logout){
+                Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+
+                //xóa dữ liệu đăng nhập
+                SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+                //chuyển màn hình login
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+            }
+            return true;
         });
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

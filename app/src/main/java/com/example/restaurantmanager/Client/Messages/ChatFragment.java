@@ -8,6 +8,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import com.example.restaurantmanager.Chat.ChatMessagesActivity;
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
+import com.example.restaurantmanager.MenuRestaurant.StatisticalFragment;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -306,7 +309,17 @@ public class ChatFragment extends Fragment {
             }
         });
         backBtn.setOnClickListener(v -> {
-            //finish();
+            // Tạo một instance mới của FragmentC
+            ListMessagesFragment statisticalFragment = new ListMessagesFragment();
+            // Đặt Arguments cho Fragment
+            // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            // Thay thế và thêm vào back stack
+            fragmentTransaction.replace(R.id.fragment_container, statisticalFragment);
+            fragmentTransaction.addToBackStack(null);
+            // Commit thao tác
+            fragmentTransaction.commit();
         });
     }
 

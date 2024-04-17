@@ -1,5 +1,8 @@
 <resources>
 
+<!--    dark mode-->
+    <string name="Restaurant_closure">Restaurant closure</string>
+    <string name="dark_mode">Dark Mode</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
