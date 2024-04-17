@@ -2,19 +2,28 @@ package com.example.restaurantmanager.Client;
 
 import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -68,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentContainer = findViewById(R.id.fragment_container);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setBackground(null);
-        NavigationView navigationView = findViewById(R.id.navigationView);
+        navigationView = findViewById(R.id.navigationView);
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -128,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.nav_header_home) {
                 replaceFragment(new ShowMenuRestaurantFragment(), false);
             } else if (itemId == R.id.nav_header_settings) {
-                Toast.makeText(MainActivity.this, "Setting", Toast.LENGTH_SHORT).show();
+                showBottomDialogSetting();
 
             } else if (itemId == R.id.nav_header_share) {
                 Toast.makeText(MainActivity.this, "Share", Toast.LENGTH_SHORT).show();
@@ -180,6 +189,61 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.commit();
     }
+
+    private void showBottomDialogSetting() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_bottom_setting_client_layout);
+
+        Switch darkModeSwitch = dialog.findViewById(R.id.darkModeSwitch);
+        Switch closedSwitch = dialog.findViewById(R.id.closedSwitch);
+//        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
+//        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
+//        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            darkModeSwitch.setChecked(true);
+        }
+
+        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        });
+        closedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                Toast.makeText(MainActivity.this,"Closed",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MainActivity.this,"Open",Toast.LENGTH_SHORT).show();
+            }
+        });
+//        videoLayout.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            Toast.makeText(MainRestaurantActivity.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
+//        });
+//
+//        shortsLayout.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            Toast.makeText(MainRestaurantActivity.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
+//        });
+//
+//        liveLayout.setOnClickListener(v -> {
+//            dialog.dismiss();
+//            Toast.makeText(MainRestaurantActivity.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
+//        });
+
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_out;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
     /**
      * Hàm này sẽ được gọi sau khi quét mã QR xong
      * @param requestCode The integer request code originally supplied to
