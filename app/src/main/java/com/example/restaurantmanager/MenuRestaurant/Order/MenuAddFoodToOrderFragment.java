@@ -1,4 +1,4 @@
-package com.example.restaurantmanager.Client;
+package com.example.restaurantmanager.MenuRestaurant.Order;
 
 import static android.content.ContentValues.TAG;
 
@@ -17,17 +17,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
+import com.example.restaurantmanager.Client.MainActivity;
+import com.example.restaurantmanager.Client.OrderClientFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -39,7 +34,7 @@ import model.MenuRestaurant;
 import model.SetTableStateEmptyRealtime;
 
 
-public class MenuClientFragment extends Fragment {
+public class MenuAddFoodToOrderFragment extends Fragment {
     public static ListView listViewClient;
 
     public static MenuClientAdapter menuClientAdapter;
@@ -61,57 +56,18 @@ public class MenuClientFragment extends Fragment {
 
     void init(View view) {
         System.out.println("đầu init");
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
-        String ktra = sharedPreferences.getString("url", "");
-        if (ktra.length()>3) {
-            System.out.println("vào ______________");
-            URL = ktra;
-            System.out.println("URL: "+URL);
-            accountId = sharedPreferences.getString("accountId", "");
-            System.out.println("accountId: "+accountId);
-            numberTable = sharedPreferences.getString("numberTable", "");
-        }
         textViewInformation = view.findViewById(R.id.textViewInformation);
         textViewInformation.setText(URL);
         listViewClient = view.findViewById(R.id.listViewClient);
         imageButtonGioHang = view.findViewById(R.id.imageButtonGioHang);
         dataMenuViewClient = new ArrayList<>();
-        MainActivity.isCheckQR= true;
-//        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
-//        listViewClient.setAdapter(menuClientAdapter);
-        SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang sử dụng");
         readDataFromFireBase();
         System.out.println("cuối init");
     }
 
     void addEvents(View view) {
         imageButtonGioHang.setOnClickListener(v -> {
-            // Tạo một Bundle để chứa dữ liệu
-            Bundle bundle = new Bundle();
-            bundle.putString("url", URL);
-            System.out.println("URL: "+URL);
-            bundle.putString("accountId", accountId);
-            System.out.println("accountId: "+accountId);
-            bundle.putString("numberTable", numberTable);
-            System.out.println("numberTable: "+numberTable);
 
-            // Tạo một instance mới của FragmentC
-            OrderClientFragment fragmentC = new OrderClientFragment();
-
-            // Đặt Arguments cho Fragment
-            fragmentC.setArguments(bundle);
-
-            // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            // Thay thế và thêm vào back stack
-            fragmentTransaction.replace(R.id.fragment_container, fragmentC);
-            fragmentTransaction.addToBackStack(null);
-
-            // Commit thao tác
-            fragmentTransaction.commit();
         });
     }
 

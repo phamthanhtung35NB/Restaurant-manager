@@ -19,7 +19,7 @@
         <ListView
             android:id="@+id/listViewClient"
             android:layout_width="match_parent"
-            android:layout_height="519dp"
+            android:layout_height="627dp"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="1dp">
 

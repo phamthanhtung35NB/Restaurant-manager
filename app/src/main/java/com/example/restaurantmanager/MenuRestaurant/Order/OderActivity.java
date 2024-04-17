@@ -25,6 +25,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
+import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +51,7 @@ public class OderActivity extends AppCompatActivity {
     ImageButton imageButtonExit;
     TextView textThongTinBan;
     Button buttonThanhToan;
+    Button addFood;
 
     public static String accountId = "";
     public static String url = "";
@@ -85,6 +87,7 @@ public class OderActivity extends AppCompatActivity {
         imageButtonExit = findViewById(R.id.imageButtonExit);
         buttonThanhToan = findViewById(R.id.buttonThanhToan);
         textThongTinBan = findViewById(R.id.textThongTinBan);
+        addFood = findViewById(R.id.addFood);
 
         dataOrder = new ArrayList<>();
         Intent intent = getIntent();
@@ -104,12 +107,23 @@ public class OderActivity extends AppCompatActivity {
     }
 
     void addEvents(){
-//        imageButtonExit.setOnClickListener(v -> {
-//            //chuyển màn hình
-//            Intent intent = new Intent(OderActivity.this, MainActivity.class);
-//            startActivity(intent);
-//        });
+        imageButtonExit.setOnClickListener(v -> {
+            // quay về màn hình chính MainRestaurantActivity
+            Intent intent = new Intent(OderActivity.this, MainRestaurantActivity.class);
+            startActivity(intent);
+        });
 
+        buttonThanhToan.setOnClickListener(v -> {
+//            Intent intent = new Intent(OderActivity.this, PaymentActivity.class);
+//            intent.putExtra("url", url);
+//            startActivity(intent);
+        });
+
+        addFood.setOnClickListener(v -> {
+            Intent intent = new Intent(OderActivity.this, MenuAddFoodToOrderFragment.class);
+            intent.putExtra("url", url);
+            startActivity(intent);
+        });
     }
 
 
