@@ -23,6 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
@@ -113,6 +115,7 @@ public class OderActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         buttonThanhToan.setOnClickListener(v -> {
 //            Intent intent = new Intent(OderActivity.this, PaymentActivity.class);
 //            intent.putExtra("url", url);
@@ -120,7 +123,7 @@ public class OderActivity extends AppCompatActivity {
         });
 
         addFood.setOnClickListener(v -> {
-            Intent intent = new Intent(OderActivity.this, MenuAddFoodToOrderFragment.class);
+            Intent intent = new Intent(OderActivity.this, MenuAddFoodToOrderActivity.class);
             intent.putExtra("url", url);
             startActivity(intent);
         });
@@ -201,21 +204,29 @@ public class OderActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Clear the old data as new data is available
                 dataOrder.clear();
+                if (dataSnapshot.hasChildren()) {
+                    // Loop through all children
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        // Create a new instance of ClassTable
+                        MenuRestaurant menuOrder = new MenuRestaurant();
+                        if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+                            menuOrder.setId(childSnapshot.child("id").getValue(String.class));
+                            menuOrder.setName(childSnapshot.child("name").getValue(String.class));
+                            menuOrder.setDescription(childSnapshot.child("describe").getValue(String.class));
+                            menuOrder.setImage(childSnapshot.child("image").getValue(String.class));
+                            menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
 
-                // Loop through all children
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    // Create a new instance of ClassTable
-                    MenuRestaurant menuOrder = new MenuRestaurant();
-                    if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
-                        menuOrder.setId(childSnapshot.child("id").getValue(String.class));
-                        menuOrder.setName(childSnapshot.child("name").getValue(String.class));
-                        menuOrder.setDescription(childSnapshot.child("describe").getValue(String.class));
-                        menuOrder.setImage(childSnapshot.child("image").getValue(String.class));
-                        menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
-
-                        dataOrder.add(menuOrder);
+                            dataOrder.add(menuOrder);
+                        }
                     }
+                } else {
+                    // dataSnapshot does not contain any children
+                    // Handle this case as needed
+                    Toast.makeText(OderActivity.this, "No data found at this path", Toast.LENGTH_SHORT).show();
+                    MenuRestaurant menuOrder = new MenuRestaurant("0", "No data found", "No data found", 0, "");
+                    dataOrder.add(menuOrder);
                 }
+
                 oderAdapter = new OrderAdapter(OderActivity.this, R.layout.food_order, dataOrder);
                 listViewOrder.setAdapter(oderAdapter);
             }

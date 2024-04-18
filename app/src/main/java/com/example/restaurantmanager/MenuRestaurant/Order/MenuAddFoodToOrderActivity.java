@@ -6,20 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.restaurantmanager.Client.MainActivity;
-import com.example.restaurantmanager.Client.OrderClientFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,10 +24,8 @@ import java.util.Map;
 
 import adapter.Client.MenuClientAdapter;
 import model.MenuRestaurant;
-import model.SetTableStateEmptyRealtime;
 
-
-public class MenuAddFoodToOrderFragment extends Fragment {
+public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     public static ListView listViewClient;
 
     public static MenuClientAdapter menuClientAdapter;
@@ -47,30 +38,34 @@ public class MenuAddFoodToOrderFragment extends Fragment {
     public static String URL = "";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu_client, container, false);
-        init(view);
-        addEvents(view);
-        return view;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_menu_client);
+        init();
+        addEvents();
     }
 
-    void init(View view) {
-        System.out.println("đầu init");
-        textViewInformation = view.findViewById(R.id.textViewInformation);
+    void init() {
+        System.out.println("đầu init MenuAddFoodToOrderFragment");
+        textViewInformation = findViewById(R.id.textViewInformation);
         textViewInformation.setText(URL);
-        listViewClient = view.findViewById(R.id.listViewClient);
-        imageButtonGioHang = view.findViewById(R.id.imageButtonGioHang);
+        listViewClient = findViewById(R.id.listViewClient);
+        imageButtonGioHang = findViewById(R.id.imageButtonGioHang);
         dataMenuViewClient = new ArrayList<>();
+        // get data login
+        SharedPreferences sharedPreferences = this.getSharedPreferences("dataLogin", this.MODE_PRIVATE);
+        accountId = sharedPreferences.getString("uid", "");
+        System.out.println("accountId: " + accountId);
         readDataFromFireBase();
         System.out.println("cuối init");
     }
 
-    void addEvents(View view) {
+    void addEvents() {
         imageButtonGioHang.setOnClickListener(v -> {
 
         });
     }
-
+    //get menu from firebase fileStore
     private void readDataFromFireBase() {
         System.out.println("đầu readDataFromFireBase");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -102,7 +97,7 @@ public class MenuAddFoodToOrderFragment extends Fragment {
                                     System.out.println("-----------------------------(-1))");
                                 }
                                 System.out.println("-----------------------------0");
-                                menuClientAdapter = new MenuClientAdapter(getActivity(), R.layout.food_show_client, dataMenuViewClient);
+                                menuClientAdapter = new MenuClientAdapter(MenuAddFoodToOrderActivity.this, R.layout.food_show_client, dataMenuViewClient);
                                 listViewClient.setAdapter(menuClientAdapter);
 
                                 System.out.println("----------------------1");

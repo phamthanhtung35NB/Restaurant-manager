@@ -1,6 +1,11 @@
 <resources>
 
-<!--    dark mode-->
+<!--    địa chỉ nhà hàng-->
+    <string name="restaurant_address">Restaurant Address</string>
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="number_of_dishes">Number of dishes</string>
+    <string name="table_empty">Number Of Empty Tables</string>
     <string name="Restaurant_closure">Restaurant closure</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="prompt_email">Email</string>

@@ -188,6 +188,7 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("idMax", 0);
                         user.put("idTableMax", 0);
                         user.put("location", location);
+                        user.put("address", "");
                         user.put("profilePic", profilePic);
 
                         user.put("menuRestaurant", new HashMap<String, MenuRestaurant>());

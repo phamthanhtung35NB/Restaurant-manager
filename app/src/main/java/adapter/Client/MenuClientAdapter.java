@@ -2,6 +2,7 @@ package adapter.Client;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,25 @@ public class MenuClientAdapter extends ArrayAdapter<MenuRestaurant> {
 //
                 //them vao order(menuRestaurant);
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference(MenuClientFragment.URL+"/"+menuRestaurant.getId()+"");
+                DatabaseReference myRef;
+                SharedPreferences sharedPreferences = context.getSharedPreferences("dataLogin", context.MODE_PRIVATE);
+                String type = sharedPreferences.getString("type", "");
+                if (type.equals("restaurant")){
+                    String uid = sharedPreferences.getString("uid", "");
+                    //lấy id bàn từ SharedPreferences
+                    SharedPreferences sharedPreferencesTable = context.getSharedPreferences("dataTable", context.MODE_PRIVATE);
+                    String idTable = sharedPreferencesTable.getString("idTable", "");
+                    String dp=uid+"/"+idTable+"/order/"+menuRestaurant.getId()+"";
+                    myRef = database.getReference(dp);
+                }else {
+                    String dp=MenuClientFragment.URL+"/"+menuRestaurant.getId()+"";
+                    System.out.println("dp: "+dp);
+                    myRef = database.getReference(dp);
+                }
+
+
+
+
                 myRef.setValue(menuRestaurant, new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError error, DatabaseReference ref) {

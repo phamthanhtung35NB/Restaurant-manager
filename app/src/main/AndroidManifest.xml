@@ -35,6 +35,8 @@
             android:name=".MenuRestaurant.MainRestaurantActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="false" />
+        <activity android:name=".MenuRestaurant.Order.MenuAddFoodToOrderActivity"
+            android:exported="false" />
         <activity
             android:name=".Client.MainActivity"
             android:exported="false" />

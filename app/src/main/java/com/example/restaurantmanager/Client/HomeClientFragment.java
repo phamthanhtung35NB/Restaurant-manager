@@ -10,6 +10,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +34,19 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import adapter.Client.RestaurantAdapter;
+import model.Restaurant;
 
 
 public class HomeClientFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private RestaurantAdapter adapter;
+    private List<Restaurant> restaurantList;
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +102,10 @@ public class HomeClientFragment extends Fragment {
             // Commit thao tác
             fragmentTransaction.commit();
         }
+        recyclerView = view.findViewById(R.id.recycler_view);
+        restaurantList = new ArrayList<>();
+        adapter = new RestaurantAdapter(restaurantList);
+        getRestaurant();
     }
     void addEvents(View view) {
         imageButtonScan.setOnClickListener(v -> {
@@ -102,6 +118,39 @@ public class HomeClientFragment extends Fragment {
             integrator.initiateScan();
 
         });
+    }
+
+    void getRestaurant() {
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+        //lấy thông tin nhà hàng từ firebase
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("restaurant").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (DocumentSnapshot document : task.getResult()) {
+//                    Restaurant restaurant = document.toObject(Restaurant.class);
+                    String phone = document.getString("phone");
+                    String username = document.getString("username");
+//                    String description = document.getString("description");
+                    //tableMax type is number
+                    Long tableMax = document.getLong("tableMax");
+                    Long idMax = document.getLong("idMax");
+                    if (tableMax != null && idMax != null) {
+                        Restaurant restaurant = new Restaurant(tableMax.intValue(), idMax.intValue(), phone, username);
+                        restaurantList.add(restaurant);
+                    }else {
+                        Restaurant restaurant = new Restaurant(0, 0, phone, username);
+                        restaurantList.add(restaurant);
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                } else {
+                    Log.d("RestaurantActivity", "Error getting documents: ", task.getException());
+                }
+        });
+
     }
 
     /**

@@ -169,9 +169,11 @@ public class OrderClientFragment extends Fragment {
         System.out.println("URL: " + URL);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference refOrder = database.getReference(URL);
-        refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+        refOrder.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // Xóa dữ liệu cũ
+                dataOrderClient.clear();
                 // Lặp qua tất cả child
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     // Tạo instance mới của ClassTable

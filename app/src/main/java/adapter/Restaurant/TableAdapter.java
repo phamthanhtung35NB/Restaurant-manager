@@ -2,6 +2,7 @@ package adapter.Restaurant;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,11 @@ public class TableAdapter extends ArrayAdapter<Table> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
+                //add id bàn vào SharedPreferences
+                SharedPreferences sharedPreferences = context.getSharedPreferences("dataTable", context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("idTable", String.valueOf(table.getId()));
+                editor.commit();
                 Intent intent = new Intent(context, OderActivity.class);
                 String qr = ShowTableRestaurantFragment.accountId+"/"+table.getId()+"/order";
                 intent.putExtra("url", qr);
