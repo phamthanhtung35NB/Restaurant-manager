@@ -110,9 +110,8 @@ public class OderActivity extends AppCompatActivity {
 
     void addEvents(){
         imageButtonExit.setOnClickListener(v -> {
-            // quay về màn hình chính MainRestaurantActivity
-            Intent intent = new Intent(OderActivity.this, MainRestaurantActivity.class);
-            startActivity(intent);
+//            quay về
+                super.onBackPressed();
         });
 
 

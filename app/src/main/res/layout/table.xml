@@ -5,62 +5,64 @@
     android:layout_width="200dp"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="horizontal">
-
-    <TextView
-        android:layout_width="3dp"
-        android:layout_height="match_parent"
-        android:background="#070606" />
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="5dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="175dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_background_table"
+        android:elevation="4dp"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:outlineProvider="background"
+        android:padding="10dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#070606" />
+        <ImageView
+            android:id="@+id/imageViewPhoto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageViewPhoto"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
-
             <TextView
                 android:id="@+id/textViewNameTable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="165dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:text="TextView" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center|left"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="29dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center|left"
                     android:text="Trạng thái: " />
 
                 <TextView
                     android:id="@+id/textViewStatus"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="97dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
                     android:text="TextView" />
 
             </LinearLayout>
@@ -68,8 +70,8 @@
             <TextView
                 android:id="@+id/textViewDescribe"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_height="30dp"
+                android:gravity="center|left"
                 android:text="TextView" />
 
         </LinearLayout>

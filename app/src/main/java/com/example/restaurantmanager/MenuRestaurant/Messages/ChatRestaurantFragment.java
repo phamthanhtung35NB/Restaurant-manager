@@ -157,7 +157,7 @@ public class ChatRestaurantFragment extends Fragment {
             }
         });
         backBtn.setOnClickListener(v -> {
-            //finish();
+            getActivity().onBackPressed();
         });
     }
 }

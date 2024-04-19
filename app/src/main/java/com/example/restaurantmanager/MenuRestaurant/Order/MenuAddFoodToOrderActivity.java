@@ -62,7 +62,7 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
 
     void addEvents() {
         imageButtonGioHang.setOnClickListener(v -> {
-
+            super.onBackPressed();
         });
     }
     //get menu from firebase fileStore

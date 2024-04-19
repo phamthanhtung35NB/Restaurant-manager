@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="50dp"/> <!-- Bán kính bo góc -->
-    <stroke android:color="@color/colorOnSecondaryDark" android:width="2dp"/>
+    <corners android:radius="10dp"/> <!-- Bán kính bo góc -->
+    <stroke android:color="@color/colorOnSecondaryLight" android:width="2dp"/>
     <!-- Viền màu xanh với độ rộng là 2dp -->
     <padding android:left="200dp" android:top="200dp"
         android:right="200dp" android:bottom="200dp"/>

@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/item_background_restaurant"
-    android:elevation="4dp"
-    android:orientation="vertical"
-    android:outlineProvider="background"
-    android:padding="10dp"> <!-- Tạo hiệu ứng đổ bóng -->
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="5dp">
+
 
     <LinearLayout
         android:id="@+id/restaurant_item_click"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/item_background_restaurant"
+        android:elevation="4dp"
+        android:outlineProvider="background"
+        android:padding="10dp"
         android:orientation="horizontal">
 
         <ImageView

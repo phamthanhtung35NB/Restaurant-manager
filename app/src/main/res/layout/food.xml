@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:visibility="visible">
+    tools:visibility="visible"
+    android:paddingStart="10dp"
+    android:paddingTop="2dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/item_background_food"
+        android:elevation="4dp"
+        android:outlineProvider="background"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/imageViewFoodOrder"
@@ -24,7 +32,7 @@
             android:layout_height="match_parent" />
 
         <LinearLayout
-            android:layout_width="220dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -41,6 +49,8 @@
                     android:layout_height="29dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:paddingStart="6dp"
                     android:text="id"
                     android:textStyle="bold|italic" />
 
@@ -50,6 +60,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:gravity="center|left"
                     android:text="Name"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -67,7 +78,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:autoText="false"
-                    android:gravity="right"
+                    android:gravity="center|right"
                     android:text="Price"
                     android:textStyle="italic" />
 
@@ -75,6 +86,7 @@
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:gravity="center|left"
                     android:text=" VNĐ"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -84,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_weight="1"
+                android:gravity="center|left"
                 android:text="TextView" />
 
         </LinearLayout>
@@ -92,12 +105,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/editTextLoiNhanOrder"
-                android:layout_width="91dp"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:ems="10"
                 android:hint="Lời nhắn"
@@ -115,15 +129,8 @@
                 android:scrollbarStyle="outsideInset"
                 android:verticalScrollbarPosition="right"
                 android:visibility="visible"
-                tools:srcCompat="@android:drawable/ic_menu_edit" />
+                tools:srcCompat="@drawable/baseline_edit_calendar_24" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#25A80F"
-        android:text="TextView" />
 
 </LinearLayout>
