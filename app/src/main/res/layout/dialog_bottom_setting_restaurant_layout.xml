@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:backgroundTint="#00000000"
-            android:padding="7dp"
+            android:padding="5dp"
             android:text="Settings"
             android:textAlignment="viewStart"
             android:textColor="@color/black"
@@ -38,18 +38,20 @@
 
     <LinearLayout
         android:id="@+id/layoutDarkMode"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:gravity="center|right"
         android:backgroundTint="#00000000"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:padding="5dp">
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:backgroundTint="#00000000"
             android:src="@drawable/nightmode" />
+
         <Switch
             android:id="@+id/darkModeSwitch"
             android:layout_width="230dp"
@@ -61,19 +63,23 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layoutClosure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:backgroundTint="#00000000"
-        android:gravity="center|right"
+        android:gravity="center"
         android:orientation="horizontal"
         android:padding="5dp">
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:backgroundTint="#00000000"
             android:src="@drawable/ic_baseline_whatshot_24" />
+
         <Switch
             android:id="@+id/closedSwitch"
             android:layout_width="230dp"
@@ -83,6 +89,102 @@
             android:backgroundTint="#00000000"
             android:text="@string/Restaurant_closure"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:backgroundTint="#00000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="#00000000"
+            android:src="@drawable/location" />
+
+        <LinearLayout
+            android:layout_width="233dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editTextAddress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="Viet Nam"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnSaveAddress"
+                android:layout_width="52dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="3dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/Save_"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:backgroundTint="#00000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="#00000000"
+            android:src="@drawable/map" />
+
+        <LinearLayout
+            android:layout_width="233dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:gravity="center|left"
+                android:inputType="text"
+                android:text="Viet Nam"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnGetLocation"
+                android:layout_width="118dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="3dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+
+                android:text="@string/get_location"
+                android:textSize="10dp" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

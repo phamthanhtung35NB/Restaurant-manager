@@ -27,7 +27,7 @@
     <string name="hello_blank_fragment">Xin chào mảnh trống</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_maps">MapsActivity</string>
-        <string name="app_name">Quản lý nhà hàng</string>
+    <string name="app_name">Quản lý nhà hàng</string>
     <string name="title_home">Trang Chủ</string>
     <string name="title_setting">Cài Đặt</string>
     <string name="title_profile">Hồ Sơ</string>
@@ -48,4 +48,6 @@
     <string name="phone_number">Số ĐIện Thoại</string>
     <string name="restaurant_name">Tên Nhà Hàng</string>
     <string name="restaurant_address">Địa chỉ nhà hàng</string>
+    <string name="Save_">Lưu</string>
+    <string name="get_location">Lấy Vị Trí</string>
 </resources>

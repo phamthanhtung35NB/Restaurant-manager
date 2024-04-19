@@ -19,17 +19,30 @@
         android:gravity="center|top"
         android:orientation="vertical">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageLogoAvatar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="#00000000"
+            android:src="@drawable/logov" />
+
         <Space
             android:layout_width="match_parent"
-            android:layout_height="75dp" />
+            android:layout_height="23dp" />
 
         <EditText
             android:id="@+id/textViewUsername"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
+            android:layout_height="50dp"
+            android:textSize="20dp"
             android:textColor="?attr/colorOnSurface"
-            android:drawableLeft="@android:drawable/sym_action_email"
+            android:drawableRight="@android:drawable/sym_action_email"
+            android:paddingEnd="13dp"
+            android:paddingStart="9dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/textview_border"
             android:hint="Email"
             android:inputType="textEmailAddress"
@@ -42,10 +55,14 @@
         <EditText
             android:id="@+id/textPassword2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
+            android:layout_height="40dp"
+            android:textSize="20dp"
             android:textColor="?attr/colorOnSurface"
-            android:drawableLeft="@android:drawable/ic_secure"
+            android:drawableRight="@android:drawable/ic_secure"
+            android:paddingEnd="13dp"
+            android:paddingStart="9dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
             android:background="@drawable/textview_border"
             android:hint="@string/prompt_password"
             android:imeActionLabel="@string/action_sign_in_short"
@@ -66,18 +83,22 @@
 
             <RadioButton
                 android:id="@+id/radioButtonClientLogin"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/colorOnSurface"
                 android:background="@drawable/textview_border"
+                android:textSize="20dp"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:text="Login Client  " />
 
             <RadioButton
                 android:id="@+id/radioButtonRestaurantLogin"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/colorOnSurface"
+                android:textSize="20dp"
+                android:textStyle="bold"
                 android:background="@drawable/textview_border"
                 android:gravity="center"
                 android:text="Login Restaurant" />
@@ -93,18 +114,18 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/colorPrimary"
             android:textColor="?attr/colorOnPrimary"
-            android:drawableLeft="@android:drawable/ic_menu_send"
+            android:drawableRight="@android:drawable/ic_menu_send"
             android:text="Login" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="12dp" />
+            android:layout_height="152dp" />
 
         <Button
             android:id="@+id/buttonCreateNewAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimary"
+            android:backgroundTint="@color/colorBackgroundDark"
             android:textColor="?attr/colorOnPrimary"
             android:drawableLeft="@android:drawable/ic_menu_add"
             android:text="Create Account" />

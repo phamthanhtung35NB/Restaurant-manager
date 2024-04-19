@@ -1,44 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="196dp"
-    android:gravity="bottom"
-    android:padding="16dp"
+    android:layout_height="200dp"
     android:background="@drawable/headerbkg"
     android:backgroundTint="?attr/colorPrimary"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:padding="10dp"
     android:theme="@style/Theme.RestaurantManager">
 
-    <ImageView
-        android:id="@+id/imageLogoAvatar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="#00000000"
-        android:src="@drawable/aklogo"/>
 
-    <TextView
-        android:id="@+id/textUsername"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:text="Name"
-        android:textColor="@color/white"
-        android:textStyle="bold"/>
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageLogoAvatar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="#00000000"
+            android:src="@drawable/aklogo" />
+
+        <TextView
+            android:id="@+id/textUsername"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:background="#00000000"
+            android:gravity="left|center"
+            android:text="Name"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="5dp"
+        android:background="#00000000"
+        android:gravity="center|left"
         android:text="-------@------"
         android:textColor="@color/white"
-        android:background="#00000000"
-        android:textSize="14sp"
-        android:layout_marginBottom="16dp"/>
+        android:textSize="14sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#00000000"/>
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+
+<!--    </LinearLayout>-->
 
 </LinearLayout>

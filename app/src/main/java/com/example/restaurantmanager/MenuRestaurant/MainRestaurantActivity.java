@@ -1,23 +1,32 @@
 package com.example.restaurantmanager.MenuRestaurant;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 //import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -29,16 +38,29 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.restaurantmanager.Account.LoginActivity;
+import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
+
+import org.checkerframework.common.subtyping.qual.Bottom;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainRestaurantActivity extends AppCompatActivity {
-    //drak mode
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     FloatingActionButton fab;
     private BottomNavigationView bottomNavigationView;
@@ -46,8 +68,12 @@ public class MainRestaurantActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
 //    FrameLayout drawerLayout;
     private FrameLayout fragmentContainer;
+    CircleImageView imageLogoAvatar;
+    TextView textUsername;
+    TextView textEmail;
+    String profilePic = "";
     public static Fragment lastFragment = null; // Biến để lưu trạng thái Fragment cuối cùng
-
+    String accountId = "";
 //    Animation slideInAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_in);
 //    Animation slideOutAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out);
     @Override
@@ -64,6 +90,11 @@ public class MainRestaurantActivity extends AppCompatActivity {
         fragmentContainer = findViewById(R.id.fragment_container);
 
         NavigationView navigationView = findViewById(R.id.navigationView);
+        View headerView = navigationView.getHeaderView(0);
+        imageLogoAvatar = headerView.findViewById(R.id.imageLogoAvatar);
+        textUsername = headerView.findViewById(R.id.textUsername);
+        textEmail = headerView.findViewById(R.id.textEmail);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -97,6 +128,17 @@ public class MainRestaurantActivity extends AppCompatActivity {
 
             return true;
         });
+        SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", "");
+        String email = sharedPreferences.getString("email", "");
+        accountId = sharedPreferences.getString("uid", "");
+        profilePic= sharedPreferences.getString("profilePic", "");
+        textUsername.setText(username);
+        textEmail.setText(email);
+        if (!profilePic.isEmpty()&&profilePic!=null&&profilePic.length()>0){
+            Picasso.get().load(profilePic).into(imageLogoAvatar);
+        }
+        //set sự kiện cho navigation bên trái
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_header_home) {
@@ -116,7 +158,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 startActivity(intent);
             } else if(itemId == R.id.nav_header_logout){
                 //xóa dữ liệu đăng nhập
-                SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+//                SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.apply();
@@ -135,6 +177,12 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 replaceFragment(new HomeRestaurantFragment(), false);
             }
         });
+        imageLogoAvatar.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        });
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
 //            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -147,6 +195,29 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //        fragmentTransaction.replace(R.id.frame_layout, fragment);
 //        fragmentTransaction.commit();
 //    }
+@Override
+public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+    if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        Uri uri = data.getData();
+        try {
+            // Update your ImageView.
+            if (uri != null){
+                //upload image to firebase storage
+                imageLogoAvatar.setImageURI(uri);
+                //get bitmap from uri
+                Bitmap bitmap = UploadImageToFirebase.getBitmapFromUri(uri, this);
+                UploadImageToFirebase.uploadImageLogoAvataFirebase(bitmap,"logo_", accountId);
+            }else {
+//                imageLogoAvatar.setImageURI(uri);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
     public void replaceFragment(Fragment fragment, boolean isAppInit){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -171,7 +242,23 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
 //        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
-
+        EditText editTextAddress = dialog.findViewById(R.id.editTextAddress);
+        Button btnSaveAddress = dialog.findViewById(R.id.btnSaveAddress);
+        TextView textViewLocation = dialog.findViewById(R.id.textViewLocation);
+        Button btnGetLocation = dialog.findViewById(R.id.btnGetLocation);
+        SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+        String address = sharedPreferences.getString("address", "");
+        String location = sharedPreferences.getString("location", "");
+        editTextAddress.setText(address);
+        textViewLocation.setText(location);
+        btnSaveAddress.setOnClickListener(view -> {
+            //edit address on firebase firestore
+            editAddress(editTextAddress.getText().toString());
+            Toast.makeText(MainRestaurantActivity.this,"Save Address",Toast.LENGTH_SHORT).show();
+        });
+        btnGetLocation.setOnClickListener(view -> {
+            Toast.makeText(MainRestaurantActivity.this,"Get Location",Toast.LENGTH_SHORT).show();
+        });
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             darkModeSwitch.setChecked(true);
         }
@@ -212,6 +299,28 @@ public class MainRestaurantActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_out;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    void editAddress(String address){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("address", address);
+
+        db.collection("restaurant").document(accountId)
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "updated successfully!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error updating ", e);
+                    }
+                });
     }
     private void showBottomDialog() {
     final Dialog dialog = new Dialog(this);
