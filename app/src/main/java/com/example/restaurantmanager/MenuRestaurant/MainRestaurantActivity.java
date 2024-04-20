@@ -48,6 +48,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -209,6 +211,7 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
                 //get bitmap from uri
                 Bitmap bitmap = UploadImageToFirebase.getBitmapFromUri(uri, this);
                 UploadImageToFirebase.uploadImageLogoAvataFirebase(bitmap,"logo_", accountId);
+
             }else {
 //                imageLogoAvatar.setImageURI(uri);
             }

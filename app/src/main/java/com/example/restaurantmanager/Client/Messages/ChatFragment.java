@@ -48,11 +48,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatFragment extends Fragment {
     ImageView backBtn;
-    TextView nameTV ;
+    TextView nameTV,status;
     EditText messageEditText;
     CircleImageView profilePic;
     ImageView sendBtn;
-    String myName,myPhone,myChatKey;
+    String myName,myPhone,myChatKey,myProfilePic;
     String opoName,opoPhone,opoChatKey;
 
     private RecyclerView chattingRecyclerView;
@@ -75,6 +75,7 @@ public class ChatFragment extends Fragment {
         profilePic = view.findViewById(R.id.profilePic);
         sendBtn = view.findViewById(R.id.sendBtn);
         chattingRecyclerView = view.findViewById(R.id.chattingRecyclerView);
+        status = view.findViewById(R.id.status);
 
         Bundle bundle = getArguments();
         if (bundle!=null){
@@ -86,8 +87,11 @@ public class ChatFragment extends Fragment {
         myName = sharedPreferences.getString("username","");
         myPhone=sharedPreferences.getString("phone","");
         myChatKey = sharedPreferences.getString("uid", "");
+        myName = sharedPreferences.getString("username","");
+        myProfilePic = sharedPreferences.getString("profilePic", "");
 
         nameTV.setText(opoName);
+        status.setText(opoPhone);
         chattingRecyclerView.setHasFixedSize(true);
         chattingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         chatAdapter = new ChatAdapter(chatList, getActivity());
@@ -287,10 +291,13 @@ public class ChatFragment extends Fragment {
                     SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss", vietnam);
                     String currentDateTimeString = sdf.format(new Date());
 //                    String currentDateTimeString = String.valueOf(System.currentTimeMillis()).substring(0,10);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("restaurant").setValue("restaurant");
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("client").setValue("client");
+                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("restaurant").setValue(opoName);
+                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("client").setValue(myName);
+                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("lastMessage").setValue(message);
+                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("profilePic").setValue(myProfilePic);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
+
                     messageEditText.setText("");
 
                 }

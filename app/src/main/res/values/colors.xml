@@ -31,7 +31,7 @@
     <color name="colorOnPrimaryLight">#ffffff</color>
     <color name="colorOnSecondaryLight">#022249</color>
     <color name="colorOnBackgroundLight">#022249</color>
-    <color name="colorOnSurfaceLight">#022249</color>
+    <color name="colorOnSurfaceLight">#000409</color>
     <color name="colorErrorLight">#B00020</color>
     <color name="colorOnErrorLight">#FFFFFF</color>
 
@@ -39,13 +39,13 @@
     <color name="colorPrimaryDark">#022249</color>
     <color name="colorPrimaryVariantDark">#f07c41</color>
     <color name="colorSecondaryDark">#55bdca</color>
-    <color name="colorSecondaryVariantDark">#95ffff</color>
+    <color name="colorSecondaryVariantDark">#0D8B8B</color>
     <color name="colorBackgroundDark">#383D3E</color>
     <color name="colorSurfaceDark">#ffffff</color>
     <color name="colorOnPrimaryDark">#ffffff</color>
     <color name="colorOnSecondaryDark">#022249</color>
     <color name="colorOnBackgroundDark">#022249</color>
-    <color name="colorOnSurfaceDark">#022249</color>
+    <color name="colorOnSurfaceDark">#BCD6F4</color>
     <color name="colorErrorDark">#B00020</color>
     <color name="colorOnErrorDark">#FFFFFF</color>
 

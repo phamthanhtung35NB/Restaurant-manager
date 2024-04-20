@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <corners android:radius="50dp"/> <!-- Bán kính bo góc -->
-    <stroke android:color="@color/colorOnSecondaryDark" android:width="2dp"/>
+    <corners android:radius="40dp"/> <!-- Bán kính bo góc -->
+    <stroke android:color="@color/colorPrimaryVariantLight" android:width="4dp"/>
     <!-- Viền màu xanh với độ rộng là 2dp -->
-    <padding android:left="200dp" android:top="200dp"
-        android:right="200dp" android:bottom="200dp"/>
+    <padding android:left="10dp" android:top="10dp"
+        android:right="10dp" android:bottom="10dp"/>
     <!-- bo viền cho item -->
 
 

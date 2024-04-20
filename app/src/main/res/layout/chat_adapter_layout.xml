@@ -16,8 +16,8 @@
             android:layout_marginEnd="50dp">
             <TextView
                 android:id="@+id/opoMessage"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:background="@drawable/opo_msg_back"
@@ -40,14 +40,15 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center|right"
             android:orientation="vertical"
             android:layout_marginEnd="20dp"
             android:id="@+id/myLayout"
             android:layout_marginStart="50dp">
             <TextView
                 android:id="@+id/myMessage"
-                android:paddingTop="20dp"
-                android:paddingBottom="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:background="@drawable/my_msg_back"
@@ -65,6 +66,5 @@
                 android:layout_height="wrap_content"
                 android:text="14-04-2024 03:26 AM"/>
         </LinearLayout>
-
     </RelativeLayout>
 </LinearLayout>

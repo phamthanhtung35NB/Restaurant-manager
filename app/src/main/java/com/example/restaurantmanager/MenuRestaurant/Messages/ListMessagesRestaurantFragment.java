@@ -79,12 +79,10 @@ public class ListMessagesRestaurantFragment extends Fragment {
                     dataSet = false;
                     System.out.println("getUid: " + chatKey);  ;
                     System.out.println("uid: " + uid);
-                    final String getProfile_pic = dataSnapshot.child("profile_pic").getValue(String.class);
-                    String getName = dataSnapshot.child("username").getValue(String.class);
+                    final String getProfile_pic = dataSnapshot.child("profilePic").getValue(String.class);
+                    String getName = dataSnapshot.child("client").getValue(String.class);
                     lastMessage = dataSnapshot.child("lastMessage").getValue(String.class);
-                    System.out.println("name: " + getName);
-                    System.out.println("-----------khác");
-                    System.out.println("getProfile_pic: " + getProfile_pic);
+
                     //ađ chat
                     System.out.println("dataSet: " + dataSet);
                     if (!dataSet){

@@ -72,7 +72,7 @@ public class MessagesRestaurantAdapter extends RecyclerView.Adapter<MessagesRest
 
                 // Tạo một Bundle để chứa dữ liệu
                 Bundle bundle = new Bundle();
-                bundle.putString("name", list2.getName());
+                bundle.putString("username", list2.getName());
                 bundle.putString("phone", list2.getPhone());
                 bundle.putString("profilePic", list2.getProfilePic());
                 bundle.putString("chatKey", list2.getChatKey());

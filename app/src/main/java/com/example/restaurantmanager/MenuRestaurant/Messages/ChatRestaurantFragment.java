@@ -135,8 +135,8 @@ public class ChatRestaurantFragment extends Fragment {
                     SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss", vietnam);
                     String currentDateTimeString = sdf.format(new Date());
 //                    String currentDateTimeString = String.valueOf(System.currentTimeMillis()).substring(0,10);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("restaurant").setValue("restaurant");
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("client").setValue("client");
+                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("lastMessage").setValue(message);
+                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("sdtRestaurant").setValue(myPhone);
                     databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
                     databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
                     messageEditText.setText("");

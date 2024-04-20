@@ -32,6 +32,7 @@ public class ListMessagesFragment extends Fragment {
     static private List<MessagesList> messagesLists= new ArrayList<>();
     private static final String TAG = "ChatActivity";
     static String name,phone,email,uid;
+    static String profilePic;
     static int unseenMessages=0;
     static private String lastMessage;
     static private String chatKey;
@@ -61,6 +62,9 @@ public class ListMessagesFragment extends Fragment {
         phone = sharedPreferences.getString("phone", "");
         email = sharedPreferences.getString("email", "");
         uid = sharedPreferences.getString("uid", "");
+        name = sharedPreferences.getString("username", "");
+        profilePic = sharedPreferences.getString("profilePic", "");
+        System.out.println("uid: "+uid);
 //        bỏ hết dấu cách ở đầu và cuối của uid
         uid = uid.trim();
     }
@@ -72,67 +76,103 @@ public class ListMessagesFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                messagesLists.clear();
-                unseenMessages = 0;
-                lastMessage = "";
-                chatKey = "";
+                messagesLists.clear(); // Xóa danh sách tin nhắn
+                unseenMessages = 0; // Đặt lại số lượng tin nhắn chưa xem
+                lastMessage = ""; // Đặt lại tin nhắn cuối cùng
+                chatKey = ""; // Đặt lại khóa chat
+
+                // Duyệt qua tất cả các nút con của nút "user"
                 for (DataSnapshot dataSnapshot : snapshot.child("user").getChildren()){
 
-                    final String chatKey = dataSnapshot.getKey().trim();
-                    dataSet = false;
-                    System.out.println("getUid: " + chatKey);  ;
-                    System.out.println("uid: " + uid);
-                    if (!chatKey.equals(uid)){
-                        final String getProfile_pic = dataSnapshot.child("profile_pic").getValue(String.class);
-                        String getName = dataSnapshot.child("username").getValue(String.class);
-                        lastMessage = dataSnapshot.child("lastMessage").getValue(String.class);
-                        System.out.println("name: " + getName);
-                        System.out.println("-----------khác");
-                        System.out.println("getProfile_pic: " + getProfile_pic);
-                        //ađ chat
-
-                        System.out.println("dataSet: " + dataSet);
-                        if (!dataSet){
-                            dataSet = true;
-                            MessagesList mesagesList = new MessagesList( getName, "getUid", lastMessage, getProfile_pic, unseenMessages, chatKey);
-                            messagesLists.add(mesagesList);
-                            messagesAdapter.updateList(messagesLists);
-                        }
-                        databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
+                    final String chatKey = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại
+                    dataSet = false; // Đặt lại cờ dataSet
+                    // Kiểm tra xem khóa của nút con hiện tại có khác với uid của người dùng và loại là "restaurant" hay không
+                    if (!chatKey.equals(uid) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")){
+                        final String getProfile_pic = dataSnapshot.child("profile_pic").getValue(String.class); // Lấy hình ảnh đại diện
+                        String getName = dataSnapshot.child("username").getValue(String.class); // Lấy tên người dùng
+System.out.println("getUid: " + chatKey + " uid: " + uid);
+                        databaseReference.child("chat").child(chatKey).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                String getChatCount = String.valueOf(snapshot.getChildrenCount());
-                                System.out.println("getChatCount: " + getChatCount);
-                                if (!getChatCount.equals("")){
-
+//                                String getChatCount = String.valueOf(snapshot.getChildrenCount()); // Lấy số lượng nút con trong nút "chat"
+//
+//                                // Kiểm tra xem số lượng có rỗng hay không
+//                                if (!getChatCount.equals("")){
+                                    // Duyệt qua tất cả các nút con của nút "chat"
                                     for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
+                                        // Lấy khóa của nút con hiện tại
                                         String chatKey = dataSnapshot1.getKey();
-                                        if (dataSnapshot1.hasChild("restaurant") && dataSnapshot1.hasChild("client")&& dataSnapshot1.hasChild("messages")) {
-                                            String getUserOne = dataSnapshot1.child("restaurant").getValue(String.class);
-                                            String getUserTwo = dataSnapshot1.child("client").getValue(String.class);
-                                            if ((getUserOne.equals("getUid") && getUserTwo.equals(uid))||
-                                                    (getUserOne.equals(uid) && getUserTwo.equals("getUid"))) {
-                                                for (DataSnapshot chatDataSnapshot : dataSnapshot1.child("messages").getChildren()) {
-                                                    long getMessageKey = Long.parseLong(chatDataSnapshot.getKey());
-                                                    long getLastMessage = 10;
-                                                    lastMessage = chatDataSnapshot.child("msg").getValue(String.class);
-                                                    if (getMessageKey>getLastMessage) {
-                                                        unseenMessages++;
-                                                    }
-                                                }
-                                            }
+                                        // Kiểm tra xem nút con hiện tại có chứa nút "restaurant" và "client" và "messages" hay không
+                                        System.out.println(dataSnapshot1.child("lastMessage").getValue(String.class));
+                                        if (dataSnapshot1.child("lastMessage").getValue(String.class)!=null) {
+                                            lastMessage = dataSnapshot1.child("lastMessage").getValue(String.class);
                                         }
-
+                                        else { lastMessage = ""; }
+                                        if (dataSnapshot1.child("sdtRestaurant").getValue(String.class)!=null) {
+                                            System.out.println("có số điện thoại");
+                                            phone = dataSnapshot1.child("sdtRestaurant").getValue(String.class);
+                                        }
+                                        else {
+                                            phone = "0";
+                                        }
                                     }
-
-
-                                }
+//                                }
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
                             }
                         });
+                        // Kiểm tra xem cờ dataSet có phải là false hay không
+                        if (!dataSet){
+                            dataSet = true; // Đặt cờ dataSet thành true
+                            // Tạo một đối tượng MessagesList mới và thêm nó vào danh sách
+                            MessagesList mesagesList = new MessagesList( getName, phone, lastMessage, getProfile_pic, unseenMessages, chatKey);
+                            messagesLists.add(mesagesList);
+                            messagesAdapter.updateList(messagesLists); // Cập nhật adapter với danh sách mới
+                        }
+
+                        // Lắng nghe sự thay đổi trong nút "chat"
+//                        databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                                String getChatCount = String.valueOf(snapshot.getChildrenCount()); // Lấy số lượng nút con trong nút "chat"
+//
+//                                // Kiểm tra xem số lượng có rỗng hay không
+//                                if (!getChatCount.equals("")){
+//                                    // Duyệt qua tất cả các nút con của nút "chat"
+//                                    for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
+//                                        // Lấy khóa của nút con hiện tại
+//                                        String chatKey = dataSnapshot1.getKey();
+//                                        // Kiểm tra xem nút con hiện tại có chứa nút "restaurant" và "client" và "messages" hay không
+//                                        if (dataSnapshot1.hasChild("restaurant") && dataSnapshot1.hasChild("client")&& dataSnapshot1.hasChild("messages")) {
+////                                            String getUserOne = dataSnapshot1.child("restaurant").getValue(String.class);
+////                                            String getUserTwo = dataSnapshot1.child("client").getValue(String.class);
+//                                            databaseReference.child("user").child(uid).child("profilePic").setValue(profilePic);
+//                                            databaseReference.child("user").child(uid).child("username").setValue(name);
+////                                            if ((getUserOne.equals("getUid") && getUserTwo.equals(uid))||
+////                                                    (getUserOne.equals(uid) && getUserTwo.equals("getUid"))) {
+////                                                for (DataSnapshot chatDataSnapshot : dataSnapshot1.child("messages").getChildren()) {
+////                                                    long getMessageKey = Long.parseLong(chatDataSnapshot.getKey());
+////                                                    long getLastMessage = 10;
+////                                                    lastMessage = chatDataSnapshot.child("msg").getValue(String.class);
+////                                                    if (getMessageKey>getLastMessage) {
+////                                                        unseenMessages++;
+////                                                    }
+////                                                }
+////                                            }
+//                                        }
+//
+//                                    }
+//
+//
+//                                }
+//                            }
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//                            }
+//                        });
 
                     }else {
                         System.out.println("-----------giống");

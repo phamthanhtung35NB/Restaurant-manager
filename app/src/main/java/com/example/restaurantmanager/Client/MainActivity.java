@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,6 +20,7 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,6 +37,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.restaurantmanager.Account.LoginActivity;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.FireBase;
+import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
@@ -46,6 +50,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -56,6 +61,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -65,7 +72,13 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FrameLayout fragmentContainer;
     static boolean isCheckQR = false;
+    CircleImageView imageLogoAvatar;
+    TextView textUsername;
+    TextView textEmail;
+    String profilePic = "";
+    String accountId = "";
     public static final String SERVER_KEY = "AAAAl-xT4ko:APA91bGASnqgklF4OfVR6ls42PxiSI1Lzj2Aj8qYqdlCgk4LKApgGGpE1oH_GzLgBqjheSfQqHc3_qrdcsT4cwOGAbGCwgdUNpLmLx-tdGLo_NtbC-rZrqiDBtcP5qI6xI_YrefHOAtX";
+    private static final int PICK_IMAGE_REQUEST = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,13 +102,30 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        init();
-        addEvents();
+
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
 //            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
+        //thanh bên
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        View headerView = navigationView.getHeaderView(0);
+        imageLogoAvatar = headerView.findViewById(R.id.imageLogoAvatar);
+        textUsername = headerView.findViewById(R.id.textUsername);
+        textEmail = headerView.findViewById(R.id.textEmail);
+        SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+        String username = sharedPreferences.getString("username", "");
+        String email = sharedPreferences.getString("email", "");
+        accountId = sharedPreferences.getString("uid", "");
+        profilePic= sharedPreferences.getString("profilePic", "");
+        textUsername.setText(username);
+        textEmail.setText(email);
+        if (!profilePic.isEmpty()&&profilePic!=null&&profilePic.length()>0){
+            Picasso.get().load(profilePic).into(imageLogoAvatar);
+        }
+        init();
+        addEvents();
     }
     void init(){
 
@@ -177,7 +207,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        imageLogoAvatar.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        });
     }
+
+
+
     void replaceFragment(Fragment fragment, boolean isAppInit){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -322,6 +361,26 @@ public class MainActivity extends AppCompatActivity {
             }
         }else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri uri = data.getData();
+            try {
+                // Update your ImageView.
+                if (uri != null){
+                    //upload image to firebase storage
+                    imageLogoAvatar.setImageURI(uri);
+                    //get bitmap from uri
+                    Bitmap bitmap = UploadImageToFirebase.getBitmapFromUri(uri, this);
+
+                    UploadImageToFirebase.uploadImageLogoClientAvataFirebase(bitmap,"logo_", accountId);
+
+                }else {
+//                imageLogoAvatar.setImageURI(uri);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
