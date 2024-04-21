@@ -80,101 +80,47 @@ public class ListMessagesFragment extends Fragment {
                 unseenMessages = 0; // Đặt lại số lượng tin nhắn chưa xem
                 lastMessage = ""; // Đặt lại tin nhắn cuối cùng
                 chatKey = ""; // Đặt lại khóa chat
-
                 // Duyệt qua tất cả các nút con của nút "user"
                 for (DataSnapshot dataSnapshot : snapshot.child("user").getChildren()){
-
                     final String chatKey = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại
                     dataSet = false; // Đặt lại cờ dataSet
                     // Kiểm tra xem khóa của nút con hiện tại có khác với uid của người dùng và loại là "restaurant" hay không
-                    if (!chatKey.equals(uid) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")){
+                    if (!chatKey.equals(uid) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")) {
                         final String getProfile_pic = dataSnapshot.child("profile_pic").getValue(String.class); // Lấy hình ảnh đại diện
                         String getName = dataSnapshot.child("username").getValue(String.class); // Lấy tên người dùng
-System.out.println("getUid: " + chatKey + " uid: " + uid);
+                        System.out.println("getUid: " + chatKey + " uid: " + uid);
+                        // Lấy dữ liệu chat từ Firebase
                         databaseReference.child("chat").child(chatKey).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+                                if (dataSnapshot1.child("lastMessage").getValue(String.class) != null) {
+                                    lastMessage = dataSnapshot1.child("lastMessage").getValue(String.class);
+                                } else {
+                                    lastMessage = "";
+                                }
+                                if (dataSnapshot1.child("sdtRestaurant").getValue(String.class) != null) {
+                                    phone = dataSnapshot1.child("sdtRestaurant").getValue(String.class);
+                                } else {
+                                    phone = "0";
+                                }
 
-//                                String getChatCount = String.valueOf(snapshot.getChildrenCount()); // Lấy số lượng nút con trong nút "chat"
-//
-//                                // Kiểm tra xem số lượng có rỗng hay không
-//                                if (!getChatCount.equals("")){
-                                    // Duyệt qua tất cả các nút con của nút "chat"
-                                    for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
-                                        // Lấy khóa của nút con hiện tại
-                                        String chatKey = dataSnapshot1.getKey();
-                                        // Kiểm tra xem nút con hiện tại có chứa nút "restaurant" và "client" và "messages" hay không
-                                        System.out.println(dataSnapshot1.child("lastMessage").getValue(String.class));
-                                        if (dataSnapshot1.child("lastMessage").getValue(String.class)!=null) {
-                                            lastMessage = dataSnapshot1.child("lastMessage").getValue(String.class);
-                                        }
-                                        else { lastMessage = ""; }
-                                        if (dataSnapshot1.child("sdtRestaurant").getValue(String.class)!=null) {
-                                            System.out.println("có số điện thoại");
-                                            phone = dataSnapshot1.child("sdtRestaurant").getValue(String.class);
-                                        }
-                                        else {
-                                            phone = "0";
-                                        }
-                                    }
-//                                }
+                                // Kiểm tra xem cờ dataSet có phải là false hay không
+                                if (!dataSet){
+                                    dataSet = true; // Đặt cờ dataSet thành true
+                                    // Tạo một đối tượng MessagesList mới và thêm nó vào danh sách
+                                    MessagesList mesagesList = new MessagesList( getName, phone, lastMessage, getProfile_pic, unseenMessages, chatKey);
+                                    messagesLists.add(mesagesList);
+                                    messagesAdapter.updateList(messagesLists); // Cập nhật adapter với danh sách mới
+                                }
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
+                                // Xử lý lỗi
                             }
                         });
-                        // Kiểm tra xem cờ dataSet có phải là false hay không
-                        if (!dataSet){
-                            dataSet = true; // Đặt cờ dataSet thành true
-                            // Tạo một đối tượng MessagesList mới và thêm nó vào danh sách
-                            MessagesList mesagesList = new MessagesList( getName, phone, lastMessage, getProfile_pic, unseenMessages, chatKey);
-                            messagesLists.add(mesagesList);
-                            messagesAdapter.updateList(messagesLists); // Cập nhật adapter với danh sách mới
-                        }
 
-                        // Lắng nghe sự thay đổi trong nút "chat"
-//                        databaseReference.child("chat").addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//
-//                                String getChatCount = String.valueOf(snapshot.getChildrenCount()); // Lấy số lượng nút con trong nút "chat"
-//
-//                                // Kiểm tra xem số lượng có rỗng hay không
-//                                if (!getChatCount.equals("")){
-//                                    // Duyệt qua tất cả các nút con của nút "chat"
-//                                    for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
-//                                        // Lấy khóa của nút con hiện tại
-//                                        String chatKey = dataSnapshot1.getKey();
-//                                        // Kiểm tra xem nút con hiện tại có chứa nút "restaurant" và "client" và "messages" hay không
-//                                        if (dataSnapshot1.hasChild("restaurant") && dataSnapshot1.hasChild("client")&& dataSnapshot1.hasChild("messages")) {
-////                                            String getUserOne = dataSnapshot1.child("restaurant").getValue(String.class);
-////                                            String getUserTwo = dataSnapshot1.child("client").getValue(String.class);
-//                                            databaseReference.child("user").child(uid).child("profilePic").setValue(profilePic);
-//                                            databaseReference.child("user").child(uid).child("username").setValue(name);
-////                                            if ((getUserOne.equals("getUid") && getUserTwo.equals(uid))||
-////                                                    (getUserOne.equals(uid) && getUserTwo.equals("getUid"))) {
-////                                                for (DataSnapshot chatDataSnapshot : dataSnapshot1.child("messages").getChildren()) {
-////                                                    long getMessageKey = Long.parseLong(chatDataSnapshot.getKey());
-////                                                    long getLastMessage = 10;
-////                                                    lastMessage = chatDataSnapshot.child("msg").getValue(String.class);
-////                                                    if (getMessageKey>getLastMessage) {
-////                                                        unseenMessages++;
-////                                                    }
-////                                                }
-////                                            }
-//                                        }
-//
-//                                    }
-//
-//
-//                                }
-//                            }
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//                            }
-//                        });
-
-                    }else {
+                    } else {
                         System.out.println("-----------giống");
 
 
@@ -182,11 +128,11 @@ System.out.println("getUid: " + chatKey + " uid: " + uid);
                     }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
+
 }
