@@ -37,4 +37,7 @@
     <string name="close_nav">Close Navigation</string>
     <string name="Save_">Save</string>
     <string name="get_location">Get Location</string>
+    <string name="message_notification">Message</string>
+    <string name="message_notification_content">Content</string>
+    <string name="message_from">From</string>
 </resources>

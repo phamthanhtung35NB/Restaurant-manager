@@ -50,4 +50,7 @@
     <string name="restaurant_address">Địa chỉ nhà hàng</string>
     <string name="Save_">Lưu</string>
     <string name="get_location">Lấy Vị Trí</string>
+    <string name="message_notification">Tin Nhắn</string>
+    <string name="message_notification_content">Nội Dung</string>
+    <string name="message_from">Từ</string>
 </resources>

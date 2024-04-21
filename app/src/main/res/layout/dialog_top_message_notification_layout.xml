@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="12dp"
+    android:paddingBottom="20dp"
+    android:paddingEnd="20dp"
+    android:paddingStart="20dp"
+    android:background="@drawable/background_message_notification">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_background_text"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePicFrom"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/account" />
+
+        <LinearLayout
+            android:layout_width="249dp"
+            android:layout_height="112dp"
+            android:background="@drawable/item_background_text"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/createText"
+                android:layout_width="249dp"
+                android:layout_height="52dp"
+                android:backgroundTint="#00000000"
+                android:gravity="center"
+                android:text="@string/message_notification"
+                android:textColor="@color/black"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/layoutDarkMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_background_text"
+                android:gravity="center|right"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:text="@string/message_from"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewFrom"
+                    android:layout_width="150dp"
+                    android:layout_height="38dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_background_text"
+                    android:ellipsize="end"
+                    android:gravity="center|left"
+                    android:singleLine="false"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layoutClosure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/item_background_text"
+        android:gravity="center|right"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:gravity="center"
+            android:textStyle="bold|italic"
+            android:text="@string/message_notification_content"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+        <!--Thuộc tính android:singleLine="false"
+            cho phép TextView hiển thị nhiều dòng nếu cần.-->
+        <!--Thuộc tính android:ellipsize="end" sẽ đặt dấu ba chấm ở cuối
+            nếu nội dung vượt quá kích thước cho phép.-->
+        <TextView
+            android:singleLine="false"
+            android:ellipsize="end"
+            android:id="@+id/textViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/item_background_text"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/item_background_text__blr"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/cancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_clear_24" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

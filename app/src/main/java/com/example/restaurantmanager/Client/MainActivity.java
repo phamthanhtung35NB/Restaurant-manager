@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -46,6 +47,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -132,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new HomeClientFragment(), true);
         Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 //        replaceFragment(new HomeClientActivity());
+        checkForNewMessages();
     }
     void addEvents(){
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -230,59 +237,138 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showBottomDialogSetting() {
+        // Tạo một Dialog mới
         final Dialog dialog = new Dialog(this);
+        // Yêu cầu không hiển thị tiêu đề cho Dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Đặt layout cho Dialog từ file XML
         dialog.setContentView(R.layout.dialog_bottom_setting_client_layout);
 
+        // Tìm các thành phần trong layout của Dialog
         Switch darkModeSwitch = dialog.findViewById(R.id.darkModeSwitch);
         Switch closedSwitch = dialog.findViewById(R.id.closedSwitch);
-//        LinearLayout videoLayout = dialog.findViewById(R.id.layoutVideo);
-//        LinearLayout shortsLayout = dialog.findViewById(R.id.layoutShorts);
-//        LinearLayout liveLayout = dialog.findViewById(R.id.layoutLive);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
 
+        // Kiểm tra xem chế độ tối hiện tại có được bật hay không
+        // Nếu có, đặt trạng thái của switch cho chế độ tối là checked
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             darkModeSwitch.setChecked(true);
         }
 
+        // Đặt listener cho sự kiện thay đổi trạng thái của switch cho chế độ tối
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Nếu switch được chọn, bật chế độ tối
+            // Nếu không, tắt chế độ tối
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
+
+        // Đặt listener cho sự kiện thay đổi trạng thái của switch khác
         closedSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // Hiển thị thông báo tương ứng với trạng thái của switch
             if (isChecked) {
                 Toast.makeText(MainActivity.this,"Closed",Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(MainActivity.this,"Open",Toast.LENGTH_SHORT).show();
             }
         });
-//        videoLayout.setOnClickListener(v -> {
-//            dialog.dismiss();
-//            Toast.makeText(MainRestaurantActivity.this,"Upload a Video is clicked",Toast.LENGTH_SHORT).show();
-//        });
-//
-//        shortsLayout.setOnClickListener(v -> {
-//            dialog.dismiss();
-//            Toast.makeText(MainRestaurantActivity.this,"Create a short is Clicked",Toast.LENGTH_SHORT).show();
-//        });
-//
-//        liveLayout.setOnClickListener(v -> {
-//            dialog.dismiss();
-//            Toast.makeText(MainRestaurantActivity.this,"Go live is Clicked",Toast.LENGTH_SHORT).show();
-//        });
 
+        // Đặt listener cho sự kiện click vào nút hủy
+        // Khi nút hủy được nhấn, Dialog sẽ bị đóng
         cancelButton.setOnClickListener(view -> dialog.dismiss());
 
+        // Hiển thị Dialog
         dialog.show();
+        // Đặt kích thước cho Dialog
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        // Đặt màu nền cho Dialog là trong suốt
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // Đặt hiệu ứng cho Dialog
         dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_out;
+        // Đặt vị trí cho Dialog ở phía dưới
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
+    private void checkForNewMessages() {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
+        dbRef.child("user").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    final String otherUid = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại
+                    if (!otherUid.equals(accountId) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")) {
+                        DatabaseReference messageRef = dbRef.child("chat").child(otherUid).child(accountId);//.child("lastMessage");
+                        messageRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+                                    String profilePic = snapshot.child( "profilePic").getValue(String.class);
+                                    System.out.println("profilePic: "+profilePic);
+                                    String username = snapshot.child("restaurant").getValue(String.class);
+                                    System.out.println("username: "+username);
+//                                    String content = snapshot.getValue(String.class);
+                                    String content = snapshot.child("lastMessage").getValue(String.class);
+                                    System.out.println("content: "+content);
+                                    showTopDialogNotification(profilePic, username, content);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.w(TAG, "Listen failed.", error.toException());
+                            }
+                        });
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "Listen failed.", error.toException());
+            }
+        });
+    }
+    private void showTopDialogNotification(String profilePic, String username, String content) {
+        // Tạo một Dialog mới
+        final Dialog dialog = new Dialog(this);
+        // Yêu cầu không hiển thị tiêu đề cho Dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // Đặt layout cho Dialog từ file XML
+        dialog.setContentView(R.layout.dialog_top_message_notification_layout);
+
+        // Tìm các thành phần trong layout của Dialog
+        CircleImageView profilePicFrom = dialog.findViewById(R.id.profilePicFrom);
+        TextView textViewFrom = dialog.findViewById(R.id.textViewFrom);
+        TextView textViewContent = dialog.findViewById(R.id.textViewContent);
+        ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+
+        //set data
+        if (profilePic!=null&&profilePic.length()>0){
+            Picasso.get().load(profilePic).into(profilePicFrom);
+        }else {
+            profilePicFrom.setImageResource(R.drawable.account);
+        }
+        textViewFrom.setText(username);
+        textViewContent.setText(content);
+
+        // Đặt listener cho sự kiện click vào nút hủy
+        // Khi nút hủy được nhấn, Dialog sẽ bị đóng
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+        // Hiển thị Dialog
+        dialog.show();
+        // Đặt kích thước cho Dialog
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        // Đặt màu nền cho Dialog là trong suốt
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // Đặt hiệu ứng cho Dialog
+        dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_in_notification;
+        // Đặt vị trí cho Dialog ở phía dưới
+        dialog.getWindow().setGravity(Gravity.TOP);
+    }
     /**
      * Hàm này sẽ được gọi sau khi quét mã QR xong
      * @param requestCode The integer request code originally supplied to
