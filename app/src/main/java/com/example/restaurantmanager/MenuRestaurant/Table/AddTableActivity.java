@@ -1,5 +1,6 @@
 package com.example.restaurantmanager.MenuRestaurant.Table;
 
+import static android.app.PendingIntent.getActivity;
 import static android.content.ContentValues.TAG;
 
 
@@ -21,8 +22,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 //import com.example.restaurantmanager.Client.MenuClientActivity;
+import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.R;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -179,6 +183,8 @@ public class AddTableActivity extends AppCompatActivity {
                     Toast.makeText(AddTableActivity.this, "onComplete: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(AddTableActivity.this, "onComplete: success", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(AddTableActivity.this, MainRestaurantActivity.class);
+                    startActivity(intent);
                     finish();
                 }
             }

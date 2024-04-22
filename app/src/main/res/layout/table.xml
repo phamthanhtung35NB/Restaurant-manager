@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayoutButton"
-    android:layout_width="200dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:paddingStart="2dp"
+    android:paddingEnd="2dp"
     android:gravity="center"
     android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="5dp"
-    android:paddingBottom="5dp">
+    android:paddingTop="10dp">
+
 
     <LinearLayout
-        android:layout_width="175dp"
+        android:layout_width="163dp"
         android:layout_height="wrap_content"
         android:background="@drawable/item_background_table"
         android:elevation="4dp"
         android:gravity="center"
         android:orientation="vertical"
         android:outlineProvider="background"
-        android:padding="10dp">
+        android:padding="1dp">
 
         <ImageView
             android:id="@+id/imageViewPhoto"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="2dp"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -34,16 +37,17 @@
 
             <TextView
                 android:id="@+id/textViewNameTable"
-                android:layout_width="165dp"
+                android:layout_width="152dp"
                 android:layout_height="match_parent"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:text="TextView" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="152dp"
             android:layout_height="match_parent"
-            android:gravity="center|left"
+            android:gravity="center"
             android:orientation="vertical">
 
             <LinearLayout
@@ -55,23 +59,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center|left"
-                    android:text="Trạng thái: " />
+                    android:paddingStart="5dp"
+                    android:text="Trạng thái: "
+                    android:textColor="?attr/colorOnSurface"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textViewStatus"
-                    android:layout_width="97dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center|left"
+                    android:paddingStart="2dp"
                     android:text="TextView" />
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/textViewDescribe"
-                android:layout_width="match_parent"
+                android:layout_width="151dp"
                 android:layout_height="30dp"
                 android:gravity="center|left"
+                android:paddingStart="6dp"
                 android:text="TextView" />
 
         </LinearLayout>

@@ -56,7 +56,9 @@ dependencies {
     implementation ("com.android.volley:volley:1.1.1")
     //MPAndroidChart
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
+    //gif
+    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.28")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
     //anh tron
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     //add ZXing

@@ -20,7 +20,6 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="20dp"
             android:layout_marginTop="40dp"
-            android:paddingEnd="2dp"
             android:src="@drawable/back_button" />
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -67,31 +66,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="75dp"
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chattingRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="659dp" />
+            android:layout_height="474dp" />
 
         <LinearLayout
             android:id="@+id/bottombar"
             android:layout_width="wrap_content"
-            android:layout_height="63dp"
+            android:layout_height="52dp"
             android:layout_marginBottom="3dp"
             android:gravity="center">
 
             <EditText
                 android:id="@+id/messageEditTxt"
                 android:layout_width="300dp"
-                android:layout_height="match_parent"
+                android:layout_height="45dp"
+                android:paddingStart="10dp"
+                android:layout_marginTop="3dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="0dp"
-                android:layout_toStartOf="@+id/sendBtn"
+                android:layout_marginEnd="1dp"
                 android:layout_weight="1"
                 android:background="@drawable/textview_border"
-
                 android:hint="Type something..."
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="14sp" />
@@ -99,10 +98,10 @@
             <ImageView
                 android:id="@+id/sendBtn"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="3dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
-                android:layout_weight="1"
                 android:background="@android:drawable/ic_menu_send" />
         </LinearLayout>
     </LinearLayout>

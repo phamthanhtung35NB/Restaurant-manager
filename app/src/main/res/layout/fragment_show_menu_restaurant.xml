@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="10dp"
-        android:paddingTop="20dp"
+        android:paddingTop="5dp"
         android:paddingEnd="10dp"
         android:orientation="vertical">
 
@@ -23,22 +23,22 @@
 
             <ImageButton
                 android:id="@+id/imageButtonAdd"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:scaleType="centerInside"
                 app:srcCompat="@drawable/baseline_format_list_bulleted_add_24" />
 
             <ImageButton
                 android:id="@+id/imageButtonOrder"
-                android:layout_width="69dp"
-                android:layout_height="66dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 app:srcCompat="?attr/actionModePasteDrawable" />
         </LinearLayout>
 
         <ListView
             android:id="@+id/listViewMenu"
             android:layout_width="match_parent"
-            android:layout_height="621dp">
+            android:layout_height="530dp">
 
         </ListView>
 

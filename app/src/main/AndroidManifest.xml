@@ -39,6 +39,7 @@
             android:exported="false" />
         <activity
             android:name=".Client.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".Client.PayTheBillClientActivity"
@@ -99,6 +100,7 @@
         <!-- android:label="@string/title_activity_maps" /> -->
         <activity
             android:name=".Account.RegisterActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/actions" /> -->
@@ -123,6 +125,7 @@
         <!-- android:label="@string/title_activity_login" /> &lt;!&ndash; màn hình chạy trước &ndash;&gt; -->
         <activity
             android:name=".Account.LoginActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
 
             <!-- màn này chạy trước -->

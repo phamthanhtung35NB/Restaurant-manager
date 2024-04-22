@@ -6,111 +6,119 @@
     tools:context=".MenuRestaurant.StatisticalFragment">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
-
+        android:layout_height="610dp">
         <LinearLayout
-            android:id="@+id/LinearLayoutToday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:gravity="center|left"
-                android:text="Hôm nay: "
-                android:textColor="?attr/colorOnBackground"
-                android:textSize="25dp" />
-
-            <TextView
-                android:id="@+id/textViewToday"
+            <LinearLayout
+                android:id="@+id/LinearLayoutToday"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="aa"
-                android:gravity="center|left"
-                android:textSize="25dp"
-                android:textColor="?attr/colorOnSecondary" />
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@color/gray" />
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChartTK"
-            android:layout_width="match_parent"
-            android:layout_height="470dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center|left"
+                    android:text="Hôm nay: "
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="20sp" />
 
-        <LinearLayout
-            android:id="@+id/LinearLayoutWeek"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="7 Ngày Gần Đây: "
-                android:gravity="center|left"
-                android:textColor="?attr/colorOnBackground"
-                android:textSize="25dp" />
-
-            <TextView
-                android:id="@+id/textViewWeek"
+                <TextView
+                    android:id="@+id/textViewToday"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:autoSizeMinTextSize="8sp"
+                    android:autoSizeStepGranularity="2sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center|left"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:textSize="20sp" />
+            </LinearLayout>
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChartTK"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center|left"
-                android:text="1111"
-                android:textSize="25dp"
-                android:textColor="?attr/colorOnSecondary" />
-        </LinearLayout>
+                android:layout_height="470dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@color/gray" />
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/lineChartTK"
-            android:layout_width="match_parent"
-            android:layout_height="460dp" />
-
-        <LinearLayout
-            android:id="@+id/LinearLayoutMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="30 Ngày Gần Đây: "
-                android:gravity="center|left"
-                android:textColor="?attr/colorOnBackground"
-                android:textSize="25dp" />
-
-            <TextView
-                android:id="@+id/textViewMonth"
+            <LinearLayout
+                android:id="@+id/LinearLayoutWeek"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:textSize="25dp"
-                android:gravity="center|left"
-                android:textColor="?attr/colorOnSecondary" />
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center|left"
+                    android:text="7 Ngày Gần Đây: "
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textViewWeek"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:autoSizeMinTextSize="8sp"
+                    android:autoSizeStepGranularity="2sp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center|left"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/gray" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lineChartTK"
+                android:layout_width="match_parent"
+                android:layout_height="460dp" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:gravity="center|left"
+                    android:text="30 Ngày Gần Đây: "
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textViewMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:autoSizeMaxTextSize="25sp"
+                    android:autoSizeMinTextSize="8sp"
+                    android:autoSizeStepGranularity="2sp"
+                    android:autoSizeTextType="uniform"
+                    android:ellipsize="end"
+                    android:gravity="center|left"
+                    android:singleLine="false"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="@color/gray" />
+
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:background="@color/gray" />
-
-    </LinearLayout>
     </ScrollView>
 </FrameLayout>

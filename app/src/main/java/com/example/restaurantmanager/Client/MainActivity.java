@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
             profilePicFrom.setImageResource(R.drawable.account);
         }
         textViewFrom.setText(username);
-        textViewContent.setText(content);
+        textViewContent.setText(content+" "+content);
 
         // Đặt listener cho sự kiện click vào nút hủy
         // Khi nút hủy được nhấn, Dialog sẽ bị đóng
