@@ -52,7 +52,8 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
-
+    //map
+    implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation ("com.android.volley:volley:1.1.1")
     //MPAndroidChart
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")

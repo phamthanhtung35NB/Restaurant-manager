@@ -11,7 +11,12 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- // cấp quyền truy cập vào thông báo -->
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" /> <!-- map -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -26,6 +31,24 @@
         android:theme="@style/Theme.RestaurantManager"
         tools:targetApi="31">
         <activity
+            android:name=".MapActivity"
+            android:exported="false" />
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_API_KEY" />
+
+        <activity
             android:name=".Chat.ChatMessagesActivity"
             android:exported="false" />
         <activity
@@ -33,18 +56,18 @@
             android:exported="false" />
         <activity
             android:name=".MenuRestaurant.MainRestaurantActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
-        <activity android:name=".MenuRestaurant.Order.MenuAddFoodToOrderActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".MenuRestaurant.Order.MenuAddFoodToOrderActivity"
             android:exported="false" />
         <activity
             android:name=".Client.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Client.PayTheBillClientActivity"
-            android:exported="false" />
-        <!-- <activity -->
+            android:exported="false" /> <!-- <activity -->
         <!-- android:name=".DialogNotificationActivity" -->
         <!-- android:exported="false" /> &lt;!&ndash; android:name=".MyApplication" &ndash;&gt; -->
         <service
@@ -70,38 +93,13 @@
         <activity
             android:name=".MenuRestaurant.Menu.EditFoodActivity"
             android:exported="false" /> <!-- <activity -->
-        <!-- android:name=".Client.HomeClientActivity" -->
-        <!-- android:exported="false" /> -->
-        <!-- <activity -->
-        <!-- android:name=".MenuRestaurant.Table.ShowTableActivity" -->
-        <!-- android:exported="false" /> -->
-        <!-- <activity -->
-        <!-- android:name=".MenuRestaurant.StatisticalActivity" -->
-        <!-- android:exported="false" /> -->
-        <!-- <activity -->
-        <!-- android:name=".MenuRestaurant.HomeRestaurantActivity" -->
-        <!-- android:exported="false" /> -->
-        <!--
-             TODO: Before you run your application, you need a Google Maps API key.
-
-             To get one, follow the directions here:
-
-                https://developers.google.com/maps/documentation/android-sdk/get-api-key
-
-             Once you have your API key (it starts with "AIza"), define a new property in your
-             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
-             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" /> <!-- <activity -->
         <!-- android:name=".MapsActivity" -->
         <!-- android:exported="false" -->
         <!-- android:label="@string/title_activity_maps" /> -->
         <activity
             android:name=".Account.RegisterActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="false" /> <!-- <meta-data -->
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/actions" /> -->
         <activity
@@ -125,8 +123,8 @@
         <!-- android:label="@string/title_activity_login" /> &lt;!&ndash; màn hình chạy trước &ndash;&gt; -->
         <activity
             android:name=".Account.LoginActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
 
             <!-- màn này chạy trước -->
             <intent-filter>

@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.example.restaurantmanager.ChatActivity;
 import com.example.restaurantmanager.Client.MainActivity;
 //import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
+import com.example.restaurantmanager.MapActivity;
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;
@@ -85,6 +86,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+        // chuyêển sang map activity
+        Intent intent1 = new Intent(LoginActivity.this, MapActivity.class);
+        startActivity(intent1);
+        finish();
+
 
         init();
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -125,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             String email = preferences.getString("email", "");
             String password = preferences.getString("password", "");
             String type = preferences.getString("type", "");
-            loginWithSavedAccount(email,password,type);
+//            loginWithSavedAccount(email,password,type);
             textViewUsername.setText(email);
             textPassword.setText(password);
         }

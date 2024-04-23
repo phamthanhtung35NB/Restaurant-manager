@@ -1,6 +1,6 @@
 <resources>
 
-<!--    địa chỉ nhà hàng-->
+    <!--    địa chỉ nhà hàng-->
     <string name="restaurant_address">Restaurant Address</string>
     <string name="restaurant_name">Restaurant Name</string>
     <string name="phone_number">Phone number</string>
