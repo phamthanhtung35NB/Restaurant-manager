@@ -62,7 +62,7 @@ public class MapActivity extends AppCompatActivity {
     private LocationListener locationListener;
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map = null;
-    private GeoPoint searchedLocation;
+    private GeoPoint restaurantLocation;
     IMapController mapController;
     private List<MyLocation> locations;
     private Location currentLocation;
@@ -74,6 +74,12 @@ public class MapActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_map);
         Context ctx = getApplicationContext();
+
+        Button buttonLocation = findViewById(R.id.button_location);
+        EditText editTextLocation = findViewById(R.id.edittext_location);
+        Button buttonSearch = findViewById(R.id.button_search);
+        Button buttonDirections = findViewById(R.id.button_directions);
+
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -139,58 +145,62 @@ public class MapActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         locations = new ArrayList<>();
         locations.add(new MyLocation(new GeoPoint(21.028511, 105.804817), "Hanoi"));
-        locations.add(new MyLocation(new GeoPoint(21.028511, 105.994817), "Hanoiiiiiiiii"));
+        locations.add(new MyLocation(new GeoPoint(21.0382323, 105.7826399), "uet"));
         // Add markers to the map
         for (MyLocation location : locations) {
             Marker marker = new Marker(map);
             marker.setPosition(location.getGeoPoint());
             marker.setTitle(location.getName());
             marker.setOnMarkerClickListener((marker1, mapView) -> {
-                // Calculate the distance
-                float[] results = new float[1];
-                Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), marker1.getPosition().getLatitude(), marker1.getPosition().getLongitude(), results);
-                float distanceInMeters = results[0];
-                Toast.makeText(MapActivity.this, "Distance: " + distanceInMeters + " meters", Toast.LENGTH_SHORT).show();
 
-                // Add a button to navigate
-                Button navigateButton = new Button(MapActivity.this);
-                navigateButton.setText("Navigate");
-                navigateButton.setOnClickListener(v -> {
-                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + marker1.getPosition().getLatitude() + "," + marker1.getPosition().getLongitude());
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    startActivity(mapIntent);
-                });
+                    restaurantLocation = marker1.getPosition();
+                    // Show a toast with the name of the location
+                    Toast.makeText(MapActivity.this, location.getName(), Toast.LENGTH_SHORT).show();
+
+                    // Set the distance to the EditText
+
+                // Calculate the distance
+//                float[] results = new float[1];
+//                Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), marker1.getPosition().getLatitude(), marker1.getPosition().getLongitude(), results);
+//                float distanceInMeters = results[0];
+//                Toast.makeText(MapActivity.this, "Distance: " + distanceInMeters + " meters", Toast.LENGTH_SHORT).show();
+
+//                // Add a button to navigate
+//                Button navigateButton = new Button(MapActivity.this);
+//                navigateButton.setText("Navigate");
+//                navigateButton.setOnClickListener(v -> {
+//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + marker1.getPosition().getLatitude() + "," + marker1.getPosition().getLongitude());
+//                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                    mapIntent.setPackage("com.google.android.apps.maps");
+//                    startActivity(mapIntent);
+//                });
 
                 return true;
             });
             map.getOverlays().add(marker);
         }
-        Button buttonLocation = findViewById(R.id.button_location);
-        EditText editTextLocation = findViewById(R.id.edittext_location);
-        Button buttonSearch = findViewById(R.id.button_search);
-        Button buttonDirections = findViewById(R.id.button_directions);
+
         buttonLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//                locationListener = new LocationListener() {
-//                    @Override
-//                    public void onLocationChanged(Location location) {
-//                        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-//                        mapController.setCenter(startPoint);
-//                    }
-//
-//                    // Override other methods as needed
-//                    @Override
-//                    public void onStatusChanged(String provider, int status, Bundle extras) {}
-//
-//                    @Override
-//                    public void onProviderEnabled(String provider) {}
-//
-//                    @Override
-//                    public void onProviderDisabled(String provider) {}
-//                };
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(Location location) {
+                        GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                        mapController.setCenter(startPoint);
+                    }
+
+                    // Override other methods as needed
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                    @Override
+                    public void onProviderEnabled(String provider) {}
+
+                    @Override
+                    public void onProviderDisabled(String provider) {}
+                };
                 if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -211,10 +221,19 @@ public class MapActivity extends AppCompatActivity {
         buttonDirections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (searchedLocation != null) {
-//                    getDirections(searchedLocation);
+                if (restaurantLocation != null) {
+                    // Open Google Maps with the coordinates of searchedLocation in "Show location" mode
+                    // and mark the location
+//                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + restaurantLocation.getLatitude() + "," + restaurantLocation.getLongitude());//chọn phương tiện đi lại
+//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + searchedLocation.getLatitude() + "," + searchedLocation.getLongitude() + "&mode=d");
+
+                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + restaurantLocation.getLatitude() + "," + restaurantLocation.getLongitude() + "&mode=d");//xe máy
+
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
                 } else {
-                    Toast.makeText(MapActivity.this, "No location searched yet.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapActivity.this, "No location selected yet.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -225,33 +244,33 @@ public class MapActivity extends AppCompatActivity {
         // For example, you can use a geocoding API to get the latitude and longitude of the location
         // Then, you can create a GeoPoint with these coordinates and set it as the center of the map
         // Don't forget to save the GeoPoint in the searchedLocation variable
-        new Thread(() -> {
-            try {
-                String urlString = "https://nominatim.openstreetmap.org/search?format=json&q=" + URLEncoder.encode(location, "UTF-8");
-                URL url = new URL(urlString);
-
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-                StringBuilder response = new StringBuilder();
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-
-                JSONArray jsonArray = new JSONArray(response.toString());
-                if (jsonArray.length() > 0) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    double lat = jsonObject.getDouble("lat");
-                    double lon = jsonObject.getDouble("lon");
-
-                    searchedLocation = new GeoPoint(lat, lon);
-                    runOnUiThread(() -> mapController.setCenter(searchedLocation));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+//        new Thread(() -> {
+//            try {
+//                String urlString = "https://nominatim.openstreetmap.org/search?format=json&q=" + URLEncoder.encode(location, "UTF-8");
+//                URL url = new URL(urlString);
+//
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                String line;
+//                StringBuilder response = new StringBuilder();
+//                while ((line = reader.readLine()) != null) {
+//                    response.append(line);
+//                }
+//                reader.close();
+//
+//                JSONArray jsonArray = new JSONArray(response.toString());
+//                if (jsonArray.length() > 0) {
+//                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+//                    double lat = jsonObject.getDouble("lat");
+//                    double lon = jsonObject.getDouble("lon");
+//
+//                    searchedLocation = new GeoPoint(lat, lon);
+//                    runOnUiThread(() -> mapController.setCenter(searchedLocation));
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
     }
 
     private void getDirections(GeoPoint destination) {
