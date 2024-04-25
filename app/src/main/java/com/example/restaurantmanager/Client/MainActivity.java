@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -353,6 +354,7 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewFrom = dialog.findViewById(R.id.textViewFrom);
         TextView textViewContent = dialog.findViewById(R.id.textViewContent);
         ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+        LinearLayout ll = dialog.findViewById(R.id.ll);
 
         //set data
         if (profilePic!=null&&profilePic.length()>0){
@@ -362,13 +364,17 @@ public class MainActivity extends AppCompatActivity {
         }
         textViewFrom.setText(username);
         textViewContent.setText(content);
+        // khi ấn vào ll thì mở fragment
+        ll.setOnClickListener(view -> {
+            //chuển tới fragment mess
 
+                });
         // Đặt listener cho sự kiện click vào nút hủy
         // Khi nút hủy được nhấn, Dialog sẽ bị đóng và cập nhật trạng thái đã đọc
         cancelButton.setOnClickListener(view -> {
             dialog.dismiss();
 //            databaseReference.child("chat").child(accountId).child(username).child("clientSeen").setValue(true);
-            databaseReference.child("chat").child(otherUid).child(accountId).child("clientSeen").setValue(true);
+//            databaseReference.child("chat").child(otherUid).child(accountId).child("clientSeen").setValue(true);
         });
 //        cancelButton.setOnClickListener(view -> dialog.dismiss());
 

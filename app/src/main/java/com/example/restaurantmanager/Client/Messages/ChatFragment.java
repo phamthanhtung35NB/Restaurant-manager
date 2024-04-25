@@ -54,12 +54,14 @@ public class ChatFragment extends Fragment {
     ImageView sendBtn;
     String myName,myPhone,myChatKey,myProfilePic;
     String opoName,opoPhone,opoChatKey;
-
+    private ValueEventListener seenListener;
+    private ValueEventListener messageListener;
     private RecyclerView chattingRecyclerView;
     private ChatAdapter chatAdapter;
     private boolean loadFirstTime = true;
     final List<ChatList> chatList= new ArrayList<>();
     DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference databaseReferenceSeen= FirebaseDatabase.getInstance().getReference();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
@@ -92,8 +94,7 @@ public class ChatFragment extends Fragment {
 
         nameTV.setText(opoName);
         // Kiểm tra xem nhà hàng đã xem tin nhắn chưa
-        DatabaseReference databaseReferenceSeen = FirebaseDatabase.getInstance().getReference();
-        databaseReferenceSeen.child("chat").child(opoChatKey).child(myChatKey)
+        seenListener=databaseReferenceSeen.child("chat").child(opoChatKey).child(myChatKey)
                 .child("restaurantSeen").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -122,7 +123,7 @@ public class ChatFragment extends Fragment {
         chatAdapter = new ChatAdapter(chatList, getActivity());
         profilePic.setImageResource(R.drawable.account);
         chatList.clear();
-        databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").addValueEventListener(new ValueEventListener() {
+        messageListener=databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatList.clear();
@@ -161,6 +162,16 @@ public class ChatFragment extends Fragment {
                 System.out.println("Error reading data: " + databaseError.getMessage());
             }
         });
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (seenListener != null) {
+            databaseReferenceSeen.removeEventListener(seenListener);
+        }
+        if (messageListener != null) {
+            databaseReference.removeEventListener(messageListener);
+        }
     }
 //    void init(View view){
 //
