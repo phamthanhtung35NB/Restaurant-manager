@@ -91,7 +91,32 @@ public class ChatFragment extends Fragment {
         myProfilePic = sharedPreferences.getString("profilePic", "");
 
         nameTV.setText(opoName);
-        status.setText(opoPhone);
+        // Kiểm tra xem nhà hàng đã xem tin nhắn chưa
+        DatabaseReference databaseReferenceSeen = FirebaseDatabase.getInstance().getReference();
+        databaseReferenceSeen.child("chat").child(opoChatKey).child(myChatKey)
+                .child("restaurantSeen").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            boolean restaurantSeen = dataSnapshot.getValue(Boolean.class);
+                            if (restaurantSeen) {
+                                status.setText("Đã xem");
+                                // set color for status
+                                status.setTextColor(getResources().getColor(R.color.green));
+                            } else {
+                                status.setText("Đã gửi");
+                                // set color for status
+                                status.setTextColor(getResources().getColor(R.color.gray));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        // Xử lý lỗi tại đây nếu có
+                    }
+                });
+
         chattingRecyclerView.setHasFixedSize(true);
         chattingRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         chatAdapter = new ChatAdapter(chatList, getActivity());
@@ -102,6 +127,8 @@ public class ChatFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                    // Kiểm tra xem có tồn tại key "msg" và "phone" trong dataSnapshot không
                     if (snapshot.hasChild("msg") && snapshot.hasChild("phone")) {
                         System.out.println("có tin nhắn mới");
                         final String messageTimeStamps = snapshot.getKey();
@@ -123,6 +150,7 @@ public class ChatFragment extends Fragment {
                         }
                     }
                 }
+                databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("clientSeen").setValue(true);
                 chatAdapter.updateChatList(chatList);
                 chattingRecyclerView.setAdapter(chatAdapter);
                 chattingRecyclerView.scrollToPosition(chatList.size() - 1);
@@ -294,6 +322,8 @@ public class ChatFragment extends Fragment {
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("restaurant").setValue(opoName);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("client").setValue(myName);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("lastMessage").setValue(message);
+                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("clientSeen").setValue(true);
+                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("restaurantSeen").setValue(false);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("profilePic").setValue(myProfilePic);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
                     databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);

@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
     String accountId = "";
     public static final String SERVER_KEY = "AAAAl-xT4ko:APA91bGASnqgklF4OfVR6ls42PxiSI1Lzj2Aj8qYqdlCgk4LKApgGGpE1oH_GzLgBqjheSfQqHc3_qrdcsT4cwOGAbGCwgdUNpLmLx-tdGLo_NtbC-rZrqiDBtcP5qI6xI_YrefHOAtX";
     private static final int PICK_IMAGE_REQUEST = 1;
+    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+    //fragment hiện tại
+    String fragmentCurrent = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
     void init(){
 
         replaceFragment(new HomeClientFragment(), true);
+        fragmentCurrent = "HomeClientFragment";
         Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 //        replaceFragment(new HomeClientActivity());
         checkForNewMessages();
@@ -148,13 +152,15 @@ public class MainActivity extends AppCompatActivity {
                 if (itemId == R.id.navHome){
                 System.out.println("navHome");
                     replaceFragment(new HomeClientFragment(), false);
+                    fragmentCurrent = "HomeClientFragment";
                     Toast.makeText(MainActivity.this, "navHome", Toast.LENGTH_SHORT).show();
                 }else if(itemId==R.id.navMessage){
                     replaceFragment(new ListMessagesFragment(), false);
+                    fragmentCurrent = "ListMessagesFragment";
                 }
                 else if (itemId == R.id.navQR){
                     if (isCheckQR==false){
-
+                    fragmentCurrent = "QRFragment";
                     System.out.println("navSetting");
                     Toast.makeText(MainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();
                     // Xử lý sự kiện khi click vào nút quét mã QR
@@ -292,15 +298,14 @@ public class MainActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
     private void checkForNewMessages() {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
-        dbRef.child("user").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("user").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     final String otherUid = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại
                     if (!otherUid.equals(accountId) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")) {
-                        DatabaseReference messageRef = dbRef.child("chat").child(otherUid).child(accountId);//.child("lastMessage");
+                        DatabaseReference messageRef = databaseReference.child("chat").child(otherUid).child(accountId);//.child("lastMessage");
                         messageRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -312,7 +317,11 @@ public class MainActivity extends AppCompatActivity {
 //                                    String content = snapshot.getValue(String.class);
                                     String content = snapshot.child("lastMessage").getValue(String.class);
                                     System.out.println("content: "+content);
-                                    showTopDialogNotification(profilePic, username, content);
+                                    boolean isSeen = snapshot.child("clientSeen").getValue(Boolean.class);
+                                    if (!isSeen&&!fragmentCurrent.equals("ListMessagesFragment")) {
+                                        showTopDialogNotification(profilePic, username, content,otherUid,accountId);
+                                    }
+
                                 }
                             }
 
@@ -331,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void showTopDialogNotification(String profilePic, String username, String content) {
+    private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId) {
         // Tạo một Dialog mới
         final Dialog dialog = new Dialog(this);
         // Yêu cầu không hiển thị tiêu đề cho Dialog
@@ -352,11 +361,16 @@ public class MainActivity extends AppCompatActivity {
             profilePicFrom.setImageResource(R.drawable.account);
         }
         textViewFrom.setText(username);
-        textViewContent.setText(content+" "+content);
+        textViewContent.setText(content);
 
         // Đặt listener cho sự kiện click vào nút hủy
-        // Khi nút hủy được nhấn, Dialog sẽ bị đóng
-        cancelButton.setOnClickListener(view -> dialog.dismiss());
+        // Khi nút hủy được nhấn, Dialog sẽ bị đóng và cập nhật trạng thái đã đọc
+        cancelButton.setOnClickListener(view -> {
+            dialog.dismiss();
+//            databaseReference.child("chat").child(accountId).child(username).child("clientSeen").setValue(true);
+            databaseReference.child("chat").child(otherUid).child(accountId).child("clientSeen").setValue(true);
+        });
+//        cancelButton.setOnClickListener(view -> dialog.dismiss());
 
         // Hiển thị Dialog
         dialog.show();
