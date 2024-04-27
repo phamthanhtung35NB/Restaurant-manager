@@ -366,8 +366,9 @@ public class MainActivity extends AppCompatActivity {
         textViewContent.setText(content);
         // khi ấn vào ll thì mở fragment
         ll.setOnClickListener(view -> {
-            //chuển tới fragment mess
-
+            //chuyển tới fragment mess
+            replaceFragment(new ListMessagesFragment(), false);
+            fragmentCurrent = "ListMessagesFragment";
                 });
         // Đặt listener cho sự kiện click vào nút hủy
         // Khi nút hủy được nhấn, Dialog sẽ bị đóng và cập nhật trạng thái đã đọc
