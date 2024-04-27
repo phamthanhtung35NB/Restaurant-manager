@@ -367,6 +367,7 @@ public class MainActivity extends AppCompatActivity {
         // khi ấn vào ll thì mở fragment
         ll.setOnClickListener(view -> {
             //chuyển tới fragment mess
+            dialog.dismiss();
             replaceFragment(new ListMessagesFragment(), false);
             fragmentCurrent = "ListMessagesFragment";
                 });
