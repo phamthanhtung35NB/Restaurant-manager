@@ -10,117 +10,124 @@
     android:background="@drawable/background_message_notification">
 
     <LinearLayout
-        android:id="@+id/ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/item_background_text"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profilePicFrom"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="3dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/account" />
+        android:id="@+id/ll"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@drawable/item_background_text"
             android:gravity="center"
-            android:paddingStart="6dp"
-            android:layout_marginEnd="1dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/createText"
-                android:layout_width="181dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#00000000"
-                android:gravity="center"
-                android:text="@string/message_notification"
-                android:textColor="@color/black"
-                android:textSize="25dp"
-                android:textStyle="bold" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profilePicFrom"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="1dp"
+                android:layout_marginEnd="3dp"
+                android:src="@drawable/account" />
 
             <LinearLayout
-                android:id="@+id/layoutDarkMode"
-                android:layout_width="match_parent"
+                android:layout_width="215dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
                 android:background="@drawable/item_background_text"
-                android:paddingStart="1dp"
-                android:gravity="center|left"
-                android:orientation="horizontal">
-
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingStart="6dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:paddingStart="2dp"
-                    android:layout_marginEnd="4dp"
+                    android:id="@+id/createText"
+                    android:layout_width="181dp"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#00000000"
                     android:gravity="center"
-                    android:text="@string/message_from"
+                    android:text="@string/message_notification"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="25dp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textViewFrom"
-                    android:layout_width="150dp"
+                <LinearLayout
+                    android:id="@+id/layoutDarkMode"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:background="@drawable/item_background_text"
-                    android:ellipsize="end"
                     android:gravity="center|left"
-                    android:singleLine="false"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:orientation="horizontal"
+                    android:paddingStart="1dp">
 
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="4dp"
+                        android:gravity="center"
+                        android:paddingStart="2dp"
+                        android:text="@string/message_from"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/textViewFrom"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/item_background_text"
+                        android:ellipsize="end"
+                        android:gravity="center|left"
+                        android:singleLine="false"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutClosure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/item_background_text"
+            android:gravity="center|right"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:text="@string/message_notification_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold|italic" />
+            <!--Thuộc tính android:singleLine="false"
+            cho phép TextView hiển thị nhiều dòng nếu cần.-->
+            <!--Thuộc tính android:ellipsize="end" sẽ đặt dấu ba chấm ở cuối
+            nếu nội dung vượt quá kích thước cho phép.-->
+            <TextView
+                android:id="@+id/textViewContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/item_background_text"
+                android:ellipsize="end"
+                android:gravity="center|left"
+                android:singleLine="false"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
         </LinearLayout>
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/layoutClosure"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/item_background_text"
-        android:gravity="center|right"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-
-        <TextView
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:gravity="center"
-            android:textStyle="bold|italic"
-            android:text="@string/message_notification_content"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-        <!--Thuộc tính android:singleLine="false"
-            cho phép TextView hiển thị nhiều dòng nếu cần.-->
-        <!--Thuộc tính android:ellipsize="end" sẽ đặt dấu ba chấm ở cuối
-            nếu nội dung vượt quá kích thước cho phép.-->
-        <TextView
-            android:singleLine="false"
-            android:ellipsize="end"
-            android:id="@+id/textViewContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/item_background_text"
-            android:layout_weight="1"
-            android:gravity="center|left"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

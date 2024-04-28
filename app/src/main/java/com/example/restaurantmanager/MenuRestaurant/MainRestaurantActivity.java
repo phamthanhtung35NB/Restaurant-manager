@@ -38,6 +38,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.restaurantmanager.Account.LoginActivity;
+import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
@@ -48,8 +49,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.appcheck.internal.util.Logger;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
@@ -63,7 +68,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainRestaurantActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    String fragmentCurrent = "";
     FloatingActionButton fab;
     private BottomNavigationView bottomNavigationView;
     private NavigationView navigationView;
@@ -74,6 +79,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
     TextView textUsername;
     TextView textEmail;
     String profilePic = "";
+    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
     public static Fragment lastFragment = null; // Biến để lưu trạng thái Fragment cuối cùng
     String accountId = "";
 //    Animation slideInAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_in);
@@ -190,6 +196,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
+checkForNewMessages();
     }
 //    private  void replaceFragment(Fragment fragment) {
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -197,6 +204,87 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //        fragmentTransaction.replace(R.id.frame_layout, fragment);
 //        fragmentTransaction.commit();
 //    }
+
+    private void checkForNewMessages() {
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.child("chat").child(accountId).getChildren()){
+                    final String opoUid = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại uid của người gửi
+                    if (!opoUid.equals(accountId)&&snapshot.exists() ) {
+                        //snapshot.exists() kiểm tra xem có dữ liệu không
+                        String profilePic = snapshot.child( "profilePic").getValue(String.class);
+                        System.out.println("profilePic: "+profilePic);
+                        String username = snapshot.child("client").getValue(String.class);
+                        System.out.println("username: "+username);
+//                                    String content = snapshot.getValue(String.class);
+                        String content = snapshot.child("lastMessage").getValue(String.class);
+                        System.out.println("content: "+content);
+                        boolean isSeen = snapshot.child("restaurantSeen").getValue(Boolean.class);
+                        if (!isSeen&&!fragmentCurrent.equals("ListMessagesFragment")) {
+                            showTopDialogNotification(profilePic, username, content,opoUid,accountId);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(Logger.TAG, "Listen failed.", error.toException());
+            }
+        });
+    }
+private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId) {
+    // Tạo một Dialog mới
+    final Dialog dialog = new Dialog(this);
+    // Yêu cầu không hiển thị tiêu đề cho Dialog
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    // Đặt layout cho Dialog từ file XML
+    dialog.setContentView(R.layout.dialog_top_message_notification_layout);
+
+    // Tìm các thành phần trong layout của Dialog
+    CircleImageView profilePicFrom = dialog.findViewById(R.id.profilePicFrom);
+    TextView textViewFrom = dialog.findViewById(R.id.textViewFrom);
+    TextView textViewContent = dialog.findViewById(R.id.textViewContent);
+    ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
+    LinearLayout ll = dialog.findViewById(R.id.ll);
+
+    //set data
+    if (profilePic!=null&&profilePic.length()>0){
+        Picasso.get().load(profilePic).into(profilePicFrom);
+    }else {
+        profilePicFrom.setImageResource(R.drawable.account);
+    }
+    textViewFrom.setText(username);
+    textViewContent.setText(content);
+    // khi ấn vào ll thì mở fragment
+    ll.setOnClickListener(view -> {
+        //chuyển tới fragment mess
+        dialog.dismiss();
+        replaceFragment(new ListMessagesFragment(), false);
+        fragmentCurrent = "ListMessagesFragment";
+    });
+    // Đặt listener cho sự kiện click vào nút hủy
+    // Khi nút hủy được nhấn, Dialog sẽ bị đóng và cập nhật trạng thái đã đọc
+    cancelButton.setOnClickListener(view -> {
+        dialog.dismiss();
+//            databaseReference.child("chat").child(accountId).child(username).child("clientSeen").setValue(true);
+//            databaseReference.child("chat").child(otherUid).child(accountId).child("clientSeen").setValue(true);
+    });
+//        cancelButton.setOnClickListener(view -> dialog.dismiss());
+
+    // Hiển thị Dialog
+    dialog.show();
+    // Đặt kích thước cho Dialog
+    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    // Đặt màu nền cho Dialog là trong suốt
+    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    // Đặt hiệu ứng cho Dialog
+    dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_in_notification;
+    // Đặt vị trí cho Dialog ở phía dưới
+    dialog.getWindow().setGravity(Gravity.TOP);
+}
 @Override
 public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
