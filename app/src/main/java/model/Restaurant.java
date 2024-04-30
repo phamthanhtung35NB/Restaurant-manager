@@ -8,6 +8,7 @@ public class Restaurant {
     //description la mot mo ta cua nha hang
     private String description;
     private String address;
+    private String location;
     private String image;
 
     public Restaurant(int idTableMax, int idMax, String phone, String username, String description, String address, String image) {
@@ -24,6 +25,31 @@ public class Restaurant {
         this.phone = phone;
         this.username = username;
         this.description = "";
+    }
+
+    public Restaurant(int idTableMax, int idMax, String phone, String username, String description, String address, String location, String image) {
+        this.idTableMax = idTableMax;
+        this.idMax = idMax;
+        this.phone = phone;
+        this.username = username;
+        this.description = description;
+        this.address = address;
+        this.location = location;
+        this.image = image;
+    }
+    public double getLatitude(){
+        String[] temp = location.split(",");
+            return Double.parseDouble(temp[0]);}
+    public double getLongitude(){
+        String[] temp = location.split(",");
+        return Double.parseDouble(temp[1]);
+    }
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getAddress() {

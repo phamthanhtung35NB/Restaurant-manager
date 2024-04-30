@@ -2,12 +2,19 @@ package com.example.restaurantmanager.MenuRestaurant;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +38,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -40,6 +48,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.example.restaurantmanager.Account.LoginActivity;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
+import com.example.restaurantmanager.MapActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
@@ -59,6 +68,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import org.checkerframework.common.subtyping.qual.Bottom;
+import org.osmdroid.util.GeoPoint;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +77,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainRestaurantActivity extends AppCompatActivity {
 
+    // Tạo một Dialog mới
+    Dialog dialog;
+    private LocationManager locationManager; // Quản lý vị trí
     private static final int PICK_IMAGE_REQUEST = 1;
+    private LocationListener locationListener; // Lắng nghe thay đổi vị trí
     String fragmentCurrent = "";
     FloatingActionButton fab;
     private BottomNavigationView bottomNavigationView;
@@ -75,8 +89,10 @@ public class MainRestaurantActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
 //    FrameLayout drawerLayout;
     private FrameLayout fragmentContainer;
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1; // Mã yêu cầu quyền
     CircleImageView imageLogoAvatar;
     TextView textUsername;
+    String locationRestaurant = "";
     TextView textEmail;
     String profilePic = "";
     DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
@@ -102,6 +118,26 @@ public class MainRestaurantActivity extends AppCompatActivity {
         imageLogoAvatar = headerView.findViewById(R.id.imageLogoAvatar);
         textUsername = headerView.findViewById(R.id.textUsername);
         textEmail = headerView.findViewById(R.id.textEmail);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+//                    lấy vị trí hiện tại
+                locationRestaurant = "" + location.getLatitude() + "_" + location.getLongitude();
+                System.out.println("Location: " + locationRestaurant);
+//                editAddress(locationRestaurant,"location");
+            }
+
+            // Override other methods as needed
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            @Override
+            public void onProviderEnabled(String provider) {}
+
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
 
         Toolbar toolbar = findViewById(R.id.toolbar);
 
@@ -120,17 +156,21 @@ public class MainRestaurantActivity extends AppCompatActivity {
 
             int itemId = item.getItemId();
             if (itemId == R.id.navMenu) {
+                fragmentCurrent = "ShowMenuRestaurantFragment";
                 replaceFragment(new ShowMenuRestaurantFragment(), false);
             } else if (itemId == R.id.navTable) {
                 System.out.println("Table");
+                fragmentCurrent = "ShowTableRestaurantFragment";
                 replaceFragment(new ShowTableRestaurantFragment(), false);
             } else if (itemId == R.id.navMessage) {
                 replaceFragment(new ListMessagesRestaurantFragment(), false);
+                fragmentCurrent = "ListMessagesFragment";
             } else if (itemId == R.id.navSetting) {
                 System.out.println("Setting");
                 showBottomDialogSetting();
 //                replaceFragment(new HomeRestaurantFragment(), false);
             } else if(itemId == R.id.navHome){
+                fragmentCurrent = "HomeRestaurantFragment";
                 replaceFragment(new HomeRestaurantFragment(), false);
             }
 
@@ -152,11 +192,12 @@ public class MainRestaurantActivity extends AppCompatActivity {
             if (itemId == R.id.nav_header_home) {
                 //đóng navigation
                 drawerLayout.closeDrawers();
+                fragmentCurrent = "HomeRestaurantFragment";
                 replaceFragment(new HomeRestaurantFragment(), false);
             } else if (itemId == R.id.nav_header_settings) {
                 showBottomDialogSetting();
                 drawerLayout.closeDrawers();
-
+                fragmentCurrent = "HomeRestaurantFragment";
             } else if (itemId == R.id.nav_header_share) {
                 Toast.makeText(MainRestaurantActivity.this, "Share", Toast.LENGTH_SHORT).show();
 
@@ -212,18 +253,36 @@ checkForNewMessages();
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.child("chat").child(accountId).getChildren()){
                     final String opoUid = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại uid của người gửi
+                    System.out.println("opoUid: "+opoUid);
                     if (!opoUid.equals(accountId)&&snapshot.exists() ) {
                         //snapshot.exists() kiểm tra xem có dữ liệu không
-                        String profilePic = snapshot.child( "profilePic").getValue(String.class);
+                        String profilePic = dataSnapshot.child( "profilePic").getValue(String.class);
                         System.out.println("profilePic: "+profilePic);
-                        String username = snapshot.child("client").getValue(String.class);
+                        String username = dataSnapshot.child("client").getValue(String.class);
                         System.out.println("username: "+username);
 //                                    String content = snapshot.getValue(String.class);
-                        String content = snapshot.child("lastMessage").getValue(String.class);
+                        String content = dataSnapshot.child("lastMessage").getValue(String.class);
                         System.out.println("content: "+content);
-                        boolean isSeen = snapshot.child("restaurantSeen").getValue(Boolean.class);
+                        System.out.println("content: "+content);
+                        boolean isSeen = dataSnapshot.child("restaurantSeen").getValue(Boolean.class);
+                        System.out.println("isSeen: "+isSeen);
+
                         if (!isSeen&&!fragmentCurrent.equals("ListMessagesFragment")) {
-                            showTopDialogNotification(profilePic, username, content,opoUid,accountId);
+                            //kiểm tra xem có dialog nào đang hiển thị không
+                            if (dialog != null && dialog.isShowing()) {
+                                // Dialog đang hiển thị
+                                dialog.dismiss();
+                                // Phát âm thanh thông báo
+                                MediaPlayer mediaPlayer = MediaPlayer.create(MainRestaurantActivity.this, R.raw.nofi);
+                                mediaPlayer.start();
+                                showTopDialogNotification(profilePic, username, content, opoUid, accountId);
+                            } else {
+                                // Không có Dialog nào đang hiển thị
+                                // Phát âm thanh thông báo
+                                MediaPlayer mediaPlayer = MediaPlayer.create(MainRestaurantActivity.this, R.raw.nofi);
+                                mediaPlayer.start();
+                                showTopDialogNotification(profilePic, username, content, opoUid, accountId);
+                            }
                         }
                     }
                 }
@@ -236,8 +295,7 @@ checkForNewMessages();
         });
     }
 private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId) {
-    // Tạo một Dialog mới
-    final Dialog dialog = new Dialog(this);
+    dialog = new Dialog(this);
     // Yêu cầu không hiển thị tiêu đề cho Dialog
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
     // Đặt layout cho Dialog từ file XML
@@ -262,8 +320,9 @@ private void showTopDialogNotification(String profilePic, String username, Strin
     ll.setOnClickListener(view -> {
         //chuyển tới fragment mess
         dialog.dismiss();
-        replaceFragment(new ListMessagesFragment(), false);
         fragmentCurrent = "ListMessagesFragment";
+        replaceFragment(new ListMessagesFragment(), false);
+
     });
     // Đặt listener cho sự kiện click vào nút hủy
     // Khi nút hủy được nhấn, Dialog sẽ bị đóng và cập nhật trạng thái đã đọc
@@ -276,13 +335,14 @@ private void showTopDialogNotification(String profilePic, String username, Strin
 
     // Hiển thị Dialog
     dialog.show();
+
     // Đặt kích thước cho Dialog
     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
     // Đặt màu nền cho Dialog là trong suốt
     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     // Đặt hiệu ứng cho Dialog
     dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_in_notification;
-    // Đặt vị trí cho Dialog ở phía dưới
+    // Đặt vị trí cho Dialog ở phía trên
     dialog.getWindow().setGravity(Gravity.TOP);
 }
 @Override
@@ -344,10 +404,22 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
         textViewLocation.setText(location);
         btnSaveAddress.setOnClickListener(view -> {
             //edit address on firebase firestore
-            editAddress(editTextAddress.getText().toString());
+            editAddress(editTextAddress.getText().toString(),"address");
             Toast.makeText(MainRestaurantActivity.this,"Save Address",Toast.LENGTH_SHORT).show();
         });
         btnGetLocation.setOnClickListener(view -> {
+            // Kiểm tra và yêu cầu quyền truy cập vị trí
+            if (ActivityCompat.checkSelfPermission(MainRestaurantActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            } else {
+                // Request location permission if not granted
+                ActivityCompat.requestPermissions(MainRestaurantActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+            }
+            //
+            editAddress(locationRestaurant,"location");
+
+
+
             Toast.makeText(MainRestaurantActivity.this,"Get Location",Toast.LENGTH_SHORT).show();
         });
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
@@ -392,11 +464,11 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-    void editAddress(String address){
+    void editAddress(String address, String type){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> data = new HashMap<>();
-        data.put("address", address);
+        data.put(type, address);
 
         db.collection("restaurant").document(accountId)
                 .update(data)

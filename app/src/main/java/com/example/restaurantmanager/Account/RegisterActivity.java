@@ -93,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password2 = textPassword3.getText().toString();
         String phone = textPhone.getText().toString();
         String location = "";
+        String address = "";
         String profilePic = "";
 
         String type = "";
@@ -134,6 +135,7 @@ public class RegisterActivity extends AppCompatActivity {
                         databaseReference.child("user").child(uid).child("email").setValue(email);
                         databaseReference.child("user").child(uid).child("location").setValue(location);
                         databaseReference.child("user").child(uid).child("profilePic").setValue(profilePic);
+                        databaseReference.child("user").child(uid).child("address").setValue(address);
 
                         // thêm thông tin người dùng vào firestore  dựa vào uid
                         Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
@@ -146,6 +148,7 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("email", email);
                         user.put("location", location);
                         user.put("profilePic", profilePic);
+                        user.put("address", address);
 
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
@@ -176,6 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
                         databaseReference.child("user").child(uid).child("email").setValue(email);
                         databaseReference.child("user").child(uid).child("location").setValue(location);
                         databaseReference.child("user").child(uid).child("profilePic").setValue(profilePic);
+                        databaseReference.child("user").child(uid).child("address").setValue(address);
                         // thêm thông tin người dùng vào firestore  dựa vào uid
                         Toast.makeText(RegisterActivity.this, uid, Toast.LENGTH_SHORT).show();
                         // thêm thông tin người dùng vào firestore collection là restaurant dựa vào uid
@@ -190,7 +194,6 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("location", location);
                         user.put("address", "");
                         user.put("profilePic", profilePic);
-
                         user.put("menuRestaurant", new HashMap<String, MenuRestaurant>());
 
 //                        // thêm thông tin menu vào firestore document uid của người dùng

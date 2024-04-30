@@ -120,6 +120,10 @@ public class HomeClientFragment extends Fragment {
         });
     }
 
+    /**
+     * Hàm lấy thông tin nhà hàng từ firebase
+     *
+     */
     void getRestaurant() {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -133,12 +137,21 @@ public class HomeClientFragment extends Fragment {
 //                    Restaurant restaurant = document.toObject(Restaurant.class);
                     String phone = document.getString("phone");
                     String username = document.getString("username");
+                    String address = document.getString("address");
+                    String location = document.getString("location");
+                    String image = document.getString("profilePic");
+                    //tách chuỗi location
+                    String[] arr = location.split("_");
+                    double latitude = Double.parseDouble(arr[0]);
+                    double longitude = Double.parseDouble(arr[1]);
 //                    String description = document.getString("description");
                     //tableMax type is number
-                    Long tableMax = document.getLong("tableMax");
+                    Long tableMax = document.getLong("idTableMax");
                     Long idMax = document.getLong("idMax");
+
+                    System.out.println("restaurant________" + tableMax + idMax + phone + username + address + location);
                     if (tableMax != null && idMax != null) {
-                        Restaurant restaurant = new Restaurant(tableMax.intValue(), idMax.intValue(), phone, username);
+                        Restaurant restaurant = new Restaurant(tableMax.intValue(), idMax.intValue(), phone, username,"description", address, location, image);
                         restaurantList.add(restaurant);
                     }else {
                         Restaurant restaurant = new Restaurant(0, 0, phone, username);

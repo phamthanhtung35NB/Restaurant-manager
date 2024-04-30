@@ -18,6 +18,7 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import model.MyLocation;
 
 import android.Manifest;
 import android.content.Context;
@@ -57,29 +58,29 @@ import java.net.URLEncoder;
 import java.util.List;
 
 public class MapActivity extends AppCompatActivity {
-    // 1. Get the current location of the user
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private MapView map = null;
-    private GeoPoint restaurantLocation;
-    IMapController mapController;
-    private List<MyLocation> locations;
-    private Location currentLocation;
+    // Khai báo các biến cần thiết
+    private LocationManager locationManager; // Quản lý vị trí
+    private LocationListener locationListener; // Lắng nghe thay đổi vị trí
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1; // Mã yêu cầu quyền
+    private MapView map = null; // Bản đồ
+    private GeoPoint restaurantLocation; // Vị trí nhà hàng
+    IMapController mapController; // Điều khiển bản đồ
+    private List<MyLocation> locations; // Danh sách các vị trí
+    private Location currentLocation; // Vị trí hiện tại
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_map);
         Context ctx = getApplicationContext();
 
+        // Khởi tạo các thành phần giao diện
         Button buttonLocation = findViewById(R.id.button_location);
         EditText editTextLocation = findViewById(R.id.edittext_location);
         Button buttonSearch = findViewById(R.id.button_search);
         Button buttonDirections = findViewById(R.id.button_directions);
 
+        // Cấu hình bản đồ
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
         map = (MapView) findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -87,17 +88,17 @@ public class MapActivity extends AppCompatActivity {
         map.setMultiTouchControls(true);
         mapController = map.getController();
         mapController.setZoom(9.5);
-        //lấy vị trí hiện tại của người dùng
 
-
+        // Đặt điểm bắt đầu cho bản đồ
         GeoPoint startPoint = new GeoPoint(21.028511, 105.804817);
         mapController.setCenter(startPoint);
-        //add a compass overlay
+
+        // Thêm hiển thị la bàn vào bản đồ
         CompassOverlay compassOverlay = new CompassOverlay(this, map);
         compassOverlay.enableCompass();
         map.getOverlays().add(compassOverlay);
 
-        System.out.println("MapActivity.onCreate");
+        // Yêu cầu quyền nếu cần thiết
         requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
                 // Manifest.permission.ACCESS_FINE_LOCATION,
@@ -105,25 +106,21 @@ public class MapActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
 
-
-
-
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-//        }
+        // Cấu hình cho việc hiển thị đầy đủ màn hình
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Khởi tạo quản lý vị trí và lắng nghe thay đổi vị trí
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                currentLocation = location; // Update currentLocation here
+                currentLocation = location; // Cập nhật vị trí hiện tại
                 GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-                mapController.setCenter(startPoint);
+                mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
             }
 
             // Override other methods as needed
@@ -136,50 +133,31 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onProviderDisabled(String provider) {}
         };
+        // Kiểm tra và yêu cầu quyền truy cập vị trí
         if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } else {
             // Request location permission if not granted
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
         }
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+
+        // Khởi tạo danh sách các vị trí và thêm marker vào bản đồ
         locations = new ArrayList<>();
         locations.add(new MyLocation(new GeoPoint(21.028511, 105.804817), "Hanoi"));
         locations.add(new MyLocation(new GeoPoint(21.0382323, 105.7826399), "uet"));
-        // Add markers to the map
         for (MyLocation location : locations) {
             Marker marker = new Marker(map);
             marker.setPosition(location.getGeoPoint());
             marker.setTitle(location.getName());
             marker.setOnMarkerClickListener((marker1, mapView) -> {
-
-                    restaurantLocation = marker1.getPosition();
-                    // Show a toast with the name of the location
-                    Toast.makeText(MapActivity.this, location.getName(), Toast.LENGTH_SHORT).show();
-
-                    // Set the distance to the EditText
-
-                // Calculate the distance
-//                float[] results = new float[1];
-//                Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(), marker1.getPosition().getLatitude(), marker1.getPosition().getLongitude(), results);
-//                float distanceInMeters = results[0];
-//                Toast.makeText(MapActivity.this, "Distance: " + distanceInMeters + " meters", Toast.LENGTH_SHORT).show();
-
-//                // Add a button to navigate
-//                Button navigateButton = new Button(MapActivity.this);
-//                navigateButton.setText("Navigate");
-//                navigateButton.setOnClickListener(v -> {
-//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + marker1.getPosition().getLatitude() + "," + marker1.getPosition().getLongitude());
-//                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//                    mapIntent.setPackage("com.google.android.apps.maps");
-//                    startActivity(mapIntent);
-//                });
-
+                restaurantLocation = marker1.getPosition(); // Cập nhật vị trí nhà hàng
+                Toast.makeText(MapActivity.this, location.getName(), Toast.LENGTH_SHORT).show(); // Hiển thị tên vị trí
                 return true;
             });
-            map.getOverlays().add(marker);
+            map.getOverlays().add(marker); // Thêm marker vào bản đồ
         }
 
+        // Đặt sự kiện cho các nút
         buttonLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,7 +166,7 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public void onLocationChanged(Location location) {
                         GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-                        mapController.setCenter(startPoint);
+                        mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
                     }
 
                     // Override other methods as needed
@@ -202,7 +180,6 @@ public class MapActivity extends AppCompatActivity {
                     public void onProviderDisabled(String provider) {}
                 };
                 if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 } else {
                     // Request location permission if not granted
@@ -218,17 +195,12 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
+        // Đặt sự kiện cho nút chỉ đường
         buttonDirections.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (restaurantLocation != null) {
-                    // Open Google Maps with the coordinates of searchedLocation in "Show location" mode
-                    // and mark the location
-//                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + restaurantLocation.getLatitude() + "," + restaurantLocation.getLongitude());//chọn phương tiện đi lại
-//                    Uri gmmIntentUri = Uri.parse("google.navigation:q=" + searchedLocation.getLatitude() + "," + searchedLocation.getLongitude() + "&mode=d");
-
                     Uri gmmIntentUri = Uri.parse("google.navigation:q=" + restaurantLocation.getLatitude() + "," + restaurantLocation.getLongitude() + "&mode=d");//xe máy
-
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");
                     startActivity(mapIntent);
@@ -239,151 +211,83 @@ public class MapActivity extends AppCompatActivity {
         });
     }
 
-    private void searchLocation(String location) {
-        // Implement your method to search for the location
-        // For example, you can use a geocoding API to get the latitude and longitude of the location
-        // Then, you can create a GeoPoint with these coordinates and set it as the center of the map
-        // Don't forget to save the GeoPoint in the searchedLocation variable
-//        new Thread(() -> {
-//            try {
-//                String urlString = "https://nominatim.openstreetmap.org/search?format=json&q=" + URLEncoder.encode(location, "UTF-8");
-//                URL url = new URL(urlString);
-//
-//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-//                String line;
-//                StringBuilder response = new StringBuilder();
-//                while ((line = reader.readLine()) != null) {
-//                    response.append(line);
-//                }
-//                reader.close();
-//
-//                JSONArray jsonArray = new JSONArray(response.toString());
-//                if (jsonArray.length() > 0) {
-//                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-//                    double lat = jsonObject.getDouble("lat");
-//                    double lon = jsonObject.getDouble("lon");
-//
-//                    searchedLocation = new GeoPoint(lat, lon);
-//                    runOnUiThread(() -> mapController.setCenter(searchedLocation));
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-    }
+    /**
+     * Hàm tìm kiếm vị trí
+     * @param encoded vị trí cần tìm
+     *
+     * @return List<GeoPoint> danh sách các vị trí
+     */
+    private List<GeoPoint> decodePolyline(String encoded) {
+        List<GeoPoint> poly = new ArrayList<>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
 
-    private void getDirections(GeoPoint destination) {
-        // Implement your method to get directions to the destination
-        // You can use a routing API to get a route from the current location to the destination
-        // Then, you can display this route on the map
-        // Create a new thread to perform the network request
-    new Thread(() -> {
-        try {
-            if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                runOnUiThread(() -> Toast.makeText(MapActivity.this, "Location permission is required", Toast.LENGTH_SHORT).show());
-                return;
-            }
+        // Duyệt qua từng ký tự trong chuỗi đã mã hóa
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                // Chuyển đổi ký tự thành số nguyên và thêm vào kết quả
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            // Tính toán độ vĩ độ
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
 
-            Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (currentLocation == null) {
-                runOnUiThread(() -> Toast.makeText(MapActivity.this, "Current location not available", Toast.LENGTH_SHORT).show());
-                return;
-            }
+            shift = 0;
+            result = 0;
+            do {
+                // Tương tự như trên, tính toán độ kinh độ
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
 
-            String urlString = "http://router.project-osrm.org/route/v1/driving/" + currentLocation.getLongitude() + "," + currentLocation.getLatitude() + ";" + destination.getLongitude() + "," + destination.getLatitude() + "?overview=full";
-            URL url = new URL(urlString);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line;
-            StringBuilder response = new StringBuilder();
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
-
-            JSONObject jsonObject = new JSONObject(response.toString());
-            JSONArray routes = jsonObject.getJSONArray("routes");
-            if (routes.length() > 0) {
-                JSONObject route = routes.getJSONObject(0);
-                String geometry = route.getString("geometry");
-
-                // Decode the polyline and create a list of GeoPoints
-                List<GeoPoint> geoPoints = decodePolyline(geometry);
-                Polyline polyline = new Polyline();
-                polyline.setPoints(geoPoints);
-
-                runOnUiThread(() -> map.getOverlayManager().add(polyline));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            // Tạo một điểm GeoPoint từ độ vĩ và độ kinh độ đã tính toán
+            GeoPoint p = new GeoPoint(((double) lat / 1E5), ((double) lng / 1E5));
+            poly.add(p); // Thêm điểm vào danh sách
         }
-    }).start();
-}
 
-private List<GeoPoint> decodePolyline(String encoded) {
-    List<GeoPoint> poly = new ArrayList<>();
-    int index = 0, len = encoded.length();
-    int lat = 0, lng = 0;
-
-    while (index < len) {
-        int b, shift = 0, result = 0;
-        do {
-            b = encoded.charAt(index++) - 63;
-            result |= (b & 0x1f) << shift;
-            shift += 5;
-        } while (b >= 0x20);
-        int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-        lat += dlat;
-
-        shift = 0;
-        result = 0;
-        do {
-            b = encoded.charAt(index++) - 63;
-            result |= (b & 0x1f) << shift;
-            shift += 5;
-        } while (b >= 0x20);
-        int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-        lng += dlng;
-
-        GeoPoint p = new GeoPoint(((double) lat / 1E5), ((double) lng / 1E5));
-        poly.add(p);
+        return poly; // Trả về danh sách các điểm
     }
 
-    return poly;
-}
     @Override
     public void onResume() {
         super.onResume();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
-        map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
+        // Cập nhật cấu hình osmdroid khi tiếp tục
+        map.onResume(); // Cần thiết cho la bàn, các lớp vị trí của tôi, v6.0.0 trở lên
     }
-
 
     @Override
     public void onPause() {
         super.onPause();
-        //this will refresh the osmdroid configuration on resuming.
-        //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().save(this, prefs);
-        map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+        // Lưu cấu hình osmdroid khi tạm dừng
+        map.onPause();  // Cần thiết cho la bàn, các lớp vị trí của tôi, v6.0.0 trở lên
     }
 
+    /**
+     * Hàm xử lý kết quả yêu cầu quyền
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults); // Call super method here
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults); // Gọi phương thức super ở đây
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (int i = 0; i < grantResults.length; i++) {
+            // Nếu quyền bị từ chối, thêm vào danh sách yêu cầu quyền
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 permissionsToRequest.add(permissions[i]);
             }
         }
         if (!permissionsToRequest.isEmpty()) {
+            // Nếu ứng dụng cần quyền vị trí và lưu trữ để hoạt động đúng cách
             Toast.makeText(this, "This app needs location and storage permissions to work properly.", Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(
                     this,
@@ -392,17 +296,21 @@ private List<GeoPoint> decodePolyline(String encoded) {
         }
     }
 
+    /**
+     * Hàm yêu cầu quyền nếu cần thiết
+     * @param permissions danh sách quyền cần yêu cầu
+     */
     private void requestPermissionsIfNecessary(String[] permissions) {
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (String permission : permissions) {
+            // Nếu quyền chưa được cấp, thêm vào danh sách yêu cầu quyền
             if (ContextCompat.checkSelfPermission(this, permission)
                     != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
                 permissionsToRequest.add(permission);
             }
         }
         if (permissionsToRequest.size() > 0) {
-            // If the location permission is not granted, show a message to the user
+            // Nếu quyền vị trí chưa được cấp, hiển thị thông báo cho người dùng
             if (permissionsToRequest.contains(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 Toast.makeText(this, "This app needs the location permission to show your current location.", Toast.LENGTH_LONG).show();
             }
@@ -411,22 +319,5 @@ private List<GeoPoint> decodePolyline(String encoded) {
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
-    }
-}
-class MyLocation {
-    private GeoPoint location;
-    private String name;
-
-    public MyLocation(GeoPoint location, String name) {
-        this.location = location;
-        this.name = name;
-    }
-
-    public GeoPoint getGeoPoint() {
-        return location;
-    }
-
-    public String getName() {
-        return name;
     }
 }

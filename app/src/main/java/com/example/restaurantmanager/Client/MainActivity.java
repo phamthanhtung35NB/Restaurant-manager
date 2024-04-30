@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,7 +73,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    // Tạo một Dialog mới
+    Dialog dialog;
     FloatingActionButton fab;
     DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -320,7 +322,17 @@ public class MainActivity extends AppCompatActivity {
                                     System.out.println("content: "+content);
                                     boolean isSeen = snapshot.child("clientSeen").getValue(Boolean.class);
                                     if (!isSeen&&!fragmentCurrent.equals("ListMessagesFragment")) {
-                                        showTopDialogNotification(profilePic, username, content,otherUid,accountId);
+                                        if (dialog != null && dialog.isShowing()) {
+                                            dialog.dismiss();
+                                            MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.nofi);
+                                            mediaPlayer.start();
+                                            showTopDialogNotification(profilePic, username, content,otherUid,accountId);
+                                        }else {
+                                            // Phát âm thanh thông báo
+                                            MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.nofi);
+                                            mediaPlayer.start();
+                                            showTopDialogNotification(profilePic, username, content,otherUid,accountId);
+                                        }
                                     }
 
                                 }
@@ -342,8 +354,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId) {
-        // Tạo một Dialog mới
-        final Dialog dialog = new Dialog(this);
+        // Tạo một Dialog
+        dialog = new Dialog(this);
         // Yêu cầu không hiển thị tiêu đề cho Dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // Đặt layout cho Dialog từ file XML

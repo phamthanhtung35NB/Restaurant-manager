@@ -53,4 +53,10 @@
     <string name="message_notification">Tin Nhắn</string>
     <string name="message_notification_content">Nội Dung</string>
     <string name="message_from">Từ</string>
+    <string name="exit_">Thoát</string>
+    <string name="cancel_">Hủy Bỏ</string>
+    <string name="ok_">Được</string>
+    <string name="Directions_on_map">Chỉ Đường</string>
+    <string name="call_">Gọi Điện</string>
+    <string name="message_">Nhắn Tin</string>
 </resources>

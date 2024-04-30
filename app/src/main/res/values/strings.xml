@@ -40,4 +40,11 @@
     <string name="message_notification">Message</string>
     <string name="message_notification_content">Content</string>
     <string name="message_from">From</string>
+    <string name="exit_">Exit</string>
+    <string name="cancel_">Cancel</string>
+    <string name="ok_">OK</string>
+    <string name="Directions_on_map">Directions On Map</string>
+    <string name="call_">Call</string>
+    <string name="message_">Message</string>
+
 </resources>
