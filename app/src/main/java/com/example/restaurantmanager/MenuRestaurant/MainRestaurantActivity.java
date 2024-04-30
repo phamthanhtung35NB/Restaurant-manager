@@ -397,14 +397,23 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Button btnSaveAddress = dialog.findViewById(R.id.btnSaveAddress);
         TextView textViewLocation = dialog.findViewById(R.id.textViewLocation);
         Button btnGetLocation = dialog.findViewById(R.id.btnGetLocation);
+        Button btnSaveDescription = dialog.findViewById(R.id.btnSaveDescription);
+        EditText textViewDescription = dialog.findViewById(R.id.textViewDescription);
         SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
         String address = sharedPreferences.getString("address", "");
         String location = sharedPreferences.getString("location", "");
+        String description = sharedPreferences.getString("description", "");
         editTextAddress.setText(address);
         textViewLocation.setText(location);
+        textViewDescription.setText(description);
         btnSaveAddress.setOnClickListener(view -> {
             //edit address on firebase firestore
             editAddress(editTextAddress.getText().toString(),"address");
+            //set data sharedpreferences address
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("address", editTextAddress.getText().toString());
+            editor.apply();
+            editTextAddress.setText(editTextAddress.getText().toString());
             Toast.makeText(MainRestaurantActivity.this,"Save Address",Toast.LENGTH_SHORT).show();
         });
         btnGetLocation.setOnClickListener(view -> {
@@ -417,10 +426,22 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
             }
             //
             editAddress(locationRestaurant,"location");
-
-
-
+            //set data sharedpreferences location
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("location", locationRestaurant);
+            editor.apply();
+            textViewLocation.setText(locationRestaurant);
             Toast.makeText(MainRestaurantActivity.this,"Get Location",Toast.LENGTH_SHORT).show();
+        });
+        btnSaveDescription.setOnClickListener(view -> {
+            //edit address on firebase firestore
+            editAddress(textViewDescription.getText().toString(),"description");
+            //set data sharedpreferences description
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("description", textViewDescription.getText().toString());
+            editor.apply();
+            textViewDescription.setText(textViewDescription.getText().toString());
+            Toast.makeText(MainRestaurantActivity.this,"Save Description",Toast.LENGTH_SHORT).show();
         });
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             darkModeSwitch.setChecked(true);

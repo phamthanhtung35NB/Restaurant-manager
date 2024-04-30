@@ -24,185 +24,198 @@
             android:background="@drawable/bg_yellow_corner_16_top"
             android:gravity="center"
             android:padding="12dp"
-            android:text="Hải sản tươi ngon"
+            android:text="name"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/restaurant_item_click"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="4dp"
-            android:gravity="center|top"
-            android:orientation="vertical"
-            android:outlineProvider="background">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/logo"
-                android:layout_width="162dp"
-                android:layout_height="156dp"
-                app:srcCompat="@drawable/account" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical" >
 
                 <LinearLayout
+                    android:id="@+id/restaurant_item_click"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:elevation="4dp"
+                    android:gravity="center|top"
+                    android:orientation="vertical"
+                    android:outlineProvider="background">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/item_background_text"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/number_of_dishes"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="17sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/table_empty"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="17sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/idMax"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="17sp" />
-
-                            <TextView
-                                android:id="@+id/idTableMax"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="17sp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/logo"
+                        android:layout_width="162dp"
+                        android:layout_height="156dp"
+                        app:srcCompat="@drawable/account" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/item_background_text"
                             android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/restaurant_address"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="17sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:id="@+id/address"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textSize="17sp" />
-
-                            <Button
-                                android:id="@+id/btnDirection"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:drawableRight="@drawable/osm_ic_center_map"
-                                android:text="@string/Directions_on_map" />
-                        </LinearLayout>
+                                android:background="@drawable/item_background_text"
+                                android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/item_background_text"
-                            android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/phone_number"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="17sp"
-                                android:textStyle="bold" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/number_of_dishes"
+                                        android:textColor="?attr/colorOnSurface"
+                                        android:textSize="17sp"
+                                        android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/phone"
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/table_empty"
+                                        android:textColor="?attr/colorOnSurface"
+                                        android:textSize="17sp"
+                                        android:textStyle="bold" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/idMax"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="17sp" />
+
+                                    <TextView
+                                        android:id="@+id/idTableMax"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="17sp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="17sp" />
+                                android:orientation="vertical">
 
-                            <Button
-                                android:id="@+id/btnCall"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:drawableRight="@android:drawable/ic_menu_call"
-                                android:text="@string/call_" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/item_background_text"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/restaurant_address"
+                                        android:textColor="?attr/colorOnSurface"
+                                        android:textSize="17sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/address"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="17sp" />
+
+                                    <Button
+                                        android:id="@+id/btnDirection"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:drawableRight="@drawable/osm_ic_center_map"
+                                        android:text="@string/Directions_on_map" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/item_background_text"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/phone_number"
+                                        android:textColor="?attr/colorOnSurface"
+                                        android:textSize="17sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/phone"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="17sp" />
+
+                                    <Button
+                                        android:id="@+id/btnCall"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="50dp"
+                                        android:drawableRight="@android:drawable/ic_menu_call"
+                                        android:text="@string/call_" />
+                                </LinearLayout>
+
+                            </LinearLayout>
                         </LinearLayout>
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/item_background_text"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="Mô tả @drawable /item_background_text__blr @drawable/ item_backg round_text__blr@ drawable/item_ backgroun @drawable/item_background _text__blrd_text__blr"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textStyle="italic|bold" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingTop="10dp">
+
+                    <Button
+                        android:id="@+id/btnCancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/item_background_text__blr"
+                        android:text="@string/cancel_" />
+
+                    <!--            <Button-->
+                    <!--                android:id="@+id/btnClose"-->
+                    <!--                android:layout_width="match_parent"-->
+                    <!--                android:layout_height="wrap_content"-->
+                    <!--                android:layout_weight="1"-->
+                    <!--                android:backgroundTint="#337BC8"-->
+                    <!--                android:text="Lưu" />-->
+                </LinearLayout>
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/item_background_text__blr"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:paddingBottom="10dp"
-                android:text="Mô tả @drawable /item_background_text__blr @drawable/ item_backg round_text__blr@ drawable/item_ backgroun @drawable/item_background _text__blrd_text__blr"
-                android:textColor="?attr/colorOnSurface"
-                android:textStyle="italic|bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="#8E8C98"
-                android:text="@string/cancel_" />
-
-<!--            <Button-->
-<!--                android:id="@+id/btnClose"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_weight="1"-->
-<!--                android:backgroundTint="#337BC8"-->
-<!--                android:text="Lưu" />-->
-        </LinearLayout>
+        </ScrollView>
 
     </LinearLayout>
 

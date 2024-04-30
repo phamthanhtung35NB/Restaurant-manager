@@ -106,8 +106,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         }else {
             logo.setImageResource(R.drawable.account);
         }
-        idMax.setText(idMenuMax_);
-        idTableMax.setText(idTableMax_);
+        //set data
+        // chuyển idMax_ và idTableMax_ sang String
+        idMax.setText(String.valueOf(idMenuMax_));
+        idTableMax.setText(String.valueOf(idTableMax_));
         address.setText(address_);
         phone.setText(phone_);
         description.setText(description_);

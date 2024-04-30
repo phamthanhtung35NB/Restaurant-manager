@@ -140,6 +140,7 @@ public class HomeClientFragment extends Fragment {
                     String address = document.getString("address");
                     String location = document.getString("location");
                     String image = document.getString("profilePic");
+                    String description = document.getString("description");
                     //tách chuỗi location
                     String[] arr = location.split("_");
                     double latitude = Double.parseDouble(arr[0]);
@@ -151,7 +152,7 @@ public class HomeClientFragment extends Fragment {
 
                     System.out.println("restaurant________" + tableMax + idMax + phone + username + address + location);
                     if (tableMax != null && idMax != null) {
-                        Restaurant restaurant = new Restaurant(tableMax.intValue(), idMax.intValue(), phone, username,"description", address, location, image);
+                        Restaurant restaurant = new Restaurant(tableMax.intValue(), idMax.intValue(), phone, username,description, address, location, image);
                         restaurantList.add(restaurant);
                     }else {
                         Restaurant restaurant = new Restaurant(0, 0, phone, username);

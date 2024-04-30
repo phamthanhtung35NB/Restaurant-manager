@@ -46,5 +46,5 @@
     <string name="Directions_on_map">Directions On Map</string>
     <string name="call_">Call</string>
     <string name="message_">Message</string>
-
+    <string name="save_description">Save Description</string>
 </resources>

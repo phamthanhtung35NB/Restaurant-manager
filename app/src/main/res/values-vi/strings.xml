@@ -59,4 +59,5 @@
     <string name="Directions_on_map">Chỉ Đường</string>
     <string name="call_">Gọi Điện</string>
     <string name="message_">Nhắn Tin</string>
+    <string name="save_description">Lưu Mô Tả</string>
 </resources>

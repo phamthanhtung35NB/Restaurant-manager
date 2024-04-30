@@ -187,4 +187,53 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:backgroundTint="#00000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="#00000000"
+            android:src="@drawable/baseline_edit_calendar_24" />
+
+        <LinearLayout
+            android:layout_width="233dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/textViewDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:ellipsize="end"
+                android:singleLine="false"
+                android:gravity="center|left"
+                android:inputType="text"
+                android:text="Mô tả"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnSaveDescription"
+                android:layout_width="118dp"
+                android:layout_height="37dp"
+                android:layout_marginTop="3dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/save_description"
+                android:textSize="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

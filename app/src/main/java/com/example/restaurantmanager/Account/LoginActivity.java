@@ -241,6 +241,7 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString("address", document.getString("address"));
                     editor.putString("location", document.getString("location"));
                     editor.putString("profilePic", document.getString("profilePic"));
+                    editor.putString("description", document.getString("description"));
                     editor.putString("type", "restaurant");
                     editor.putString("uid", uid);
                     editor.apply();
