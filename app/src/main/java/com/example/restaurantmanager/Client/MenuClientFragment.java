@@ -45,7 +45,7 @@ public class MenuClientFragment extends Fragment {
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
     TextView textViewInformation;
-    ImageButton imageButtonGioHang;
+    ImageButton imageButtonThanhToan;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -75,7 +75,7 @@ public class MenuClientFragment extends Fragment {
         textViewInformation = view.findViewById(R.id.textViewInformation);
         textViewInformation.setText(URL);
         listViewClient = view.findViewById(R.id.listViewClient);
-        imageButtonGioHang = view.findViewById(R.id.imageButtonGioHang);
+        imageButtonThanhToan = view.findViewById(R.id.imageButtonThanhToan);
         dataMenuViewClient = new ArrayList<>();
         MainActivity.isCheckQR= true;
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
@@ -86,7 +86,8 @@ public class MenuClientFragment extends Fragment {
     }
 
     void addEvents(View view) {
-        imageButtonGioHang.setOnClickListener(v -> {
+        //button GIỎ HÀNG
+        imageButtonThanhToan.setOnClickListener(v -> {
             // Tạo một Bundle để chứa dữ liệu
             Bundle bundle = new Bundle();
             bundle.putString("url", URL);
