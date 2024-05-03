@@ -54,20 +54,21 @@ public class StatisticalFragment extends Fragment {
         textViewToday = view.findViewById(R.id.textViewToday);
         textViewWeek = view.findViewById(R.id.textViewWeek);
         textViewMonth = view.findViewById(R.id.textViewMonth);
-        initChart(view);
-        initLineChart(view);
+        initChartColumn(view);
+        initChartLine(view);
         System.out.println("show chart");
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("dataLogin", getActivity().MODE_PRIVATE);
         accountId = sharedPreferences.getString("uid", "");
 
-            String dayTam0 = HistoryRestaurant.getDay(6);
-            String dayTam1 = HistoryRestaurant.getDay(5);
-            String dayTam2 = HistoryRestaurant.getDay(4);
-            String dayTam3 = HistoryRestaurant.getDay(3);
-            String dayTam4 = HistoryRestaurant.getDay(2);
-            String dayTam5 = HistoryRestaurant.getDay(1);
-            String dayTam6 = HistoryRestaurant.getDay(0);
-            xValues = Arrays.asList(dayTam0, dayTam1, dayTam2, dayTam3, dayTam4, dayTam5, dayTam6);
+//        // Lấy dữ liệu từ Firebase
+//        String dayTam0 = HistoryRestaurant.getDay(6);
+//        String dayTam1 = HistoryRestaurant.getDay(5);
+//        String dayTam2 = HistoryRestaurant.getDay(4);
+//        String dayTam3 = HistoryRestaurant.getDay(3);
+//        String dayTam4 = HistoryRestaurant.getDay(2);
+//        String dayTam5 = HistoryRestaurant.getDay(1);
+//        String dayTam6 = HistoryRestaurant.getDay(0);
+//        xValues = Arrays.asList(dayTam0, dayTam1, dayTam2, dayTam3, dayTam4, dayTam5, dayTam6);
 
 
         if (HistoryRestaurant.totalSumDay != 0){
@@ -79,7 +80,7 @@ public class StatisticalFragment extends Fragment {
         if (HistoryRestaurant.totalSumMonth != 0){
             tongSumMonth = HistoryRestaurant.totalSumMonth;
         }
-        pushdataTo(accountId, tongSumMonth, tongSumWeek);
+        pushdataToFirebase(accountId, tongSumMonth, tongSumWeek);
         MainRestaurantActivity.lastFragment = new StatisticalFragment();
         textViewToday.setText(formatNumber(tongSumDay) + " VNĐ");
         textViewWeek.setText(formatNumber(tongSumWeek) + " VNĐ");
@@ -90,7 +91,14 @@ public class StatisticalFragment extends Fragment {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
         return numberFormat.format(number);
     }
-    public void pushdataTo( String accountId, double totalSumMonth, double totalSumWeek){
+
+    /**
+     * Push data to firebase
+     * @param accountId
+     * @param totalSumMonth
+     * @param totalSumWeek
+     */
+    public void pushdataToFirebase( String accountId, double totalSumMonth, double totalSumWeek){
         System.out.println("da vao day");
         System.out.println("accountId: "+accountId);
         System.out.println("totalSumMonth: "+totalSumMonth);
@@ -115,7 +123,7 @@ public class StatisticalFragment extends Fragment {
         return parts[0] + "/" + parts[1];
     }
 
-    void initLineChart(View view){
+    void initChartLine(View view){
         // Khởi tạo biểu đồ
         LineChart lineChartTK = view.findViewById(R.id.lineChartTK);
         // Tắt nhãn trên trục phải
@@ -140,12 +148,20 @@ public class StatisticalFragment extends Fragment {
         yAxis.setAxisLineWidth(1f);
         yAxis.setAxisLineColor(Color.BLACK);
         yAxis.setTextColor(Color.BLACK);
-        int max = (int) (HistoryRestaurant.totalSumMonthMax/100000)+1;
+        int max = (int) (HistoryRestaurant.totalSumMonthMax/500000)+1;
         yAxis.setLabelCount(max);
         // Tạo tập dữ liệu mới và cấu hình màu sắc
         LineDataSet dataSet = new LineDataSet(entries, "VNĐ");
         dataSet.setColor(Color.RED); // Set color for line
+        // set độ rộng của đường
+        dataSet.setLineWidth(2f);
         dataSet.setDrawValues(false); // Hide line values
+
+        // tắt lưới trên trục Y
+        lineChartTK.getAxisLeft().setDrawGridLines(false);
+        // tắt lưới trên trục X
+        lineChartTK.getXAxis().setDrawGridLines(false);
+
 
         // Tạo dữ liệu cho biểu đồ và thiết lập dữ liệu
         LineData lineData = new LineData(dataSet);
@@ -173,10 +189,11 @@ public class StatisticalFragment extends Fragment {
         lineChartTK.getXAxis().setGranularityEnabled(true);
 
         // Thêm hiệu ứng hoạt hình cho biểu đồ
-        lineChartTK.animateXY(2000, 2000); // Add animation
+        lineChartTK.animateXY(2500, 2000); // Add animation
     }
 
-    void initChart(View view){
+    // Khởi tạo biểu đồ cột Column Chart
+    void initChartColumn(View view){
         // Khởi tạo biểu đồ
         barChartTK = view.findViewById(R.id.barChartTK);
         // Tắt nhãn trên trục phải
@@ -209,7 +226,7 @@ public class StatisticalFragment extends Fragment {
         yAxis.setAxisLineWidth(1f);
         yAxis.setAxisLineColor(Color.BLACK);
         yAxis.setTextColor(Color.BLACK);
-        int max = (int) (HistoryRestaurant.totalSumWeekMax/100000)+1;
+        int max = (int) (HistoryRestaurant.totalSumWeekMax/500000)+1;
         yAxis.setLabelCount(max);
 
         // Tạo tập dữ liệu mới và cấu hình màu sắc
@@ -239,11 +256,19 @@ public class StatisticalFragment extends Fragment {
         barChartTK.getAxisLeft().setAxisLineWidth(2f);
         barChartTK.getAxisLeft().setAxisLineColor(Color.BLACK);
 
+        //tắt lưới trên trục Y
+        barChartTK.getAxisLeft().setDrawGridLines(false);
+        //tắt lưới trên trục X
+        barChartTK.getXAxis().setDrawGridLines(false);
+        //tắt tất cả các lưới
+        barChartTK.setDrawGridBackground(false);
+
+
         // Cấu hình độ nhỏ nhất giữa các giá trị trên trục X
         barChartTK.getXAxis().setGranularity(1f);
         barChartTK.getXAxis().setGranularityEnabled(true);
 
         // Thêm hiệu ứng hoạt hình cho biểu đồ
-        barChartTK.animateXY(2000, 2000); // Add animation
+        barChartTK.animateXY(1500, 4000); // Add animation
     }
 }

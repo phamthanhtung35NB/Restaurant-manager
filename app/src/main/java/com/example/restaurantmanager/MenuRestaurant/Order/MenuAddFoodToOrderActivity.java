@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +32,8 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
     TextView textViewInformation;
-    ImageButton imageButtonGioHang;
+    ImageButton imageButtonBack;
+    ImageButton imageButtonThanhToan;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -48,9 +50,10 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     void init() {
         System.out.println("đầu init MenuAddFoodToOrderFragment");
         textViewInformation = findViewById(R.id.textViewInformation);
+        imageButtonBack = findViewById(R.id.imageButtonBack);
         textViewInformation.setText(URL);
         listViewClient = findViewById(R.id.listViewClient);
-        imageButtonGioHang = findViewById(R.id.imageButtonGioHang);
+        imageButtonThanhToan = findViewById(R.id.imageButtonThanhToan);
         dataMenuViewClient = new ArrayList<>();
         // get data login
         SharedPreferences sharedPreferences = this.getSharedPreferences("dataLogin", this.MODE_PRIVATE);
@@ -61,7 +64,10 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     }
 
     void addEvents() {
-        imageButtonGioHang.setOnClickListener(v -> {
+        imageButtonThanhToan.setOnClickListener(v -> {
+            Toast.makeText(MenuAddFoodToOrderActivity.this, "Thanh toán", Toast.LENGTH_SHORT).show();
+        });
+        imageButtonBack.setOnClickListener(v -> {
             super.onBackPressed();
         });
     }

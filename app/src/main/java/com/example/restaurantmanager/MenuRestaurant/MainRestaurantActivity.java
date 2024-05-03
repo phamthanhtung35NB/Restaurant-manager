@@ -83,7 +83,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private LocationListener locationListener; // Lắng nghe thay đổi vị trí
     String fragmentCurrent = "";
-    FloatingActionButton fab;
+//    FloatingActionButton fab;
     private BottomNavigationView bottomNavigationView;
     private NavigationView navigationView;
     DrawerLayout drawerLayout;
@@ -109,7 +109,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 //        slideInAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_in)
 //        slideOutAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_out);;
-        fab = findViewById(R.id.fab);
+//        fab = findViewById(R.id.fab);
         drawerLayout = findViewById(R.id.main);
         fragmentContainer = findViewById(R.id.fragment_container);
 
@@ -146,11 +146,11 @@ public class MainRestaurantActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeRestaurantFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StatisticalFragment()).commit();
             navigationView.setCheckedItem(R.id.navHome);
         }
 
-        replaceFragment(new HomeRestaurantFragment(), true);
+        replaceFragment(new StatisticalFragment(), true);
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -169,10 +169,14 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 System.out.println("Setting");
                 showBottomDialogSetting();
 //                replaceFragment(new HomeRestaurantFragment(), false);
-            } else if(itemId == R.id.navHome){
-                fragmentCurrent = "HomeRestaurantFragment";
-                replaceFragment(new HomeRestaurantFragment(), false);
             }
+            else if(itemId == R.id.navStatistical){
+                fragmentCurrent = "StatisticalFragment";
+                replaceFragment(new StatisticalFragment(), false);
+            }
+//            else if(itemId == R.id.navHome){
+//                fragmentCurrent = "HomeRestaurantFragment";
+//                replaceFragment(new HomeRestaurantFragment(), false);}
 
             return true;
         });
@@ -193,7 +197,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
                 //đóng navigation
                 drawerLayout.closeDrawers();
                 fragmentCurrent = "HomeRestaurantFragment";
-                replaceFragment(new HomeRestaurantFragment(), false);
+                replaceFragment(new StatisticalFragment(), false);
             } else if (itemId == R.id.nav_header_settings) {
                 showBottomDialogSetting();
                 drawerLayout.closeDrawers();
@@ -219,13 +223,13 @@ public class MainRestaurantActivity extends AppCompatActivity {
             return true;
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                showBottomDialog();
-                replaceFragment(new HomeRestaurantFragment(), false);
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                showBottomDialog();
+//                replaceFragment(new HomeRestaurantFragment(), false);
+//            }
+//        });
         imageLogoAvatar.setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setType("image/*");

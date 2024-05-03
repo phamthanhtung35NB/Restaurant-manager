@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.restaurantmanager.MenuRestaurant.Menu.AddFoodActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -14,7 +15,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -200,99 +203,97 @@ public class HistoryRestaurant {
     // Đọc tổng bill của ngày hôm đó
     public static long totalSumDay=0;
     public static void readAndSaveSumDay(String accountId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("history").document(accountId).collection(getDay())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot querySnapshot) {
-                        long totalSum = 0;
-                        for (DocumentSnapshot documentSnapshot : querySnapshot) {
-                            if (documentSnapshot.exists()) {
-                                Map<String, Object> accountData = documentSnapshot.getData();
-                                Long sum = (Long) documentSnapshot.getData().get("sum");
+    db.collection("history").document(accountId).collection(getDay())
+            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot querySnapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
 
-                                // Cộng dồn vào biến tổng
-                                if (sum != null) {
-                                    totalSum += sum;
-                                }
-                                Log.d(TAG, "Summmmmmmmmm: " + sum);
-                            } else {
-                                Log.d(TAG, "Tài liệu không tồn tại");
+                    long totalSum = 0;
+                    for (DocumentSnapshot documentSnapshot : querySnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> accountData = documentSnapshot.getData();
+                            Long sum = (Long) documentSnapshot.getData().get("sum");
+
+                            // Cộng dồn vào biến tổng
+                            if (sum != null) {
+                                totalSum += sum;
                             }
-                            totalSumDay = totalSum;
-                            Log.d(TAG, "Total sum: " + totalSum);
+                            Log.d(TAG, "Summmmmmmmmm: " + sum);
+                        } else {
+                            Log.d(TAG, "Tài liệu không tồn tại");
                         }
-                        //lưu tổng bill của ngày hôm đó
-                        Map<String, Object> dataSumDay = new HashMap<>();
-                        dataSumDay.put("sumDay", totalSum);
-                        FirebaseFirestore db2 = FirebaseFirestore.getInstance();
-                        db2.collection("history").document(accountId).collection(getDay()).document("sumDay"+getDay())
-                                .set(dataSumDay)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "Data added successfully for account: " + accountId);
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.e(TAG, "Error adding data for account: " + accountId, e);
-                                    }
-                                });
+                        totalSumDay = totalSum;
+                        Log.d(TAG, "Total sum: " + totalSum);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                    // ... (Mã xử lý lỗi hiện có của bạn)
-                });
-    }
+                    //lưu tổng bill của ngày hôm đó
+                    Map<String, Object> dataSumDay = new HashMap<>();
+                    dataSumDay.put("sumDay", totalSum);
+                    FirebaseFirestore db2 = FirebaseFirestore.getInstance();
+                    db2.collection("history").document(accountId).collection(getDay()).document("sumDay"+getDay())
+                            .set(dataSumDay)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Data added successfully for account: " + accountId);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "Error adding data for account: " + accountId, e);
+                                }
+                            });
+                }
+            });
+}
     // Đọc tổng bill của tuần
     public static long totalSumWeek = 0;
     public static long getTotalSumWeekArray[] = new long[7];
     public static long totalSumWeekMax = 0;
     public static int i = 0;
     public static void readAndSaveSumWeek(String accountId) {
-        FirebaseFirestore db3 = FirebaseFirestore.getInstance();
-        totalSumWeek = 0;
-        System.out.println("totalSumWeek" + totalSumWeek);
-        for (i = 0; i < 7; i++) {
-            String day = getDay(i);
-            final int finalI = i;
-            System.out.println(day);
-            DocumentReference docRef = db3.collection("history").document(accountId).collection(day).document("sumDay" + day);
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    System.out.println("da vao trong");
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-//                            System.out.println("da vao trong 2");
-                            Long sum = (Long) document.get("sumDay");
-                            if (sum != null) {
-                                getTotalSumWeekArray[finalI] = sum;
-                                totalSumWeek += sum;
-                                if (totalSumWeekMax < sum) {
-                                    totalSumWeekMax = sum;
-                                }
-//                                System.out.println("Sum" + sum);
-//                                System.out.println("totalSumWeek" + totalSumWeek);
-                            }
-                        }
-
-                    } else {
-                        Log.d(TAG, "Failed with: ", task.getException());
-                    }
+    FirebaseFirestore db3 = FirebaseFirestore.getInstance();
+    totalSumWeek = 0;
+    System.out.println("totalSumWeek" + totalSumWeek);
+    for (i = 0; i < 7; i++) {
+        String day = getDay(i);
+        final int finalI = i;
+        System.out.println(day);
+        DocumentReference docRef = db3.collection("history").document(accountId).collection(day).document("sumDay" + day);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
                 }
-            });
-        }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Long sum = (Long) snapshot.get("sumDay");
+                    if (sum != null) {
+                        getTotalSumWeekArray[finalI] = sum;
+                        totalSumWeek += sum;
+                        if (totalSumWeekMax < sum) {
+                            totalSumWeekMax = sum;
+                        }
+                        System.out.println("Sum" + sum);
+                        System.out.println("totalSumWeek" + totalSumWeek);
+                    }
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
     }
+}
 
     public static long getTotalSumMonthArray[] = new long[30];
     public static long totalSumMonthMax=0;

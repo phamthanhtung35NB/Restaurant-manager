@@ -1,12 +1,20 @@
 package adapter.Restaurant;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,10 +27,20 @@ import androidx.annotation.Nullable;
 import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import model.MenuRestaurant;
 import model.Table;
 
 public class TableAdapter extends ArrayAdapter<Table> {
@@ -85,16 +103,27 @@ public class TableAdapter extends ArrayAdapter<Table> {
         linearLayoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
-                //add id bàn vào SharedPreferences
-                SharedPreferences sharedPreferences = context.getSharedPreferences("dataTable", context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("idTable", String.valueOf(table.getId()));
-                editor.commit();
-                Intent intent = new Intent(context, OderActivity.class);
                 String qr = ShowTableRestaurantFragment.accountId+"/"+table.getId()+"/order";
-                intent.putExtra("url", qr);
-                context.startActivity(intent);
+                if (table.getStateEmpty().equals("Trống")){
+                    try {
+                        showQR(qr, table.getId(),ShowTableRestaurantFragment.accountId,""+table.getId());
+                    } catch (WriterException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                else {
+                    Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
+                    //add id bàn vào SharedPreferences
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("dataTable", context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("idTable", String.valueOf(table.getId()));
+                    editor.commit();
+                    Intent intent = new Intent(context, OderActivity.class);
+
+                    intent.putExtra("url", qr);
+                    context.startActivity(intent);
+                }
+
 //                //add vào sqlite
 //                MainActivity.dataOrder.add(menuRestaurant);
 ////                Toast.makeText(context, "Thêm thành công", Toast.LENGTH_SHORT).show();
@@ -108,5 +137,92 @@ public class TableAdapter extends ArrayAdapter<Table> {
         return row;
 
     }
+    void showQR(String url,int id,String accountId,String idTable) throws WriterException {
+        QRCodeWriter writer = new QRCodeWriter();
+        final int width = 1000;
+        final int height = 1000;
+        BitMatrix matrix = writer.encode(url, BarcodeFormat.QR_CODE, width, height);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                bitmap.setPixel(i, j, matrix.get(i, j) ? Color.BLACK : Color.WHITE);
+            }
+        }
 
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_center_show_qr);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == Gravity.BOTTOM) {
+            dialog.setCancelable(true);
+        } else {
+            dialog.setCancelable(false);
+        }
+        TextView username = dialog.findViewById(R.id.username);
+        ImageView imageViewQRCode = dialog.findViewById(R.id.imageViewQRCode);
+        //set image
+        imageViewQRCode.setImageBitmap(bitmap);
+//       set username table
+        username.setText("Bàn Số: "+id);
+
+        dialog.show();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(accountId).child(idTable).child("stateEmpty");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String stateEmpty = dataSnapshot.getValue(String.class);
+                if (!stateEmpty.equals("Trống")){
+                    //đóng dialog show qr
+                    dialog.dismiss();
+                    //show dialog thông báo
+                    showDialog(id);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error: " + databaseError.getMessage());
+            }
+        });
+    }
+    public void showDialog(int id){
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.activity_notification_dialog);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == Gravity.BOTTOM) {
+            dialog.setCancelable(true);
+        } else {
+            dialog.setCancelable(false);
+        }
+        TextView tvNotification = dialog.findViewById(R.id.tvNotification);
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+        tvNotification.setText("Bàn "+id+" đã được quét QR thành công!");
+        btnClose.setOnClickListener(v -> {
+            System.out.println("Đóng dialog");
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
 }

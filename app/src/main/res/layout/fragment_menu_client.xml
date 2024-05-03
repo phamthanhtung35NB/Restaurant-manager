@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,6 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageButtonBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_button" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewInformation"
@@ -26,10 +39,10 @@
         </ListView>
 
         <ImageButton
-            android:id="@+id/imageButtonGioHang"
+            android:id="@+id/imageButtonThanhToan"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:src="@android:drawable/ic_menu_today" />
+            android:src="@drawable/baseline_arrow_outward_24" />
     </LinearLayout>
 
 </FrameLayout>

@@ -53,6 +53,7 @@ public class OderActivity extends AppCompatActivity {
     ImageButton imageButtonExit;
     TextView textThongTinBan;
     Button buttonThanhToan;
+    Button btshowQR;
     Button addFood;
 
     public static String accountId = "";
@@ -88,6 +89,7 @@ public class OderActivity extends AppCompatActivity {
         listViewOrder = findViewById(R.id.listViewOrder);
         imageButtonExit = findViewById(R.id.imageButtonExit);
         buttonThanhToan = findViewById(R.id.buttonThanhToan);
+        btshowQR = findViewById(R.id.btshowQR);
         textThongTinBan = findViewById(R.id.textThongTinBan);
         addFood = findViewById(R.id.addFood);
 
@@ -100,9 +102,9 @@ public class OderActivity extends AppCompatActivity {
         accountId = parts[0];
         table = parts[1];
 
-        startChecking();
+//        startChecking();
         textThongTinBan.setText("Bàn số: " + table);
-        showQR();
+//        showQR();
 //        accountId = intent.getStringExtra("uid");
 //        table = intent.getStringExtra("table");
 //        MainActivity.dataOrder = new ArrayList<>();
@@ -113,7 +115,13 @@ public class OderActivity extends AppCompatActivity {
 //            quay về
                 super.onBackPressed();
         });
-
+        btshowQR.setOnClickListener(v -> {
+            try {
+                showQR();
+            } catch (WriterException e) {
+                e.printStackTrace();
+            }
+        });
 
         buttonThanhToan.setOnClickListener(v -> {
 //            Intent intent = new Intent(OderActivity.this, PaymentActivity.class);
@@ -132,10 +140,49 @@ public class OderActivity extends AppCompatActivity {
     /**
      * Hàm hiển thị dialog thông báo
      */
-    public void showDialog(){
+//    public void showDialog(){
+//        final Dialog dialog = new Dialog(this);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.activity_notification_dialog);
+//
+//        Window window = dialog.getWindow();
+//        if (window == null) {
+//            return;
+//        }
+//        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+//        windowAttributes.gravity = Gravity.CENTER;
+//        window.setAttributes(windowAttributes);
+//        if (Gravity.BOTTOM == Gravity.BOTTOM) {
+//            dialog.setCancelable(true);
+//        } else {
+//            dialog.setCancelable(false);
+//        }
+//        Button btnClose = dialog.findViewById(R.id.btnClose);
+//        btnClose.setOnClickListener(v -> {
+//            System.out.println("Đóng dialog");
+//            dialog.dismiss();
+//        });
+//
+//        dialog.show();
+//    }
+
+    void showQR() throws WriterException {
+        QRCodeWriter writer = new QRCodeWriter();
+        final int width = 1000;
+        final int height = 1000;
+        BitMatrix matrix = writer.encode(url, BarcodeFormat.QR_CODE, width, height);
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                bitmap.setPixel(i, j, matrix.get(i, j) ? Color.BLACK : Color.WHITE);
+            }
+        }
+
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.activity_notification_dialog);
+        dialog.setContentView(R.layout.dialog_center_show_qr);
 
         Window window = dialog.getWindow();
         if (window == null) {
@@ -151,28 +198,28 @@ public class OderActivity extends AppCompatActivity {
         } else {
             dialog.setCancelable(false);
         }
-        Button btnClose = dialog.findViewById(R.id.btnClose);
-        btnClose.setOnClickListener(v -> {
-            System.out.println("Đóng dialog");
-            dialog.dismiss();
-        });
+        TextView username = dialog.findViewById(R.id.username);
+        ImageView imageViewQRCode = dialog.findViewById(R.id.imageViewQRCode);
+        //set image
+        imageViewQRCode.setImageBitmap(bitmap);
+//       set username table
+        username.setText("Bàn Số: "+table);
 
         dialog.show();
     }
-
-    void showQR() throws WriterException {
-        QRCodeWriter writer = new QRCodeWriter();
-
-        BitMatrix matrix = writer.encode(url, BarcodeFormat.QR_CODE, width, height);
-        ImageView imageViewQr = findViewById(R.id.imageViewQr);
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                bitmap.setPixel(i, j, matrix.get(i, j) ? Color.BLACK : Color.WHITE);
-            }
-        }
-        imageViewQr.setImageBitmap(bitmap);
-    }
+//    void showQR() throws WriterException {
+//        QRCodeWriter writer = new QRCodeWriter();
+//
+//        BitMatrix matrix = writer.encode(url, BarcodeFormat.QR_CODE, width, height);
+//        ImageView imageViewQr = findViewById(R.id.imageViewQr);
+//        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+//        for (int i = 0; i < width; i++) {
+//            for (int j = 0; j < height; j++) {
+//                bitmap.setPixel(i, j, matrix.get(i, j) ? Color.BLACK : Color.WHITE);
+//            }
+//        }
+//        imageViewQr.setImageBitmap(bitmap);
+//    }
 
     void checkStateEmpty() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -268,50 +315,50 @@ public class OderActivity extends AppCompatActivity {
 //        });
 //    }
 
-    private Handler handler;
-    private Runnable runnable;
-
-    /**
-     * Hàm bắt đầu kiểm tra biến staticBooleanVariable trong OtherClass
-     */
-    void startChecking() {
-        // Khởi tạo Handler và Runnable
-        handler = new Handler();
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                checkVariable();
-                handler.postDelayed(this, 1000);
-            }
-        };
-
-        // Bắt đầu kiểm tra
-        runnable.run();
-    }
-
-    /**
-     * khi Activity bị hủy
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Dừng kiểm tra khi Activity bị hủy
-        handler.removeCallbacks(runnable);
-    }
-
-    /**
-     * Hàm kiểm tra biến staticBooleanVariable trong OtherClass
-     */
-    private void checkVariable() {
-
-            if (MyFirebaseMessagingService.isNotification==true) {
-            // Biến staticBooleanVariable trong OtherClass đang có giá trị true
-            showDialog();
-            System.out.println("có tb mới");
-            MyFirebaseMessagingService.isNotification = false;
-                } else {
-            // Biến staticBooleanVariable trong OtherClass đang có giá trị false
+//    private Handler handler;
+//    private Runnable runnable;
+//
+//    /**
+//     * Hàm bắt đầu kiểm tra biến staticBooleanVariable trong OtherClass
+//     */
+//    void startChecking() {
+//        // Khởi tạo Handler và Runnable
+//        handler = new Handler();
+//        runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                checkVariable();
+//                handler.postDelayed(this, 1000);
+//            }
+//        };
+//
+//        // Bắt đầu kiểm tra
+//        runnable.run();
+//    }
+//
+//    /**
+//     * khi Activity bị hủy
+//     */
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        // Dừng kiểm tra khi Activity bị hủy
+//        handler.removeCallbacks(runnable);
+//    }
+//
+//    /**
+//     * Hàm kiểm tra biến staticBooleanVariable trong OtherClass
+//     */
+//    private void checkVariable() {
+//
+//            if (MyFirebaseMessagingService.isNotification==true) {
+//            // Biến staticBooleanVariable trong OtherClass đang có giá trị true
 //            showDialog();
-        }
-    }
+//            System.out.println("có tb mới");
+//            MyFirebaseMessagingService.isNotification = false;
+//                } else {
+//            // Biến staticBooleanVariable trong OtherClass đang có giá trị false
+////            showDialog();
+//        }
+//    }
 }

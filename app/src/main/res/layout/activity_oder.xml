@@ -25,22 +25,16 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/back_button" />
 
-            <ImageView
-                android:id="@+id/imageViewQr"
-                android:layout_marginStart="60dp"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                tools:srcCompat="@tools:sample/avatars" />
+            <TextView
+                android:id="@+id/textThongTinBan"
+                android:layout_width="300dp"
+                android:layout_height="34dp"
+                android:gravity="center"
+                android:text="Danh sách món đã thêm"
+                android:textColor="#FF0000" />
+
 
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/textThongTinBan"
-            android:layout_width="300dp"
-            android:layout_height="34dp"
-            android:gravity="center"
-            android:text="Danh sách món đã thêm"
-            android:textColor="#FF0000" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,7 +45,16 @@
                 android:id="@+id/addFood"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Thêm món"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <Button
+                android:id="@+id/btshowQR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="QR Code"
                 tools:srcCompat="@tools:sample/avatars" />
 
         </LinearLayout>

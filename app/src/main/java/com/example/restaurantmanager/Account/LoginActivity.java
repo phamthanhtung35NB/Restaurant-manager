@@ -60,6 +60,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import model.HistoryRestaurant;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 //import model.SqliteAccountHelper;
@@ -154,6 +155,15 @@ public class LoginActivity extends AppCompatActivity {
                 if (type.equals("client")) {
                     loginClient(uid);
                 } else if (type.equals("restaurant")) {
+                    //Lấy dữ liệu sum cả ngày từ firebase
+                    HistoryRestaurant.readAndSaveSumDay(uid);
+                    System.out.println("đọc xong ngày");
+                    // lấy dữ liệu sum cả tuần từ firebase
+                    HistoryRestaurant.readAndSaveSumWeek(uid);
+                    System.out.println("đọc xong tuần");
+                    HistoryRestaurant.readAndSaveSumMonth(uid);
+                    System.out.println("đọc xong tháng");
+                    System.out.println("đọc xong");
                     loginRestaurant(uid);
                 }
             }else {
@@ -208,6 +218,15 @@ public class LoginActivity extends AppCompatActivity {
                     if (radioButtonClientLogin.isChecked()) {
                         loginClient(uid);
                     } else if (radioButtonRestaurantLogin.isChecked()) {
+                        //Lấy dữ liệu sum cả ngày từ firebase
+                        HistoryRestaurant.readAndSaveSumDay(uid);
+                        System.out.println("đọc xong ngày");
+                        // lấy dữ liệu sum cả tuần từ firebase
+                        HistoryRestaurant.readAndSaveSumWeek(uid);
+                        System.out.println("đọc xong tuần");
+                        HistoryRestaurant.readAndSaveSumMonth(uid);
+                        System.out.println("đọc xong tháng");
+                        System.out.println("đọc xong");
                         loginRestaurant(uid);
                     } else {
                         Toast.makeText(LoginActivity.this, "Vui lòng chọn loại tài khoản", Toast.LENGTH_SHORT).show();
@@ -228,6 +247,8 @@ public class LoginActivity extends AppCompatActivity {
                 // nếu uid tồn tại trong collection client thì lấy thông tin phone và email của người dùng
                 DocumentSnapshot document = task1.getResult();
                 if (document.exists()) {
+
+
                     String phone = document.getString("phone");
                     String email = document.getString("email");
 

@@ -17,8 +17,9 @@
         android:icon="@drawable/chair"
         android:title="Table" />
     <item
-        android:id="@+id/navHome"
-        android:title=""/>
+        android:id="@+id/navStatistical"
+        android:icon="@drawable/baseline_area_chart_24"
+        android:title="Statistical"/>
     <item
         android:id="@+id/navMessage"
         android:icon="@android:drawable/ic_dialog_email"

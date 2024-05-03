@@ -41,10 +41,11 @@
                     android:textColor="?attr/colorOnSecondary"
                     android:textSize="20sp" />
             </LinearLayout>
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChartTK"
                 android:layout_width="match_parent"
-                android:layout_height="470dp" />
+                android:layout_height="350dp" />
 
             <LinearLayout
                 android:id="@+id/LinearLayoutWeek"
@@ -82,7 +83,7 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChartTK"
                 android:layout_width="match_parent"
-                android:layout_height="460dp" />
+                android:layout_height="350dp" />
 
             <LinearLayout
                 android:id="@+id/LinearLayoutMonth"

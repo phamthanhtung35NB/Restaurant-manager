@@ -41,7 +41,7 @@ import com.example.restaurantmanager.Account.LoginActivity;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.FireBase;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
-import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantFragment;
+
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.R;
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     integrator.setPrompt("Quét mã QR để xem menu");
                     integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
                     integrator.initiateScan();
-                    replaceFragment(new HomeRestaurantFragment(), false);
+//                    replaceFragment(new HomeRestaurantFragment(), false);
                     }
                 }
                 return true;
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
 //            integrator.setCaptureActivity(400);
                 integrator.initiateScan();
-                replaceFragment(new HomeRestaurantFragment(), false);
+//                replaceFragment(new HomeRestaurantFragment(), false);
                 }
             }
         });
