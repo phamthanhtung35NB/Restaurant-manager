@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,8 +69,7 @@ public class MapFragment extends Fragment {
     }
     void init(View view) {
         // Khởi tạo các thành phần giao diện
-        Button buttonLocation = view.findViewById(R.id.button_location);
-        Button buttonDirections = view.findViewById(R.id.button_directions);
+        ImageButton buttonLocation = view.findViewById(R.id.button_location);
 
         // Cấu hình bản đồ
         Configuration.getInstance().load(getActivity(), PreferenceManager.getDefaultSharedPreferences(getActivity()));
@@ -77,6 +77,14 @@ public class MapFragment extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
+        // Thiết lập điều khiển bản đồ
+        // thiết lập  kéo dọc
+        map.setVerticalMapRepetitionEnabled(true);
+        // thiết lập  kéo ngang
+        map.setHorizontalMapRepetitionEnabled(true);
+
+
+
         mapController = map.getController();
         mapController.setZoom(17.5);
         // khởi tạo currentLocation
@@ -175,7 +183,7 @@ public class MapFragment extends Fragment {
 
 
 
-                if (currentLocation != null) {
+                if (currentLocation != null&&currentLocation.getLatitude()!=0&&currentLocation.getLongitude()!=0) {
                     mapController.setZoom(17.5);
                     GeoPoint startPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
                     mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
@@ -188,12 +196,25 @@ public class MapFragment extends Fragment {
         });
 
 
-        if (currentLocation != null) {
+        if (currentLocation != null&&currentLocation.getLatitude()!=0&&currentLocation.getLongitude()!=0) {
             GeoPoint startPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
             mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
         }else {
+            Toast.makeText(getActivity(), "Tín hiệu kém", Toast.LENGTH_SHORT).show();
             GeoPoint startPoint = new GeoPoint( 21.009593333333335, 105.78076333333333);
             mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
+            // Thiết lập vị trí cho Marker này
+            currentLocationMarker.setPosition(startPoint);
+
+            // Thiết lập tiêu đề cho Marker này
+            currentLocationMarker.setTitle("Me Location");
+
+//                        // Thiết lập icon cho Marker này
+            Drawable currentLocationIcon = getResources().getDrawable(android.R.drawable.radiobutton_on_background);
+            currentLocationMarker.setIcon(currentLocationIcon);
+
+            // Thêm Marker này vào bản đồ
+            map.getOverlays().add(currentLocationMarker);
         }
     }
     void addEvents(View view) {

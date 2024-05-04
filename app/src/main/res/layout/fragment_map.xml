@@ -1,48 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="650dp"
+    android:layout_height="600dp"
+    android:backgroundTint="@color/black"
+    android:layout_gravity="center"
+    android:gravity="center"
     tools:context=".Client.MapFragment">
 
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="400dp"
+        android:layout_height="550dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+    </org.osmdroid.views.MapView>
 
 
-                <Button
-                    android:id="@+id/button_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search"
-                    android:layout_below="@id/edittext_location" />
 
-                <Button
-                    android:id="@+id/button_directions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Get Directions"
-                    android:layout_below="@id/button_search" />
-            </LinearLayout>
+    <ImageButton
+        android:id="@+id/button_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/ic_menu_mylocation" />
 
-            <org.osmdroid.views.MapView
-                android:id="@+id/map"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"/>
+    <!--    <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
-            <Button
-                android:id="@+id/button_location"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:text="Get Location" />
-        </LinearLayout>
+<!--    </LinearLayout>-->
 
 
 </FrameLayout>
