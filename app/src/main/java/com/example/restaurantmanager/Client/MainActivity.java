@@ -38,12 +38,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.restaurantmanager.Account.LoginActivity;
+import com.example.restaurantmanager.Client.Messages.ChatFragment;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.FireBase;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
+import com.example.restaurantmanager.MenuRestaurant.Messages.ChatRestaurantFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -306,32 +308,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    final String otherUid = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại
-                    if (!otherUid.equals(accountId) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")) {
-                        DatabaseReference messageRef = databaseReference.child("chat").child(otherUid).child(accountId);//.child("lastMessage");
+                    final String opoUid = dataSnapshot.getKey().trim(); // Lấy khóa của nút con hiện tại
+                    if (!opoUid.equals(accountId) && dataSnapshot.child("type").getValue(String.class).trim().equals("restaurant")) {
+                        DatabaseReference messageRef = databaseReference.child("chat").child(opoUid).child(accountId);//.child("lastMessage");
                         messageRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (snapshot.exists()) {
                                     String profilePic = snapshot.child( "profilePic").getValue(String.class);
-                                    System.out.println("profilePic: "+profilePic);
                                     String username = snapshot.child("restaurant").getValue(String.class);
-                                    System.out.println("username: "+username);
-//                                    String content = snapshot.getValue(String.class);
                                     String content = snapshot.child("lastMessage").getValue(String.class);
-                                    System.out.println("content: "+content);
                                     boolean isSeen = snapshot.child("clientSeen").getValue(Boolean.class);
+                                    SharedPreferences sharedPreferences = getSharedPreferences("dataLogin", MODE_PRIVATE);
+                                    String phone = sharedPreferences.getString("phone", "");
                                     if (!isSeen&&!fragmentCurrent.equals("ListMessagesFragment")) {
                                         if (dialog != null && dialog.isShowing()) {
                                             dialog.dismiss();
                                             MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.nofi);
                                             mediaPlayer.start();
-                                            showTopDialogNotification(profilePic, username, content,otherUid,accountId);
+                                            showTopDialogNotification(profilePic, username, content, opoUid, accountId, phone);
                                         }else {
                                             // Phát âm thanh thông báo
                                             MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.nofi);
                                             mediaPlayer.start();
-                                            showTopDialogNotification(profilePic, username, content,otherUid,accountId);
+                                            showTopDialogNotification(profilePic, username, content, opoUid, accountId, phone);
                                         }
                                     }
 
@@ -353,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId) {
+    private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId, String phone) {
         // Tạo một Dialog
         dialog = new Dialog(this);
         // Yêu cầu không hiển thị tiêu đề cho Dialog
@@ -380,9 +380,25 @@ public class MainActivity extends AppCompatActivity {
         ll.setOnClickListener(view -> {
             //chuyển tới fragment mess
             dialog.dismiss();
-            replaceFragment(new ListMessagesFragment(), false);
-            fragmentCurrent = "ListMessagesFragment";
-                });
+            // Tạo một instance mới của ChatFragment
+            ChatFragment chatFragment = new ChatFragment();
+
+            // Tạo một Bundle để chứa dữ liệu
+            Bundle bundle = new Bundle();
+            bundle.putString("username", username);
+            bundle.putString("phone", phone);
+            bundle.putString("profilePic",profilePic);
+            bundle.putString("chatKey", otherUid);
+
+            // Đặt Arguments cho Fragment
+            chatFragment.setArguments(bundle);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, chatFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+        });
         // Đặt listener cho sự kiện click vào nút hủy
         // Khi nút hủy được nhấn, Dialog sẽ bị đóng và cập nhật trạng thái đã đọc
         cancelButton.setOnClickListener(view -> {
