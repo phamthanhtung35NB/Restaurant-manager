@@ -98,7 +98,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1; // Mã yêu cầu quyền
     CircleImageView imageLogoAvatar;
     TextView textUsername;
-    String locationRestaurant = "";
+    String locationRestaurant = "21.009593333333335_105.78076333333333";
     TextView textEmail;
     String profilePic = "";
     DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
@@ -126,33 +126,31 @@ public class MainRestaurantActivity extends AppCompatActivity {
         textEmail = headerView.findViewById(R.id.textEmail);
 
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-//                    lấy vị trí hiện tại
-                locationRestaurant = "" + location.getLatitude() + "_" + location.getLongitude();
-                System.out.println("Location: " + locationRestaurant);
-//                editAddress(locationRestaurant,"location");
+
+            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    Log.d("Location", "onLocationChanged: " + location.toString());
+                    locationRestaurant = "" + location.getLatitude() + "_" + location.getLongitude();
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                @Override
+                public void onProviderEnabled(String provider) {}
+
+                @Override
+                public void onProviderDisabled(String provider) {}
+            };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            } else {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             }
-
-            // Override other methods as needed
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            @Override
-            public void onProviderEnabled(String provider) {}
-
-            @Override
-            public void onProviderDisabled(String provider) {}
-        };
-        // Kiểm tra và yêu cầu quyền truy cập vị trí
-        if (ActivityCompat.checkSelfPermission(MainRestaurantActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        } else {
-            // Request location permission if not granted
-            ActivityCompat.requestPermissions(MainRestaurantActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -259,7 +257,18 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //        fragmentTransaction.replace(R.id.frame_layout, fragment);
 //        fragmentTransaction.commit();
 //    }
+@Override
+public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+    if (requestCode == 1) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            }
+        }
+    }
+}
     public void showDialogThongBaoLenMon(int id){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -516,22 +525,29 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
             Toast.makeText(MainRestaurantActivity.this,"Save Address",Toast.LENGTH_SHORT).show();
         });
         btnGetLocation.setOnClickListener(view -> {
-            // Kiểm tra và yêu cầu quyền truy cập vị trí
-            if (ActivityCompat.checkSelfPermission(MainRestaurantActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            } else {
-                // Request location permission if not granted
-                ActivityCompat.requestPermissions(MainRestaurantActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
-            }
-            //
-            editAddress(locationRestaurant,"location");
 
-            Toast.makeText(MainRestaurantActivity.this,"Get Location",Toast.LENGTH_SHORT).show();
-            //set data sharedpreferences location
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("location", locationRestaurant);
-            editor.apply();
-            textViewLocation.setText(locationRestaurant);
+            // Kiểm tra và yêu cầu quyền truy cập vị trí
+//            if (ActivityCompat.checkSelfPermission(MainRestaurantActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+//            } else {
+//                // Request location permission if not granted
+//                ActivityCompat.requestPermissions(MainRestaurantActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+//            }
+            //
+            if (locationRestaurant.length()>2){
+                textViewLocation.setText(locationRestaurant);
+                editAddress(locationRestaurant,"location");
+
+                Toast.makeText(MainRestaurantActivity.this,"Get Location"+locationRestaurant,Toast.LENGTH_SHORT).show();
+                //set data sharedpreferences location
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("location", locationRestaurant);
+                editor.apply();
+            }else {
+                Toast.makeText(MainRestaurantActivity.this,"Can't get Location",Toast.LENGTH_SHORT).show();
+            }
+
+
         });
         btnSaveDescription.setOnClickListener(view -> {
             //edit address on firebase firestore

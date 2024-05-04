@@ -126,7 +126,7 @@ public class HomeClientFragment extends Fragment {
                     String image = document.getString("profilePic");
                     String description = document.getString("description");
                     //tách chuỗi location
-                    if (location == null) {
+                    if (location != null) {
                         String[] arr = location.split("_");
                         double latitude = Double.parseDouble(arr[0]);
                         double longitude = Double.parseDouble(arr[1]);

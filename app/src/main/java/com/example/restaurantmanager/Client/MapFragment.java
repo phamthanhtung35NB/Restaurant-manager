@@ -79,6 +79,8 @@ public class MapFragment extends Fragment {
         map.setMultiTouchControls(true);
         mapController = map.getController();
         mapController.setZoom(17.5);
+        // khởi tạo currentLocation
+        currentLocation = new Location(LocationManager.GPS_PROVIDER);
         currentLocationMarker = new Marker(map);
 
         // Đặt điểm bắt đầu cho bản đồ
@@ -97,15 +99,6 @@ public class MapFragment extends Fragment {
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         });
-
-        // Cấu hình cho việc hiển thị đầy đủ màn hình
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        // Khởi tạo quản lý vị trí và lắng nghe thay đổi vị trí
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -135,15 +128,14 @@ public class MapFragment extends Fragment {
             @Override
             public void onProviderDisabled(String provider) {}
         };
+        // Cấu hình cho việc hiển thị đầy đủ màn hình
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
 
-        // Kiểm tra và yêu cầu quyền truy cập vị trí
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        } else {
-            // Request location permission if not granted
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
 
         // Khởi tạo danh sách các vị trí và thêm marker vào bản đồ
 
@@ -168,17 +160,28 @@ public class MapFragment extends Fragment {
         buttonLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "get", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "get", Toast.LENGTH_SHORT).show();
+//// Khởi tạo quản lý vị trí và lắng nghe thay đổi vị trí
+//
+//
+//
+//                // Kiểm tra và yêu cầu quyền truy cập vị trí
+//                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+//                } else {
+//                    // Request location permission if not granted
+//                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+//                }
 
 
-                Log.d("LocationUpdates", "Location changed: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude());
-                Toast.makeText(getActivity(), "Location: " + currentLocation.getLatitude() + ", " + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
 
                 if (currentLocation != null) {
                     mapController.setZoom(17.5);
                     GeoPoint startPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
                     mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
-
+                }else {
+                    GeoPoint startPoint = new GeoPoint( 21.009593333333335, 105.78076333333333);
+                    mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
                 }
 
             }
@@ -187,6 +190,9 @@ public class MapFragment extends Fragment {
 
         if (currentLocation != null) {
             GeoPoint startPoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+            mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
+        }else {
+            GeoPoint startPoint = new GeoPoint( 21.009593333333335, 105.78076333333333);
             mapController.setCenter(startPoint); // Cập nhật vị trí trung tâm của bản đồ
         }
     }
