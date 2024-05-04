@@ -51,7 +51,6 @@ import com.example.restaurantmanager.Account.LoginActivity;
 import com.example.restaurantmanager.Client.Messages.ChatFragment;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
-import com.example.restaurantmanager.MapActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ChatRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
@@ -125,6 +124,8 @@ public class MainRestaurantActivity extends AppCompatActivity {
         imageLogoAvatar = headerView.findViewById(R.id.imageLogoAvatar);
         textUsername = headerView.findViewById(R.id.textUsername);
         textEmail = headerView.findViewById(R.id.textEmail);
+
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -145,7 +146,13 @@ public class MainRestaurantActivity extends AppCompatActivity {
             @Override
             public void onProviderDisabled(String provider) {}
         };
-
+        // Kiểm tra và yêu cầu quyền truy cập vị trí
+        if (ActivityCompat.checkSelfPermission(MainRestaurantActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        } else {
+            // Request location permission if not granted
+            ActivityCompat.requestPermissions(MainRestaurantActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
         Toolbar toolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
@@ -518,12 +525,13 @@ public void onActivityResult(int requestCode, int resultCode, Intent data) {
             }
             //
             editAddress(locationRestaurant,"location");
+
+            Toast.makeText(MainRestaurantActivity.this,"Get Location",Toast.LENGTH_SHORT).show();
             //set data sharedpreferences location
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("location", locationRestaurant);
             editor.apply();
             textViewLocation.setText(locationRestaurant);
-            Toast.makeText(MainRestaurantActivity.this,"Get Location",Toast.LENGTH_SHORT).show();
         });
         btnSaveDescription.setOnClickListener(view -> {
             //edit address on firebase firestore

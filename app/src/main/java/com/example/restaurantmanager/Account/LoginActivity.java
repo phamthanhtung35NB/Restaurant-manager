@@ -41,7 +41,6 @@ import android.widget.Toast;
 import com.example.restaurantmanager.ChatActivity;
 import com.example.restaurantmanager.Client.MainActivity;
 //import com.example.restaurantmanager.MenuRestaurant.HomeRestaurantActivity;
-import com.example.restaurantmanager.MapActivity;
 import com.example.restaurantmanager.MenuRestaurant.MainRestaurantActivity;
 import com.example.restaurantmanager.FireBase.Notifications.MyFirebaseMessagingService;
 import com.example.restaurantmanager.R;

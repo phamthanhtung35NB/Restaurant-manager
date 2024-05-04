@@ -38,10 +38,10 @@ public class Restaurant {
         this.image = image;
     }
     public double getLatitude(){
-        String[] temp = location.split(",");
+        String[] temp = location.split("_");
             return Double.parseDouble(temp[0]);}
     public double getLongitude(){
-        String[] temp = location.split(",");
+        String[] temp = location.split("_");
         return Double.parseDouble(temp[1]);
     }
     public String getLocation() {

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,11 +77,16 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "Restaurant: " + restaurant.getUsername(), Toast.LENGTH_SHORT).show();
-                showDialogRestaurant(holder,restaurant.getUsername(),restaurant.getIdTableMax(),restaurant.getIdMax(),restaurant.getDescription(),restaurant.getAddress(),restaurant.getImage(),restaurant.getPhone());
+                //tách lat_ và lng_ từ location_
+                String[] location_ = restaurant.getLocation().split("_");
+                String lat_ = location_[0];
+                String lng_ = location_[1];
+                showDialogRestaurant(holder,restaurant.getUsername(),restaurant.getIdTableMax(),restaurant.getIdMax(),
+                        restaurant.getDescription(),restaurant.getAddress(),restaurant.getImage(),restaurant.getPhone(),lat_,lng_);
             }
         });
     }
-    private void showDialogRestaurant(ViewHolder viewHolder,String userName_,int idTableMax_,int idMenuMax_,String description_,String address_,String image_,String phone_){
+    private void showDialogRestaurant(ViewHolder viewHolder,String userName_,int idTableMax_,int idMenuMax_,String description_,String address_,String image_,String phone_, String lat_, String lng_){
         // Tạo một Dialog
         Dialog dialog = new Dialog(viewHolder.itemView.getContext());
         // Yêu cầu không hiển thị tiêu đề cho Dialog
@@ -118,7 +124,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         btnDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Direction", Toast.LENGTH_SHORT).show();
+                //mở google map
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat_ + "," + lng_+ "&mode=d");//xe máy
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                viewHolder.itemView.getContext().startActivity(mapIntent);
+
             }
         });
         btnCall.setOnClickListener(new View.OnClickListener() {

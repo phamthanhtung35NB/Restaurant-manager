@@ -2,13 +2,48 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="650dp"
     tools:context=".Client.MapFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/button_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Search"
+                    android:layout_below="@id/edittext_location" />
+
+                <Button
+                    android:id="@+id/button_directions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get Directions"
+                    android:layout_below="@id/button_search" />
+            </LinearLayout>
+
+            <org.osmdroid.views.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/button_location"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="Get Location" />
+        </LinearLayout>
+
 
 </FrameLayout>

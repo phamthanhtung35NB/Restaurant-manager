@@ -2,13 +2,19 @@ package com.example.restaurantmanager.Client;
 
 import static com.google.firebase.appcheck.internal.util.Logger.TAG;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -75,6 +82,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
+
+
+
     // Tạo một Dialog mới
     Dialog dialog;
     FloatingActionButton fab;
@@ -100,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fab = findViewById(R.id.fab);
+        //cái ảnh nút quét mã QR
+        fab.setImageResource(R.drawable.qrcode);
         drawerLayout = findViewById(R.id.main);
         fragmentContainer = findViewById(R.id.fragment_container);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);

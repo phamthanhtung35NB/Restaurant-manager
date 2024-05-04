@@ -45,8 +45,9 @@ import model.Restaurant;
 public class HomeClientFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private ImageButton imgBtnMap;
     private RestaurantAdapter adapter;
-    private List<Restaurant> restaurantList;
+    public static List<Restaurant> restaurantList;
     @Override
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,35 +56,13 @@ public class HomeClientFragment extends Fragment {
         addEvents(view);
         return view;
     }
-    private ImageButton imageButtonScan;
     private TextView textView;
     // server key từ firebase console project setting cloud messaging
     public static final String SERVER_KEY = "AAAAl-xT4ko:APA91bGASnqgklF4OfVR6ls42PxiSI1Lzj2Aj8qYqdlCgk4LKApgGGpE1oH_GzLgBqjheSfQqHc3_qrdcsT4cwOGAbGCwgdUNpLmLx-tdGLo_NtbC-rZrqiDBtcP5qI6xI_YrefHOAtX";
 
     void init(View view) {
-        imageButtonScan = view.findViewById(R.id.imageButtonScan);
         textView = view.findViewById(R.id.textView);
-        //cái ảnh nút quét mã QR
-        imageButtonScan.setImageResource(R.drawable.qrcode);
-//        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-        // Lấy giá trị đã lưu kiểm tra xem đã quét mã QR chưa
-        // Nếu chưa quét mã QR thì hiển thị Activity MenuClientActivity
-        // Nếu đã quét mã QR thì hiển thị Activity OrderClientActivity
-//        if (preferences.getString("key", "") != "") {
-//            String text = preferences.getString("key", "");
-//            //tách chuỗi
-//            String[] arr = text.split("/");
-//            String content = arr[2];
-////            if (content.equals("order")){
-////                Intent intent = new Intent(HomeClientActivity.this, MenuClientActivity.class);
-////                intent.putExtra("url", content);
-////                startActivity(intent);
-////            }
-//            textView.setText(text);
-//        }
-        //tách chuỗi
-//        String[] arr = preferences.getString("key", "").split("/");
-//        String userId = arr[0];
+        imgBtnMap = view.findViewById(R.id.imgBtnMap);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
         String a = sharedPreferences.getString("url", "");
         if (a.length()>2){
@@ -108,15 +87,20 @@ public class HomeClientFragment extends Fragment {
         getRestaurant();
     }
     void addEvents(View view) {
-        imageButtonScan.setOnClickListener(v -> {
-            // Xử lý sự kiện khi click vào nút quét mã QR
-            IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
-            integrator.setOrientationLocked(true);
-            integrator.setPrompt("Quét mã QR để xem menu");
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
-//            integrator.setCaptureActivity(400);
-            integrator.initiateScan();
+        imgBtnMap.setOnClickListener(v -> {
+            // Tạo một instance mới của MapFragment
+            MapFragment mapFragment = new MapFragment();
 
+            // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng MapFragment
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Thay thế và thêm vào back stack
+            fragmentTransaction.replace(R.id.fragment_container, mapFragment);
+            fragmentTransaction.addToBackStack(null);
+
+            // Commit thao tác
+            fragmentTransaction.commit();
         });
     }
 
@@ -142,9 +126,14 @@ public class HomeClientFragment extends Fragment {
                     String image = document.getString("profilePic");
                     String description = document.getString("description");
                     //tách chuỗi location
-                    String[] arr = location.split("_");
-                    double latitude = Double.parseDouble(arr[0]);
-                    double longitude = Double.parseDouble(arr[1]);
+                    if (location == null) {
+                        String[] arr = location.split("_");
+                        double latitude = Double.parseDouble(arr[0]);
+                        double longitude = Double.parseDouble(arr[1]);
+                    }else {
+                        location = "0_0";
+                    }
+
 //                    String description = document.getString("description");
                     //tableMax type is number
                     Long tableMax = document.getLong("idTableMax");
@@ -185,34 +174,11 @@ public class HomeClientFragment extends Fragment {
             // Xử lý kết quả quét mã QR
             String content = result.getContents();
             if (content != null) {
-                // Check if table number is available from intent
-                //lưu mã QR vào database
-//                System.out.println("content: " + content);
-//                SqliteUrlOrderHelper sqliteUrlOrderHelper =new SqliteUrlOrderHelper(this);
-//                System.out.println("111111111111111111111");
-//                sqliteUrlOrderHelper.addUrl(content);
-//                System.out.println("222222222222222222222");
-//                Toast.makeText(this, content, Toast.LENGTH_SHORT).show();
-//                System.out.println("333333333333333333333");
-//                String text=sqliteUrlOrderHelper.getAllUrls();
 
-                // Lấy SharedPreferences
-//                SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-                // Lưu trữ giá trị
-//                preferences.edit().putString("key", content).apply();
                 //tách chuỗi
                 String[] arr = content.split("/");
                 String userId = arr[0];
                 String numberTable = arr[1];
-                // Tạo một Bundle để chứa dữ liệu
-//                Bundle bundle = new Bundle();
-//                bundle.putString("url", content);
-//                System.out.println("url: " + content);
-//                bundle.putString("accountId", userId);
-//                System.out.println("userId: " + userId);
-//                bundle.putString("numberTable", numberTable);
-//                System.out.println("numberTable: " + numberTable);
-//                Intent intent = new Intent(getActivity(), PayTheBillClientActivity.class);
 //                tạo sharedPreferences lưu mã QR
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", getActivity().MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
