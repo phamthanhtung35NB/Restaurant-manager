@@ -58,9 +58,7 @@ public class ShowTableRestaurantFragment extends Fragment {
     }
     public void addEvents(View view){
         imageButtonExit.setOnClickListener(v -> {
-//            Intent intent = new Intent(getActivity(), HomeRestaurantActivity.class);
-//            startActivity(intent);
-//            finish();
+
             System.out.println("click exit");
         });
         System.out.println("hết event-----------------------------");

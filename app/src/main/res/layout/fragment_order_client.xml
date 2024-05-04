@@ -30,11 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="440dp"/>
 
+
         <Button
             android:id="@+id/buttonThanhToanClient"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Thanh Toán" />
+            android:text="Gửi yêu cầu gọi món" />
     </LinearLayout>
 
 </FrameLayout>

@@ -60,7 +60,7 @@ public class ChatFragment extends Fragment {
     private ChatAdapter chatAdapter;
     private boolean loadFirstTime = true;
     final List<ChatList> chatList= new ArrayList<>();
-    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference databaseReferences= FirebaseDatabase.getInstance().getReference();
     DatabaseReference databaseReferenceSeen= FirebaseDatabase.getInstance().getReference();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,6 +84,8 @@ public class ChatFragment extends Fragment {
             opoName = bundle.getString("username");
             opoPhone = bundle.getString("phone");
             opoChatKey = bundle.getString("chatKey");
+            System.out.println("11111111111111111");
+            System.out.println("nhà hàng" + "username: " + opoName + "phone: " + opoPhone + "opoChatKey: " + opoChatKey);
         }
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("dataLogin", getActivity().MODE_PRIVATE);
         myName = sharedPreferences.getString("username","");
@@ -123,7 +125,7 @@ public class ChatFragment extends Fragment {
         chatAdapter = new ChatAdapter(chatList, getActivity());
         profilePic.setImageResource(R.drawable.account);
         chatList.clear();
-        messageListener=databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").addValueEventListener(new ValueEventListener() {
+        messageListener=databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("message").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chatList.clear();
@@ -151,7 +153,7 @@ public class ChatFragment extends Fragment {
                         }
                     }
                 }
-                databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("clientSeen").setValue(true);
+                databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("clientSeen").setValue(true);
                 chatAdapter.updateChatList(chatList);
                 chattingRecyclerView.setAdapter(chatAdapter);
                 chattingRecyclerView.scrollToPosition(chatList.size() - 1);
@@ -170,7 +172,7 @@ public class ChatFragment extends Fragment {
             databaseReferenceSeen.removeEventListener(seenListener);
         }
         if (messageListener != null) {
-            databaseReference.removeEventListener(messageListener);
+            databaseReferences.removeEventListener(messageListener);
         }
     }
 //    void init(View view){
@@ -329,20 +331,22 @@ public class ChatFragment extends Fragment {
                     Locale vietnam = new Locale("vi", "VN");
                     SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss", vietnam);
                     String currentDateTimeString = sdf.format(new Date());
+                    System.out.println("currentDateTimeString: " + currentDateTimeString);
 //                    String currentDateTimeString = String.valueOf(System.currentTimeMillis()).substring(0,10);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("restaurant").setValue(opoName);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("client").setValue(myName);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("lastMessage").setValue(message);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("clientSeen").setValue(true);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("restaurantSeen").setValue(false);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("profilePic").setValue(myProfilePic);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
-                    databaseReference.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("restaurant").setValue(opoName);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("client").setValue(myName);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("lastMessage").setValue(message);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("clientSeen").setValue(true);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("restaurantSeen").setValue(false);
+                    databaseReferences.child("chat").child(opoChatKey).child(myChatKey).child("profilePic").setValue(myProfilePic);
 
+System.out.println("hết");
                     messageEditText.setText("");
 
                 }
-                init(view);
+//                init(view);
             }
         });
         profilePic.setOnClickListener(new View.OnClickListener() {

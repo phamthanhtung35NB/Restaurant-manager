@@ -230,7 +230,6 @@ public class HomeClientFragment extends Fragment {
                                 if (documentSnapshot.exists()) {
                                     Map<String, Object> accountData = documentSnapshot.getData();
                                     String token = accountData.get("token").toString();
-                                    Log.d(ContentValues.TAG, "Summmmmmmmmm: " + token);
                                     //gửi thông báo đến nhà hàng
                                     sendNotification(token);
                                 } else {

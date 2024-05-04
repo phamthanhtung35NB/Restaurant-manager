@@ -50,7 +50,7 @@ public class ChatRestaurantFragment extends Fragment {
     private ChatAdapter chatAdapter;
     private boolean loadFirstTime = true;
     final List<ChatList> chatList= new ArrayList<>();
-    DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference databaseReferences= FirebaseDatabase.getInstance().getReference();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
@@ -106,7 +106,7 @@ public class ChatRestaurantFragment extends Fragment {
         chatAdapter = new ChatAdapter(chatList, getActivity());
         profilePic.setImageResource(R.drawable.account);
         chatList.clear();
-        databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("message").addValueEventListener(new ValueEventListener() {
+        databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("message").addValueEventListener(new ValueEventListener() {
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         chatList.clear();
@@ -131,7 +131,7 @@ public class ChatRestaurantFragment extends Fragment {
                 }
             }
         }
-        databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("restaurantSeen").setValue(true);
+        databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("restaurantSeen").setValue(true);
         chatAdapter.updateChatList(chatList);
         chattingRecyclerView.setAdapter(chatAdapter);
         chattingRecyclerView.scrollToPosition(chatList.size() - 1);
@@ -158,18 +158,18 @@ public class ChatRestaurantFragment extends Fragment {
                     SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyyHHmmss", vietnam);
                     String currentDateTimeString = sdf.format(new Date());
 //                    String currentDateTimeString = String.valueOf(System.currentTimeMillis()).substring(0,10);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("lastMessage").setValue(message);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("restaurantSeen").setValue(true);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("clientSeen").setValue(false);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("lastMessage").setValue(message);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("sdtRestaurant").setValue(myPhone);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
-                    databaseReference.child("chat").child(myChatKey).child(opoChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("lastMessage").setValue(message);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("restaurantSeen").setValue(true);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("clientSeen").setValue(false);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("lastMessage").setValue(message);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("sdtRestaurant").setValue(myPhone);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("message").child(currentDateTimeString).child("msg").setValue(message);
+                    databaseReferences.child("chat").child(myChatKey).child(opoChatKey).child("message").child(currentDateTimeString).child("phone").setValue(myPhone);
 
                     messageEditText.setText("");
 
                 }
-                init(view);
+//                init(view);
             }
         });
         profilePic.setOnClickListener(new View.OnClickListener() {

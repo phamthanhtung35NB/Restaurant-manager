@@ -32,7 +32,6 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
     TextView textViewInformation;
-    ImageButton imageButtonBack;
     ImageButton imageButtonThanhToan;
     public static String accountId = "";
     public static String type = "restaurant";
@@ -42,7 +41,8 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_menu_client);
+        setContentView(R.layout.fragment_menu_add_restaurant);
+
         init();
         addEvents();
     }
@@ -50,7 +50,6 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     void init() {
         System.out.println("đầu init MenuAddFoodToOrderFragment");
         textViewInformation = findViewById(R.id.textViewInformation);
-        imageButtonBack = findViewById(R.id.imageButtonBack);
         textViewInformation.setText(URL);
         listViewClient = findViewById(R.id.listViewClient);
         imageButtonThanhToan = findViewById(R.id.imageButtonThanhToan);
@@ -66,9 +65,6 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     void addEvents() {
         imageButtonThanhToan.setOnClickListener(v -> {
             Toast.makeText(MenuAddFoodToOrderActivity.this, "Thanh toán", Toast.LENGTH_SHORT).show();
-        });
-        imageButtonBack.setOnClickListener(v -> {
-            super.onBackPressed();
         });
     }
     //get menu from firebase fileStore

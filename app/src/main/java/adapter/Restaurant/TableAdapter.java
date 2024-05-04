@@ -182,7 +182,7 @@ public class TableAdapter extends ArrayAdapter<Table> {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String stateEmpty = dataSnapshot.getValue(String.class);
-                if (!stateEmpty.equals("Trống")){
+                if (stateEmpty.equals("Đã Quét QR")){
                     //đóng dialog show qr
                     dialog.dismiss();
                     //show dialog thông báo

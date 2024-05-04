@@ -45,7 +45,8 @@ public class MenuClientFragment extends Fragment {
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
     TextView textViewInformation;
-    ImageButton imageButtonThanhToan;
+    ImageButton imageButtonFragmentOder;
+    ImageButton imageButtonBack;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -75,19 +76,20 @@ public class MenuClientFragment extends Fragment {
         textViewInformation = view.findViewById(R.id.textViewInformation);
         textViewInformation.setText(URL);
         listViewClient = view.findViewById(R.id.listViewClient);
-        imageButtonThanhToan = view.findViewById(R.id.imageButtonThanhToan);
+        imageButtonFragmentOder = view.findViewById(R.id.imageButtonFragmentOder);
+        imageButtonBack = view.findViewById(R.id.imageButtonBack);
         dataMenuViewClient = new ArrayList<>();
         MainActivity.isCheckQR= true;
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
 //        listViewClient.setAdapter(menuClientAdapter);
-        SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang sử dụng");
+        SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đã Quét QR");
         readDataFromFireBase();
         System.out.println("cuối init");
     }
 
     void addEvents(View view) {
         //button GIỎ HÀNG
-        imageButtonThanhToan.setOnClickListener(v -> {
+        imageButtonFragmentOder.setOnClickListener(v -> {
             // Tạo một Bundle để chứa dữ liệu
             Bundle bundle = new Bundle();
             bundle.putString("url", URL);
@@ -113,6 +115,9 @@ public class MenuClientFragment extends Fragment {
 
             // Commit thao tác
             fragmentTransaction.commit();
+        });
+        imageButtonBack.setOnClickListener(v -> {
+            super.getActivity().onBackPressed();
         });
     }
 

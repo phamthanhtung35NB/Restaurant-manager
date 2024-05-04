@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_margin="16dp"
+    android:background="@drawable/bg_white_corner_16"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/bg_yellow_corner_16_top"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="Thông báo"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+
+    <TextView
+        android:id="@+id/tvNotification"
+        android:layout_width="match_parent"
+        android:layout_height="139dp"
+        android:background="@drawable/bg_white_corner_16"
+        android:gravity="center"
+        android:text="Bàn đã được quét QR thành công"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:orientation="horizontal">
+
+
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#9F8F8F"
+            android:text="Đóng"
+            android:layout_marginEnd="5dp"/>
+
+        <Button
+            android:layout_marginStart="5dp"
+            android:id="@+id/btnToTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Xem" />
+    </LinearLayout>
+
+
+</LinearLayout>

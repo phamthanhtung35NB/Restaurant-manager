@@ -77,88 +77,111 @@ public class OrderClientFragment extends Fragment {
         readDataFromFireBase();
         System.out.println("cuối init order");
 //        textThongTinBanClient.setText(showNameTable);
+
     }
 
     void addEvents(View view) {
         buttonThanhToanClient.setOnClickListener(v -> {
-            // Xử lý sự kiện khi click vào nút thanh toán
-            //xóa dữ liệu preferences my_preferences
-//            SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.remove("key");
-//            editor.apply();
-            //tính tổng price trên firebase
-            // xóa dữ liệu SharedPreferences
-            SharedPreferences preferences = getActivity().getSharedPreferences("data", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.remove("url");
-            editor.remove("accountId");
-            editor.remove("numberTable");
-            editor.apply();
-            SetTableStateEmptyRealtime.setTableIsUsing(accountId, numberTable, "Trống");
+
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference refOrder = database.getReference(URL);
-            //cho phép quét mã QR
-            MainActivity.isCheckQR = false;
-            refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+            DatabaseReference ref = database.getReference(accountId).child(numberTable).child("stateEmpty");
+            ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    // Lặp qua tất cả child
-                    double tong = 0;
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        // Tạo instance mới của ClassTable
-                        MenuRestaurant menuOrder = new MenuRestaurant();
-                        if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
-                            menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
-                            tong += menuOrder.getPrice();
-                        }
-                    }
+                    String stateEmpty = dataSnapshot.getValue(String.class);
+                    if (stateEmpty.equals(("Đang Đợi Món"))){
+                        //thanh toán
+                        buttonThanhToanClient.setOnClickListener(v -> {
+                            thanhToan();
+                        });
 
-                    //tính tổng price
-                    System.out.println("tong: " + tong);
-                    //xóa dữ liệu trên firebase
+                    } else if(stateEmpty.equals("Đã Quét QR")){
+                        //đổi tên button thanh toán buttonThanhToanClient
+                        SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang Đợi Món");
+                        buttonThanhToanClient.setText("Thanh toán");
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("Error: " + databaseError.getMessage());
+                }
+            });
+        });
+
+        System.out.println("cuối addEvents order");
+    }
+    //thanh toán
+    void thanhToan(){
+        //tính tổng price trên firebase
+        // xóa dữ liệu SharedPreferences
+        SharedPreferences preferences = getActivity().getSharedPreferences("data", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove("url");
+        editor.remove("accountId");
+        editor.remove("numberTable");
+        editor.apply();
+        SetTableStateEmptyRealtime.setTableIsUsing(accountId, numberTable, "Trống");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refOrder = database.getReference(URL);
+        //cho phép quét mã QR
+        MainActivity.isCheckQR = false;
+        refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Lặp qua tất cả child
+                double tong = 0;
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    // Tạo instance mới của ClassTable
+                    MenuRestaurant menuOrder = new MenuRestaurant();
+                    if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+                        menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
+                        tong += menuOrder.getPrice();
+                    }
+                }
+
+                //tính tổng price
+                System.out.println("tong: " + tong);
+                //xóa dữ liệu trên firebase
 //                    refOrder.removeValue();
-                    //chuyển sang activity thanh toán
+                //chuyển sang activity thanh toán
 //                    OrderClientActivity.tong0 = tong;
 
 
-                    HistoryRestaurant.addHistory(dataOrderClient, accountId, numberTable, (long) tong);
-                    //xóa dữ liệu brrn trong url trên firebase
-                    removeOrder();
+                HistoryRestaurant.addHistory(dataOrderClient, accountId, numberTable, (long) tong);
+                //xóa dữ liệu brrn trong url trên firebase
+                removeOrder();
 //                    Intent intent = new Intent(OrderClientActivity.this, PayTheBillClientActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("url", URL);
-                    bundle.putString("accountId", accountId);
-                    bundle.putString("numberTable", numberTable);
-                    // Tạo một instance mới của FragmentC
-                    OrderClientFragment fragmentC = new OrderClientFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("url", URL);
+                bundle.putString("accountId", accountId);
+                bundle.putString("numberTable", numberTable);
+                // Tạo một instance mới của FragmentC
+                OrderClientFragment fragmentC = new OrderClientFragment();
 
-                    // Đặt Arguments cho Fragment
-                    fragmentC.setArguments(bundle);
+                // Đặt Arguments cho Fragment
+                fragmentC.setArguments(bundle);
 
-                    // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                    // Thay thế và thêm vào back stack
-                    fragmentTransaction.replace(R.id.fragment_container, fragmentC);
-                    fragmentTransaction.addToBackStack(null);
+                // Thay thế và thêm vào back stack
+                fragmentTransaction.replace(R.id.fragment_container, fragmentC);
+                fragmentTransaction.addToBackStack(null);
 
-                    // Commit thao tác
-                    fragmentTransaction.commit();
+                // Commit thao tác
+                fragmentTransaction.commit();
 
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Xử lý lỗi
-                    System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
-                }
-
-            });
-
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Xử lý lỗi
+                System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+            }
 
         });
-        System.out.println("cuối addEvents order");
     }
 
     /**

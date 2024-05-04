@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -41,16 +42,20 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.restaurantmanager.Account.LoginActivity;
+import com.example.restaurantmanager.Client.Messages.ChatFragment;
 import com.example.restaurantmanager.Client.Messages.ListMessagesFragment;
 import com.example.restaurantmanager.FireBase.UploadImageToFirebase;
 import com.example.restaurantmanager.MapActivity;
 import com.example.restaurantmanager.MenuRestaurant.Menu.ShowMenuRestaurantFragment;
+import com.example.restaurantmanager.MenuRestaurant.Messages.ChatRestaurantFragment;
 import com.example.restaurantmanager.MenuRestaurant.Messages.ListMessagesRestaurantFragment;
+import com.example.restaurantmanager.MenuRestaurant.Order.OderActivity;
 import com.example.restaurantmanager.MenuRestaurant.Table.ShowTableRestaurantFragment;
 import com.example.restaurantmanager.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -73,7 +78,9 @@ import org.osmdroid.util.GeoPoint;
 import java.util.HashMap;
 import java.util.Map;
 
+import adapter.Restaurant.TableAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
+import model.Table;
 
 public class MainRestaurantActivity extends AppCompatActivity {
 
@@ -236,12 +243,8 @@ public class MainRestaurantActivity extends AppCompatActivity {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
         });
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
-checkForNewMessages();
+        checkForNewMessages();
+        checkForNewNotification();
     }
 //    private  void replaceFragment(Fragment fragment) {
 //        FragmentManager fragmentManager = getSupportFragmentManager();
@@ -249,6 +252,78 @@ checkForNewMessages();
 //        fragmentTransaction.replace(R.id.frame_layout, fragment);
 //        fragmentTransaction.commit();
 //    }
+
+    public void showDialogThongBaoLenMon(int id){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_center_show_tb_call_food);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == Gravity.BOTTOM) {
+            dialog.setCancelable(true);
+        } else {
+            dialog.setCancelable(false);
+        }
+        TextView tvNotification = dialog.findViewById(R.id.tvNotification);
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+        Button btnToTable = dialog.findViewById(R.id.btnToTable);
+        tvNotification.setText("Bàn "+id+" đã gửi thông báo lên món!");
+        btnClose.setOnClickListener(v -> {
+            System.out.println("Đóng dialog");
+            dialog.dismiss();
+        });
+        btnToTable.setOnClickListener(v -> {
+            dialog.dismiss();
+            //add id bàn vào SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("dataTable", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("idTable", String.valueOf(id));
+            editor.commit();
+            Intent intent = new Intent(MainRestaurantActivity.this, OderActivity.class);
+            String qr = accountId+"/"+String.valueOf(id)+"/order";
+            intent.putExtra("url", qr);
+            startActivity(intent);
+        });
+
+        dialog.show();
+    }
+    private void checkForNewNotification() {
+            System.out.println("đầu readDataFromFireBase");
+            System.out.println("accountId: " + accountId);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference(accountId);
+            // Lắng nghe giá trị của tất cả child
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    // lặp qua tất cả child
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                        // tạo instance mới của ClassTable
+                        if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+
+                            if (childSnapshot.child("stateEmpty").getValue(String.class).equals("Đang Đợi Món")){
+                                //show dialog thông báo
+                                showDialogThongBaoLenMon(childSnapshot.child("id").getValue(Integer.class));
+                            }
+                        }
+                    }
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Xử lý lỗi
+                    System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+                }
+            });
+    }
 
     private void checkForNewMessages() {
 
@@ -261,15 +336,10 @@ checkForNewMessages();
                     if (!opoUid.equals(accountId)&&snapshot.exists() ) {
                         //snapshot.exists() kiểm tra xem có dữ liệu không
                         String profilePic = dataSnapshot.child( "profilePic").getValue(String.class);
-                        System.out.println("profilePic: "+profilePic);
                         String username = dataSnapshot.child("client").getValue(String.class);
-                        System.out.println("username: "+username);
-//                                    String content = snapshot.getValue(String.class);
                         String content = dataSnapshot.child("lastMessage").getValue(String.class);
-                        System.out.println("content: "+content);
-                        System.out.println("content: "+content);
+                        String phone = dataSnapshot.child("phone").getValue(String.class);
                         boolean isSeen = dataSnapshot.child("restaurantSeen").getValue(Boolean.class);
-                        System.out.println("isSeen: "+isSeen);
 
                         if (!isSeen&&!fragmentCurrent.equals("ListMessagesFragment")) {
                             //kiểm tra xem có dialog nào đang hiển thị không
@@ -279,13 +349,13 @@ checkForNewMessages();
                                 // Phát âm thanh thông báo
                                 MediaPlayer mediaPlayer = MediaPlayer.create(MainRestaurantActivity.this, R.raw.nofi);
                                 mediaPlayer.start();
-                                showTopDialogNotification(profilePic, username, content, opoUid, accountId);
+                                showTopDialogNotification(profilePic, username, content, opoUid, accountId, phone);
                             } else {
                                 // Không có Dialog nào đang hiển thị
                                 // Phát âm thanh thông báo
                                 MediaPlayer mediaPlayer = MediaPlayer.create(MainRestaurantActivity.this, R.raw.nofi);
                                 mediaPlayer.start();
-                                showTopDialogNotification(profilePic, username, content, opoUid, accountId);
+                                showTopDialogNotification(profilePic, username, content, opoUid, accountId, phone);
                             }
                         }
                     }
@@ -298,7 +368,7 @@ checkForNewMessages();
             }
         });
     }
-private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId) {
+private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId, String phone) {
     dialog = new Dialog(this);
     // Yêu cầu không hiển thị tiêu đề cho Dialog
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -311,7 +381,8 @@ private void showTopDialogNotification(String profilePic, String username, Strin
     TextView textViewContent = dialog.findViewById(R.id.textViewContent);
     ImageView cancelButton = dialog.findViewById(R.id.cancelButton);
     LinearLayout ll = dialog.findViewById(R.id.ll);
-
+System.out.println("___________________");
+    System.out.println("chatKey: "+otherUid);
     //set data
     if (profilePic!=null&&profilePic.length()>0){
         Picasso.get().load(profilePic).into(profilePicFrom);
@@ -324,8 +395,25 @@ private void showTopDialogNotification(String profilePic, String username, Strin
     ll.setOnClickListener(view -> {
         //chuyển tới fragment mess
         dialog.dismiss();
-        fragmentCurrent = "ListMessagesFragment";
-        replaceFragment(new ListMessagesFragment(), false);
+        // Tạo một instance mới của ChatFragment
+        ChatRestaurantFragment chatFragment = new ChatRestaurantFragment();
+
+        // Tạo một Bundle để chứa dữ liệu
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+        bundle.putString("phone", phone);
+        bundle.putString("profilePic",profilePic);
+        bundle.putString("chatKey", otherUid);
+
+        // Đặt Arguments cho Fragment
+        chatFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, chatFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+
 
     });
     // Đặt listener cho sự kiện click vào nút hủy
