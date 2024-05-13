@@ -116,7 +116,9 @@ public class HomeClientFragment extends Fragment {
         //lấy thông tin nhà hàng từ firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("restaurant").get().addOnCompleteListener(task -> {
+
             if (task.isSuccessful()) {
+                restaurantList.clear();
                 for (DocumentSnapshot document : task.getResult()) {
 //                    Restaurant restaurant = document.toObject(Restaurant.class);
                     String phone = document.getString("phone");
@@ -126,7 +128,7 @@ public class HomeClientFragment extends Fragment {
                     String image = document.getString("profilePic");
                     String description = document.getString("description");
                     //tách chuỗi location
-                    if (location != null) {
+                    if (location != null&&location.length()>0) {
                         String[] arr = location.split("_");
                         double latitude = Double.parseDouble(arr[0]);
                         double longitude = Double.parseDouble(arr[1]);
@@ -149,9 +151,9 @@ public class HomeClientFragment extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
-                } else {
-                    Log.d("RestaurantActivity", "Error getting documents: ", task.getException());
-                }
+            } else {
+                Log.d("RestaurantActivity", "Error getting documents: ", task.getException());
+            }
         });
 
     }

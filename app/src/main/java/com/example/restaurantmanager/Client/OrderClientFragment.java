@@ -44,6 +44,7 @@ public class OrderClientFragment extends Fragment {
     public static String type = "restaurant";
     public static String numberTable = "";
     public static String URL = "";
+    String stateEmpty = "";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_client, container, false);
@@ -77,44 +78,28 @@ public class OrderClientFragment extends Fragment {
         readDataFromFireBase();
         System.out.println("cuối init order");
 //        textThongTinBanClient.setText(showNameTable);
-
-    }
-
-    void addEvents(View view) {
-        buttonThanhToanClient.setOnClickListener(v -> {
-
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference ref = database.getReference(accountId).child(numberTable).child("stateEmpty");
-            ref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    String stateEmpty = dataSnapshot.getValue(String.class);
-                    if (stateEmpty.equals(("Đang Đợi Món"))){
-                        //thanh toán
-                        buttonThanhToanClient.setOnClickListener(v -> {
-                            thanhToan();
-                        });
-
-                    } else if(stateEmpty.equals("Đã Quét QR")){
-                        //đổi tên button thanh toán buttonThanhToanClient
-                        SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang Đợi Món");
-                        buttonThanhToanClient.setText("Thanh toán");
-
-                    }
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference(accountId).child(numberTable).child("stateEmpty");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                stateEmpty = dataSnapshot.getValue(String.class);
+                if (stateEmpty.equals("Trống")) {
+                    removeAllOrder();
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("Error: " + databaseError.getMessage());
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error: " + databaseError.getMessage());
+            }
         });
 
-        System.out.println("cuối addEvents order");
+
+
     }
-    //thanh toán
-    void thanhToan(){
-        //tính tổng price trên firebase
+
+    void removeAllOrder() {
         // xóa dữ liệu SharedPreferences
         SharedPreferences preferences = getActivity().getSharedPreferences("data", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -122,11 +107,35 @@ public class OrderClientFragment extends Fragment {
         editor.remove("accountId");
         editor.remove("numberTable");
         editor.apply();
-        SetTableStateEmptyRealtime.setTableIsUsing(accountId, numberTable, "Trống");
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference refOrder = database.getReference(URL);
         //cho phép quét mã QR
         MainActivity.isCheckQR = false;
+        //xóa dữ liệu brrn trong url trên firebase
+//        removeOrder();
+    }
+    void addEvents(View view) {
+        buttonThanhToanClient.setOnClickListener(v -> {
+
+            if (stateEmpty.equals(("Đang Đợi Món"))){
+                    thanhToan();
+            } else if(stateEmpty.equals("Đã Quét QR")){
+                //đổi tên button thanh toán buttonThanhToanClient
+                SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang Đợi Món");
+                buttonThanhToanClient.setText("Thanh toán");
+
+            }
+
+        });
+
+        System.out.println("cuối addEvents order");
+    }
+    //thanh toán
+    void thanhToan(){
+        //tính tổng price trên firebase
+
+        SetTableStateEmptyRealtime.setTableIsUsing(accountId, numberTable, "Chờ Thanh Toán");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refOrder = database.getReference(URL);
+
         refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,31 +157,30 @@ public class OrderClientFragment extends Fragment {
                 //chuyển sang activity thanh toán
 //                    OrderClientActivity.tong0 = tong;
 
-
+                textThongTinBanClient.setText("Tổng tiền bàn số " + numberTable + " là: " + tong + " VNĐ");
                 HistoryRestaurant.addHistory(dataOrderClient, accountId, numberTable, (long) tong);
-                //xóa dữ liệu brrn trong url trên firebase
-                removeOrder();
+
 //                    Intent intent = new Intent(OrderClientActivity.this, PayTheBillClientActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("url", URL);
-                bundle.putString("accountId", accountId);
-                bundle.putString("numberTable", numberTable);
-                // Tạo một instance mới của FragmentC
-                OrderClientFragment fragmentC = new OrderClientFragment();
-
-                // Đặt Arguments cho Fragment
-                fragmentC.setArguments(bundle);
-
-                // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                // Thay thế và thêm vào back stack
-                fragmentTransaction.replace(R.id.fragment_container, fragmentC);
-                fragmentTransaction.addToBackStack(null);
-
-                // Commit thao tác
-                fragmentTransaction.commit();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("url", URL);
+//                bundle.putString("accountId", accountId);
+//                bundle.putString("numberTable", numberTable);
+//                // Tạo một instance mới của FragmentC
+//                OrderClientFragment fragmentC = new OrderClientFragment();
+//
+//                // Đặt Arguments cho Fragment
+//                fragmentC.setArguments(bundle);
+//
+//                // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                // Thay thế và thêm vào back stack
+//                fragmentTransaction.replace(R.id.fragment_container, fragmentC);
+//                fragmentTransaction.addToBackStack(null);
+//
+//                // Commit thao tác
+//                fragmentTransaction.commit();
 
             }
             @Override

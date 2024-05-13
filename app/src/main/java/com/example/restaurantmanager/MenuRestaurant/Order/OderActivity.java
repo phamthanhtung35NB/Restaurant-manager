@@ -3,6 +3,7 @@ package com.example.restaurantmanager.MenuRestaurant.Order;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -42,7 +43,9 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.util.ArrayList;
 
 import adapter.Restaurant.OrderAdapter;
+import model.HistoryRestaurant;
 import model.MenuRestaurant;
+import model.SetTableStateEmptyRealtime;
 
 public class OderActivity extends AppCompatActivity {
 
@@ -124,9 +127,10 @@ public class OderActivity extends AppCompatActivity {
         });
 
         buttonThanhToan.setOnClickListener(v -> {
-//            Intent intent = new Intent(OderActivity.this, PaymentActivity.class);
-//            intent.putExtra("url", url);
-//            startActivity(intent);
+
+            thanhToan();
+
+//
         });
 
         addFood.setOnClickListener(v -> {
@@ -136,7 +140,122 @@ public class OderActivity extends AppCompatActivity {
         });
     }
 
+    void thanhToan(){
+        //tính tổng price trên firebase
 
+        SetTableStateEmptyRealtime.setTableIsUsing(accountId, table, "Chờ Thanh Toán");
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference refOrder = database.getReference(url);
+
+        refOrder.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Lặp qua tất cả child
+                double tong = 0;
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    // Tạo instance mới của ClassTable
+                    MenuRestaurant menuOrder = new MenuRestaurant();
+                    if (childSnapshot.hasChild("id") && childSnapshot.child("id").getValue() != null) {
+                        menuOrder.setPrice(childSnapshot.child("price").getValue(Double.class));
+                        tong += menuOrder.getPrice();
+                    }
+                }
+
+                //tính tổng price
+                System.out.println("tong: " + tong);
+                //xóa dữ liệu trên firebase
+//                    refOrder.removeValue();
+                //chuyển sang activity thanh toán
+//                    OrderClientActivity.tong0 = tong;
+
+                showDialogThongBaoLenMon("Tổng tiền bàn số " + table + " là: " + tong + " VNĐ",tong);
+
+
+//                    Intent intent = new Intent(OrderClientActivity.this, PayTheBillClientActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("url", URL);
+//                bundle.putString("accountId", accountId);
+//                bundle.putString("numberTable", numberTable);
+//                // Tạo một instance mới của FragmentC
+//                OrderClientFragment fragmentC = new OrderClientFragment();
+//
+//                // Đặt Arguments cho Fragment
+//                fragmentC.setArguments(bundle);
+//
+//                // Sử dụng FragmentManager để thay thế Fragment hiện tại bằng FragmentC
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//                // Thay thế và thêm vào back stack
+//                fragmentTransaction.replace(R.id.fragment_container, fragmentC);
+//                fragmentTransaction.addToBackStack(null);
+//
+//                // Commit thao tác
+//                fragmentTransaction.commit();
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Xử lý lỗi
+                System.out.println("Lỗi đọc dữ liệu: " + databaseError.getMessage());
+            }
+
+        });
+    }
+    public void showDialogThongBaoLenMon(String text, double tong){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_center_show_tb_call_food);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = Gravity.CENTER;
+        window.setAttributes(windowAttributes);
+        if (Gravity.BOTTOM == Gravity.BOTTOM) {
+            dialog.setCancelable(true);
+        } else {
+            dialog.setCancelable(false);
+        }
+        TextView tvNotification = dialog.findViewById(R.id.tvNotification);
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+        Button btnToTable = dialog.findViewById(R.id.btnToTable);
+        tvNotification.setText(text);
+        btnClose.setOnClickListener(v -> {
+            System.out.println("Đóng dialog");
+            dialog.dismiss();
+        });
+        btnToTable.setOnClickListener(v -> {
+
+            HistoryRestaurant.addHistory(dataOrder, accountId, table, (long) tong);
+// Khởi tạo Firebase Database
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+            // Lấy reference đến order
+            DatabaseReference orderRef = database.getReference(url);
+
+            // Xóa tất cả các child bên trong order
+            orderRef.removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    // Xóa thành công
+                    System.out.println("Xóa order thành công!");
+
+                } else {
+                    // Xóa thất bại
+                    Exception e = task.getException();
+                    System.out.println("Xóa order thất bại: " + e.getMessage());
+                }
+            });
+            SetTableStateEmptyRealtime.setTableIsUsing(accountId, table, "Trống");
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
     /**
      * Hàm hiển thị dialog thông báo
      */

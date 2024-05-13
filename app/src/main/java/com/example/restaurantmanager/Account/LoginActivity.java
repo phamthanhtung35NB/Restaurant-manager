@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             String email = preferences.getString("email", "");
             String password = preferences.getString("password", "");
             String type = preferences.getString("type", "");
-            loginWithSavedAccount(email,password,type);
+//            loginWithSavedAccount(email,password,type);
             textViewUsername.setText(email);
             textPassword.setText(password);
         }
@@ -187,7 +187,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     private void login() {
-        textPassword.setText("1234567");
         String username = textViewUsername.getText().toString();
         String password = textPassword.getText().toString();
         if (TextUtils.isEmpty(username)) {
@@ -205,7 +204,9 @@ public class LoginActivity extends AppCompatActivity {
 //            finish();
 //        }
         //kiểm tra xem có kết nối internet không
-
+        System.out.println("login--------------------------------------------");
+System.out.println("username: "+username);
+System.out.println("password: "+password);
         mAuth.signInWithEmailAndPassword(username, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

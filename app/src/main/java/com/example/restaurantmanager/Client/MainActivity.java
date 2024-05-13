@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     void init(){
 
         replaceFragment(new HomeClientFragment(), true);
+        replaceFragment(new HomeClientFragment(), false);
         fragmentCurrent = "HomeClientFragment";
         Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 //        replaceFragment(new HomeClientActivity());
@@ -192,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        // Xử lý sự kiện khi click vào một item trong NavigationView thanh bên
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_header_home) {
@@ -314,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
         // Đặt vị trí cho Dialog ở phía dưới
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
+
     private void checkForNewMessages() {
 
         databaseReference.child("user").addValueEventListener(new ValueEventListener() {
@@ -365,6 +368,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void showTopDialogNotification(String profilePic, String username, String content, String otherUid, String accountId, String phone) {
         // Tạo một Dialog
         dialog = new Dialog(this);

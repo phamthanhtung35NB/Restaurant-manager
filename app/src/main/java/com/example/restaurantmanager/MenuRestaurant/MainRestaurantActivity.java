@@ -163,6 +163,7 @@ public class MainRestaurantActivity extends AppCompatActivity {
         }
 
         replaceFragment(new StatisticalFragment(), true);
+        replaceFragment(new StatisticalFragment(), false);
         bottomNavigationView.setBackground(null);
         bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -257,19 +258,19 @@ public class MainRestaurantActivity extends AppCompatActivity {
 //        fragmentTransaction.replace(R.id.frame_layout, fragment);
 //        fragmentTransaction.commit();
 //    }
-@Override
-public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    if (requestCode == 1) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                }
             }
         }
     }
-}
-    public void showDialogThongBaoLenMon(int id){
+    public void showDialogThongBaoLenMon(String text, int id){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_center_show_tb_call_food);
@@ -291,7 +292,7 @@ public void onRequestPermissionsResult(int requestCode, String[] permissions, in
         TextView tvNotification = dialog.findViewById(R.id.tvNotification);
         Button btnClose = dialog.findViewById(R.id.btnClose);
         Button btnToTable = dialog.findViewById(R.id.btnToTable);
-        tvNotification.setText("Bàn "+id+" đã gửi thông báo lên món!");
+        tvNotification.setText(text);
         btnClose.setOnClickListener(v -> {
             System.out.println("Đóng dialog");
             dialog.dismiss();
@@ -327,7 +328,15 @@ public void onRequestPermissionsResult(int requestCode, String[] permissions, in
 
                             if (childSnapshot.child("stateEmpty").getValue(String.class).equals("Đang Đợi Món")){
                                 //show dialog thông báo
-                                showDialogThongBaoLenMon(childSnapshot.child("id").getValue(Integer.class));
+                                int id = childSnapshot.child("id").getValue(Integer.class);
+                                String text = "Bàn "+id +" đang đợi món";
+                                showDialogThongBaoLenMon(text,id);
+                            }
+                            if (childSnapshot.child("stateEmpty").getValue(String.class).equals("Chờ Thanh Toán")){
+                                //show dialog thông báo
+                                int id = childSnapshot.child("id").getValue(Integer.class);
+                                String text = "Bàn "+id+" chờ thanh toán";
+                                showDialogThongBaoLenMon(text,id);
                             }
                         }
                     }

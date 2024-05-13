@@ -150,6 +150,9 @@ public class RegisterActivity extends AppCompatActivity {
                         user.put("profilePic", profilePic);
                         user.put("address", address);
 
+                        // thêm thông tin menu vào firestore document uid của người dùng
+
+
                         documentReference.set(user).addOnSuccessListener(aVoid -> {
                             Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                         });
