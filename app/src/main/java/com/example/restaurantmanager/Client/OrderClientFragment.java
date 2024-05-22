@@ -1,28 +1,44 @@
 package com.example.restaurantmanager.Client;
 
 import static android.content.Context.MODE_PRIVATE;
-
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import android.widget.Toast;
+//
+//import com.example.restaurantmanager.Manifest;
+import com.example.restaurantmanager.PdfViewerActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import adapter.Client.OrderClientAdapter;
 import model.HistoryRestaurant;
@@ -32,12 +48,13 @@ import model.SetTableStateEmptyRealtime;
 
 public class OrderClientFragment extends Fragment {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     public static ListView listViewOrderClient;
 
     public static OrderClientAdapter orderClientAdapter;
     public static ArrayList<MenuRestaurant> dataOrderClient;
 
-    public static double tong0 = 0;
+//    public static double tong0 = 0;
     Button buttonThanhToanClient;
     TextView textThongTinBanClient;
     public static String accountId = "";
@@ -45,6 +62,7 @@ public class OrderClientFragment extends Fragment {
     public static String numberTable = "";
     public static String URL = "";
     String stateEmpty = "";
+    double tong = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_client, container, false);
@@ -112,6 +130,7 @@ public class OrderClientFragment extends Fragment {
         //xóa dữ liệu brrn trong url trên firebase
 //        removeOrder();
     }
+
     void addEvents(View view) {
         buttonThanhToanClient.setOnClickListener(v -> {
 
@@ -122,11 +141,66 @@ public class OrderClientFragment extends Fragment {
                 SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang Đợi Món");
                 buttonThanhToanClient.setText("Thanh toán");
 
+            } else if(stateEmpty.equals("Chờ Thanh Toán")){
+                //chuyển sang activity thanh toán
+                //tính tổng price trên firebase
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Quyền chưa được cấp, yêu cầu quyền
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                } else {
+                    // Quyền đã được cấp, bạn có thể thực hiện các thao tác liên quan đến tệp
+                    createPdf();
+                }
+
+                Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
+                startActivity(intent);
+
             }
 
         });
 
         System.out.println("cuối addEvents order");
+    }
+    public void createPdf() {
+        try {
+            // Tạo một đối tượng Document
+            Document document = new Document();
+
+            // Tạo tên tệp dựa trên thời gian hiện tại
+            SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss", Locale.getDefault());
+            String fileName = sdf.format(new Date()) + ".pdf";
+
+            // Tạo một đối tượng PdfWriter
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
+            PdfWriter.getInstance(document, new FileOutputStream(path));
+
+            // Mở Document
+            document.open();
+
+            // Thêm nội dung vào Document
+            document.add(new Paragraph("Hóa đơn thanh toán"));
+            document.add(new Paragraph("Ngày thanh toán: " + new Date().toString()));
+            document.add(new Paragraph("Danh sách món ăn:"));
+
+            // Thêm danh sách món ăn
+            for (MenuRestaurant menuOrder : dataOrderClient) {
+                document.add(new Paragraph(menuOrder.getName() + " - " + menuOrder.getPrice()));
+            }
+
+            // Thêm tổng số tiền
+            document.add(new Paragraph("Tổng tiền: " + tong + " VNĐ"));
+
+            // Đóng Document
+            document.close();
+
+            Toast.makeText(getActivity(), "Hóa đơn đã được tạo thành công!", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Có lỗi xảy ra khi tạo hóa đơn!", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
     }
     //thanh toán
     void thanhToan(){
@@ -140,7 +214,7 @@ public class OrderClientFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Lặp qua tất cả child
-                double tong = 0;
+                tong = 0;
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     // Tạo instance mới của ClassTable
                     MenuRestaurant menuOrder = new MenuRestaurant();

@@ -52,6 +52,10 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
+    //pdf
+    implementation ("com.itextpdf:itextg:5.5.10")
+    //show pdf
+    implementation ("com.github.barteksc:android-pdf-viewer:2.8.2")
     //map
     implementation ("org.osmdroid:osmdroid-android:6.1.14")
     implementation ("com.android.volley:volley:1.1.1")
