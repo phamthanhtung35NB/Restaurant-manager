@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
+import android.os.Environment;
 import android.app.NotificationManager;
 import android.content.Intent;
 
@@ -176,7 +176,9 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
+                Bitmap bitmap = getScreenShot(v);
+                store(bitmap, "myScreenshot.png");
+//                login();
             }
 
         });
@@ -186,6 +188,33 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+
+    public Bitmap getScreenShot(View view) {
+    View screenView = view.getRootView();
+    screenView.setDrawingCacheEnabled(true);
+    Bitmap bitmap = Bitmap.createBitmap(screenView.getDrawingCache());
+    screenView.setDrawingCacheEnabled(false);
+    return bitmap;
+}
+
+public void store(Bitmap bm, String fileName){
+    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    File file = new File(dir, fileName);
+    try {
+        FileOutputStream fOut = new FileOutputStream(file);
+        bm.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+        fOut.flush();
+        Toast.makeText(this, "Lưu ảnh thành công", Toast.LENGTH_SHORT).show();
+        fOut.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+
+
+
     private void login() {
         String username = textViewUsername.getText().toString();
         String password = textPassword.getText().toString();
