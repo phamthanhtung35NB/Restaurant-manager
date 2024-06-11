@@ -104,14 +104,14 @@ public class TableAdapter extends ArrayAdapter<Table> {
             @Override
             public void onClick(View v) {
                 String qr = ShowTableRestaurantFragment.accountId+"/"+table.getId()+"/order";
-                if (table.getStateEmpty().equals("Trống")){
-                    try {
-                        showQR(qr, table.getId(),ShowTableRestaurantFragment.accountId,""+table.getId());
-                    } catch (WriterException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                else {
+//                if (table.getStateEmpty().equals("Trống")){
+//                    try {
+//                        showQR(qr, table.getId(),ShowTableRestaurantFragment.accountId,""+table.getId());
+//                    } catch (WriterException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//                else {
                     Toast.makeText(context,  table.getName()+"", Toast.LENGTH_SHORT).show();
                     //add id bàn vào SharedPreferences
                     SharedPreferences sharedPreferences = context.getSharedPreferences("dataTable", context.MODE_PRIVATE);
@@ -122,7 +122,7 @@ public class TableAdapter extends ArrayAdapter<Table> {
 
                     intent.putExtra("url", qr);
                     context.startActivity(intent);
-                }
+//                }
 
 //                //add vào sqlite
 //                MainActivity.dataOrder.add(menuRestaurant);

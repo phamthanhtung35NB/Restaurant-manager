@@ -20,14 +20,17 @@
         android:gravity="center"
         android:orientation="vertical"
         android:outlineProvider="background"
-        android:padding="1dp">
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
 
         <ImageView
             android:id="@+id/imageViewPhoto"
+            android:layout_width="131dp"
+            android:layout_height="125dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="2dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
             app:srcCompat="@drawable/ic_launcher_foreground" />
 
         <LinearLayout
@@ -40,6 +43,7 @@
                 android:layout_width="152dp"
                 android:layout_height="match_parent"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 android:gravity="center"
                 android:text="TextView" />
         </LinearLayout>
@@ -51,8 +55,9 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="29dp"
+                android:gravity="center|left"
                 android:orientation="horizontal">
 
                 <TextView
@@ -64,22 +69,23 @@
                     android:textColor="?attr/colorOnSurface"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textViewStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
-
-                    android:paddingStart="2dp"
-                    android:text="TextView" />
-
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:textColor="@color/black"
+                android:paddingStart="2dp"
+                android:text="TextView" />
 
             <TextView
                 android:id="@+id/textViewDescribe"
                 android:layout_width="151dp"
                 android:layout_height="30dp"
+                android:textColor="@color/black"
                 android:gravity="center|left"
                 android:paddingStart="6dp"
                 android:text="TextView" />

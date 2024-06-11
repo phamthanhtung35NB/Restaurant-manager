@@ -116,7 +116,8 @@ public class OderActivity extends AppCompatActivity {
     void addEvents(){
         imageButtonExit.setOnClickListener(v -> {
 //            quay về
-                super.onBackPressed();
+//                super.onBackPressed();
+        finish();
         });
         btshowQR.setOnClickListener(v -> {
             try {

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="620dp"
+    android:layout_height="760dp"
+    android:orientation="vertical"
     tools:context=".MenuRestaurant.Order.OderActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="760dp"
         android:gravity="center|top"
         android:orientation="vertical">
 
@@ -62,7 +63,7 @@
         <ListView
             android:id="@+id/listViewOrder"
             android:layout_width="match_parent"
-            android:layout_height="470dp" />
+            android:layout_height="575dp" />
 
         <Button
             android:id="@+id/buttonThanhToan"
@@ -70,4 +71,4 @@
             android:layout_height="50dp"
             android:text="Thanh Toán" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

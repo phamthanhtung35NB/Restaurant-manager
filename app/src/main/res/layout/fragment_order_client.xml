@@ -16,13 +16,14 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-            <TextView
+
+            <Button
                 android:id="@+id/textThongTinBanClient"
-                android:layout_width="300dp"
-                android:layout_height="119dp"
+                android:layout_width="match_parent"
+                android:layout_height="103dp"
                 android:gravity="center"
-                android:text="Danh sách món đã thêm"
-                android:textColor="#FF0000" />
+                android:textSize="15dp"
+                android:text="Danh sách món đã thêm" />
         </LinearLayout>
 
         <ListView

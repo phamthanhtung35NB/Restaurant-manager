@@ -18,33 +18,14 @@
         android:gravity="left"
         android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/imageButtonExit"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/logout"
-            android:backgroundTint="?attr/colorOnSecondary" />
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButtonAddTable"
-            android:layout_width="58dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/add"
-            android:backgroundTint="?attr/colorOnSecondary" />
-
-        <TextView
-            android:layout_width="10dp"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:id="@+id/textViewSummary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="TextView"
-            android:textColor="?attr/colorOnSecondary" />
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            android:text="Thêm Bàn" />
+
     </LinearLayout>
 
         <GridView

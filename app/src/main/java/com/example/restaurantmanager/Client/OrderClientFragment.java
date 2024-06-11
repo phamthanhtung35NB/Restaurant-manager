@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 //
 //import com.example.restaurantmanager.Manifest;
-import com.example.restaurantmanager.PdfViewerActivity;
 import com.example.restaurantmanager.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,7 +55,7 @@ public class OrderClientFragment extends Fragment {
 
 //    public static double tong0 = 0;
     Button buttonThanhToanClient;
-    TextView textThongTinBanClient;
+    Button textThongTinBanClient;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -139,6 +138,7 @@ public class OrderClientFragment extends Fragment {
             } else if(stateEmpty.equals("Đã Quét QR")){
                 //đổi tên button thanh toán buttonThanhToanClient
                 SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang Đợi Món");
+                textThongTinBanClient.setText("Đã gửi yêu cầu món ăn thành công!");
                 buttonThanhToanClient.setText("Thanh toán");
 
             } else if(stateEmpty.equals("Chờ Thanh Toán")){
@@ -154,9 +154,9 @@ public class OrderClientFragment extends Fragment {
                     // Quyền đã được cấp, bạn có thể thực hiện các thao tác liên quan đến tệp
                     createPdf();
                 }
-
-                Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
-                startActivity(intent);
+                Toast.makeText(getActivity(), "Hóa đơn đã được tạo thành công!", Toast.LENGTH_LONG).show();
+//                Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
+//                startActivity(intent);
 
             }
 

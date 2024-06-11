@@ -6,6 +6,7 @@
     <padding android:left="20dp" android:top="20dp"
         android:right="20dp" android:bottom="20dp"/>
     <!-- bo viền cho item -->
+    <solid android:color="@color/cyan"/>
 
 
 </shape>

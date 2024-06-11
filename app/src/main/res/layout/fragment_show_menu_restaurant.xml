@@ -21,18 +21,12 @@
             android:gravity="left"
             android:orientation="horizontal">
 
-            <ImageButton
+            <Button
                 android:id="@+id/imageButtonAdd"
-                android:layout_width="65dp"
+                android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:scaleType="centerInside"
-                app:srcCompat="@drawable/baseline_format_list_bulleted_add_24" />
-
-            <ImageButton
-                android:id="@+id/imageButtonOrder"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                app:srcCompat="?attr/actionModePasteDrawable" />
+                android:text="Thêm món ăn" />
         </LinearLayout>
 
         <ListView

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,9 +34,9 @@ import model.MenuRestaurant;
 
 public class ShowMenuRestaurantFragment extends Fragment {
     TextView textView1;
-    ImageButton imageButtonOrder;
+//    ImageButton imageButtonOrder;
 //    ImageButton imageButtonMenuOp;
-    ImageButton imageButtonAdd;
+    Button imageButtonAdd;
     ListView listViewMenu;
 
     public static ArrayList<MenuRestaurant> dataRestaurant ;
@@ -59,7 +60,7 @@ public class ShowMenuRestaurantFragment extends Fragment {
         System.out.println(accountId);
 
         textView1 = view.findViewById(R.id.textView1);
-        imageButtonOrder = view.findViewById(R.id.imageButtonOrder);
+//        imageButtonOrder = view.findViewById(R.id.imageButtonOrder);
         listViewMenu = view.findViewById(R.id.listViewMenu);
         dataRestaurant = new ArrayList<>();
         imageButtonAdd = view.findViewById(R.id.imageButtonAdd);
@@ -151,11 +152,11 @@ System.out.println("menuId: "+menuId+" name: "+name+" description: "+description
         System.out.println("1111111111111111111111111111111111111111111");
         System.out.println(accountId);
         System.out.println(type);
-        imageButtonOrder.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), OderActivity.class);
-            startActivity(intent);
-//            finish();
-        });
+//        imageButtonOrder.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(), OderActivity.class);
+//            startActivity(intent);
+////            finish();
+//        });
 //        imageButtonMenuOp.setOnClickListener(v -> {
 ////            addDataToFireBase(new MenuRestaurant("4", "Cơm chiên", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));
 ////            updateDataInFireBase("4", new MenuRestaurant("4", "Cơm chiê----n", "Cơm chiên + trứng", 5000.0, "https://i.imgur.com/ikbFUzX.png"));

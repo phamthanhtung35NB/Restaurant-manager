@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import model.Table;
 
 public class ShowTableRestaurantFragment extends Fragment {
     GridView gvTable;
-    ImageButton imageButtonExit,imageButtonAddTable;
+    Button imageButtonAddTable;
     TextView textViewSummary;
     public static ArrayList<Table> arrTableData;
     TableAdapter adapterTable;
@@ -48,7 +49,7 @@ public class ShowTableRestaurantFragment extends Fragment {
         System.out.println(accountId);
 
         gvTable = view.findViewById(R.id.gvTable);
-        imageButtonExit = view.findViewById(R.id.imageButtonExit);
+//        imageButtonExit = view.findViewById(R.id.imageButtonExit);
         textViewSummary = view.findViewById(R.id.textViewSummary);
         imageButtonAddTable = view.findViewById(R.id.imageButtonAddTable);
         arrTableData = new ArrayList<>();
@@ -57,10 +58,10 @@ public class ShowTableRestaurantFragment extends Fragment {
         readDataFromFireBase(accountId);
     }
     public void addEvents(View view){
-        imageButtonExit.setOnClickListener(v -> {
-
-            System.out.println("click exit");
-        });
+//        imageButtonExit.setOnClickListener(v -> {
+//
+//            System.out.println("click exit");
+//        });
         System.out.println("hết event-----------------------------");
         imageButtonAddTable.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddTableActivity.class);

@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
     TextView textViewInformation;
-    ImageButton imageButtonThanhToan;
+    Button imageButtonThanhToan;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -64,7 +65,8 @@ public class MenuAddFoodToOrderActivity extends AppCompatActivity {
 
     void addEvents() {
         imageButtonThanhToan.setOnClickListener(v -> {
-            Toast.makeText(MenuAddFoodToOrderActivity.this, "Thanh toán", Toast.LENGTH_SHORT).show();
+            //quay lại màn hình trước
+            finish();
         });
     }
     //get menu from firebase fileStore

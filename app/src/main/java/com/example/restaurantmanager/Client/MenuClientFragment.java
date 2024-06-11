@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,9 +45,9 @@ public class MenuClientFragment extends Fragment {
 
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
-    TextView textViewInformation;
-    ImageButton imageButtonFragmentOder;
-    ImageButton imageButtonBack;
+//    TextView textViewInformation;
+    Button imageButtonFragmentOder;
+//    ImageButton imageButtonBack;
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";
@@ -73,11 +74,11 @@ public class MenuClientFragment extends Fragment {
             System.out.println("accountId: "+accountId);
             numberTable = sharedPreferences.getString("numberTable", "");
         }
-        textViewInformation = view.findViewById(R.id.textViewInformation);
-        textViewInformation.setText(URL);
+//        textViewInformation = view.findViewById(R.id.textViewInformation);
+//        textViewInformation.setText(URL);
         listViewClient = view.findViewById(R.id.listViewClient);
         imageButtonFragmentOder = view.findViewById(R.id.imageButtonFragmentOder);
-        imageButtonBack = view.findViewById(R.id.imageButtonBack);
+//        imageButtonBack = view.findViewById(R.id.imageButtonBack);
         dataMenuViewClient = new ArrayList<>();
         MainActivity.isCheckQR= true;
 //        menuClientAdapter = new MenuClientAdapter(this, R.layout.food_show_client, dataMenuViewClient);
@@ -116,9 +117,9 @@ public class MenuClientFragment extends Fragment {
             // Commit thao tác
             fragmentTransaction.commit();
         });
-        imageButtonBack.setOnClickListener(v -> {
-            super.getActivity().onBackPressed();
-        });
+//        imageButtonBack.setOnClickListener(v -> {
+//            super.getActivity().onBackPressed();
+//        });
     }
 
     private void readDataFromFireBase() {
