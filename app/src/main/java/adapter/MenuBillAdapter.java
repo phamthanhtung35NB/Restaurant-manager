@@ -44,17 +44,21 @@ public class MenuBillAdapter extends ArrayAdapter<MenuRestaurant> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = this.context.getLayoutInflater();
         View row = inflater.inflate(this.resource, null);
+        System.out.println("1");
         TextView txtSl = row.findViewById(R.id.txtSl);
+        System.out.println("2");
         TextView textViewName = row.findViewById(R.id.textViewNameOrder);
+        System.out.println("3");
         TextView textViewPrice = row.findViewById(R.id.textViewPriceOrder);
-
+System.out.println("4");
         MenuRestaurant menuRestaurant = this.objects.get(position);
-
+System.out.println("5");
         txtSl.setText(menuRestaurant.getId() + "");
+        System.out.println("6");
         textViewName.setText(menuRestaurant.getName());
+System.out.println("7");
         textViewPrice.setText(menuRestaurant.getPrice()+"");
-        //lấy hình ảnh từ database
-        String imageShow = menuRestaurant.getImage();
+        System.out.println("8");
         return row;
     }
 

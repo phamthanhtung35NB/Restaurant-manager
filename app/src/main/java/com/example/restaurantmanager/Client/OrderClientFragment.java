@@ -135,6 +135,7 @@ public class OrderClientFragment extends Fragment {
 
             if (stateEmpty.equals(("Đang Đợi Món"))){
                     thanhToan();
+                buttonThanhToanClient.setText("Xem Hóa Đơn");
             } else if(stateEmpty.equals("Đã Quét QR")){
                 //đổi tên button thanh toán buttonThanhToanClient
                 SetTableStateEmptyRealtime.setTableIsUsing(accountId,numberTable,"Đang Đợi Món");
@@ -142,66 +143,69 @@ public class OrderClientFragment extends Fragment {
                 buttonThanhToanClient.setText("Thanh toán");
 
             } else if(stateEmpty.equals("Chờ Thanh Toán")){
-                //chuyển sang activity thanh toán
-                //tính tổng price trên firebase
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    // Quyền chưa được cấp, yêu cầu quyền
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-                } else {
-                    // Quyền đã được cấp, bạn có thể thực hiện các thao tác liên quan đến tệp
-                    createPdf();
-                }
-                Toast.makeText(getActivity(), "Hóa đơn đã được tạo thành công!", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
-//                startActivity(intent);
+//                //chuyển sang activity thanh toán
+//                //tính tổng price trên firebase
+//                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//                    // Quyền chưa được cấp, yêu cầu quyền
+//                    ActivityCompat.requestPermissions(getActivity(),
+//                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+//                } else {
+//                    // Quyền đã được cấp, bạn có thể thực hiện các thao tác liên quan đến tệp
+//                    createPdf();
+//                }
+//                Toast.makeText(getActivity(), "Hóa đơn đã được tạo thành công!", Toast.LENGTH_LONG).show();
+////                Intent intent = new Intent(getActivity(), PdfViewerActivity.class);
+////                startActivity(intent);
 
+                //chuyển sang activity thanh toán
+                Intent intent = new Intent(getActivity(), PayTheBillClientActivity.class);
+                startActivity(intent);
             }
 
         });
 
         System.out.println("cuối addEvents order");
     }
-    public void createPdf() {
-        try {
-            // Tạo một đối tượng Document
-            Document document = new Document();
-
-            // Tạo tên tệp dựa trên thời gian hiện tại
-            SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss", Locale.getDefault());
-            String fileName = sdf.format(new Date()) + ".pdf";
-
-            // Tạo một đối tượng PdfWriter
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
-            PdfWriter.getInstance(document, new FileOutputStream(path));
-
-            // Mở Document
-            document.open();
-
-            // Thêm nội dung vào Document
-            document.add(new Paragraph("Hóa đơn thanh toán"));
-            document.add(new Paragraph("Ngày thanh toán: " + new Date().toString()));
-            document.add(new Paragraph("Danh sách món ăn:"));
-
-            // Thêm danh sách món ăn
-            for (MenuRestaurant menuOrder : dataOrderClient) {
-                document.add(new Paragraph(menuOrder.getName() + " - " + menuOrder.getPrice()));
-            }
-
-            // Thêm tổng số tiền
-            document.add(new Paragraph("Tổng tiền: " + tong + " VNĐ"));
-
-            // Đóng Document
-            document.close();
-
-            Toast.makeText(getActivity(), "Hóa đơn đã được tạo thành công!", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            Toast.makeText(getActivity(), "Có lỗi xảy ra khi tạo hóa đơn!", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-    }
+//    public void createPdf() {
+//        try {
+//            // Tạo một đối tượng Document
+//            Document document = new Document();
+//
+//            // Tạo tên tệp dựa trên thời gian hiện tại
+//            SimpleDateFormat sdf = new SimpleDateFormat("HH_mm_ss", Locale.getDefault());
+//            String fileName = sdf.format(new Date()) + ".pdf";
+//
+//            // Tạo một đối tượng PdfWriter
+//            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + fileName;
+//            PdfWriter.getInstance(document, new FileOutputStream(path));
+//
+//            // Mở Document
+//            document.open();
+//
+//            // Thêm nội dung vào Document
+//            document.add(new Paragraph("Hóa đơn thanh toán"));
+//            document.add(new Paragraph("Ngày thanh toán: " + new Date().toString()));
+//            document.add(new Paragraph("Danh sách món ăn:"));
+//
+//            // Thêm danh sách món ăn
+//            for (MenuRestaurant menuOrder : dataOrderClient) {
+//                document.add(new Paragraph(menuOrder.getName() + " - " + menuOrder.getPrice()));
+//            }
+//
+//            // Thêm tổng số tiền
+//            document.add(new Paragraph("Tổng tiền: " + tong + " VNĐ"));
+//
+//            // Đóng Document
+//            document.close();
+//
+//            Toast.makeText(getActivity(), "Hóa đơn đã được tạo thành công!", Toast.LENGTH_LONG).show();
+//        } catch (Exception e) {
+//            Toast.makeText(getActivity(), "Có lỗi xảy ra khi tạo hóa đơn!", Toast.LENGTH_LONG).show();
+//            e.printStackTrace();
+//        }
+//    }
     //thanh toán
     void thanhToan(){
         //tính tổng price trên firebase
@@ -233,6 +237,12 @@ public class OrderClientFragment extends Fragment {
 
                 textThongTinBanClient.setText("Tổng tiền bàn số " + numberTable + " là: " + tong + " VNĐ");
                 HistoryRestaurant.addHistory(dataOrderClient, accountId, numberTable, (long) tong);
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("data", MODE_PRIVATE);
+                // thêm tong vào sharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("tong", tong + "");
+                editor.apply();
+
 
 //                    Intent intent = new Intent(OrderClientActivity.this, PayTheBillClientActivity.class);
 //                Bundle bundle = new Bundle();
