@@ -14,22 +14,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"/>
-
-        <ListView
-            android:id="@+id/listViewClient"
-            android:layout_width="match_parent"
-            android:layout_height="510dp"
             android:layout_weight="1"
-            android:layout_marginBottom="10dp">
+            android:orientation="vertical">
 
-        </ListView>
+            <ListView
+                android:id="@+id/listViewClient"
+                android:layout_width="match_parent"
+                android:layout_height="590dp"></ListView>
+        </LinearLayout>
 
 
         <Button
             android:id="@+id/imageButtonFragmentOder"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="wrap_content"
             android:text="Xem lại món đã đặt"
             android:src="@drawable/baseline_arrow_outward_24" />
     </LinearLayout>

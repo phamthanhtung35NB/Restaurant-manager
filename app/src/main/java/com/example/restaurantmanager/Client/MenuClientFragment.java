@@ -130,6 +130,7 @@ public class MenuClientFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        dataMenuViewClient.clear();
                         if (documentSnapshot.exists()) {
                             Map<String, Object> accountData = documentSnapshot.getData();
 

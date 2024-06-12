@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="20dp"
         android:orientation="vertical">
 
 
@@ -45,7 +46,9 @@
                     android:layout_width="50dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"
+                    android:gravity="center"
                     android:text="id"
+                    android:textColor="@color/black"
                     android:textStyle="bold|italic" />
 
                 <EditText
@@ -53,7 +56,9 @@
                     android:layout_width="364dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:hint="Name food"
+                    android:textColor="@color/black"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -61,17 +66,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="right"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/textViewPriceOrder"
-                    android:layout_width="229dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:autoText="false"
-                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:gravity="center|right"
+
                     android:hint="Price"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/black"
                     android:textStyle="italic" />
 
                 <TextView
@@ -79,6 +85,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text=" VNĐ"
+                    android:textColor="@color/black"
                     android:textStyle="italic" />
             </LinearLayout>
 
@@ -86,7 +93,9 @@
                 android:id="@+id/textViewDescriptionOrder"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
-                android:hint="Description" />
+                android:gravity="center"
+                android:hint="Description"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -95,24 +104,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical" />
 
-        <ImageButton
+        <Button
             android:id="@+id/imageButtonDelFood"
-            android:layout_width="425dp"
-            android:layout_height="92dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:cropToPadding="false"
-            android:scaleType="centerInside"
-            android:scrollbarAlwaysDrawHorizontalTrack="false"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:verticalScrollbarPosition="right"
-            android:visibility="visible"
-            tools:srcCompat="@android:drawable/ic_menu_myplaces" />
+            android:text="Thêm" />
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="#25A80F" />
 </androidx.constraintlayout.widget.ConstraintLayout>

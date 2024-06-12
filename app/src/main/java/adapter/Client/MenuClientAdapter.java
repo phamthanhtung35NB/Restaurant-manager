@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class MenuClientAdapter extends ArrayAdapter<MenuRestaurant> {
         TextView textViewDescription = row.findViewById(R.id.textViewDescriptionOrder);
         TextView textViewPrice = row.findViewById(R.id.textViewPriceOrder);
         ImageView imageViewFood = row.findViewById(R.id.imageViewFoodOrder);
-        ImageButton imageButtonAddOrder = row.findViewById(R.id.imageButtonAddOrder);
+        Button imageButtonAddOrder = row.findViewById(R.id.imageButtonAddOrder);
 
         MenuRestaurant menuRestaurant = this.objects.get(position);
 

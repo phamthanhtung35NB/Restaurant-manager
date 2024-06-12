@@ -156,12 +156,13 @@ public class MainActivity extends AppCompatActivity {
     void init(){
 
         replaceFragment(new HomeClientFragment(), true);
-        replaceFragment(new HomeClientFragment(), false);
+
+
         fragmentCurrent = "HomeClientFragment";
         Toast.makeText(MainActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 //        replaceFragment(new HomeClientActivity());
         checkForNewMessages();
-    }
+        replaceFragment(new HomeClientFragment(), false);    }
     void addEvents(){
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -171,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("navHome");
                     replaceFragment(new HomeClientFragment(), false);
                     fragmentCurrent = "HomeClientFragment";
-                    Toast.makeText(MainActivity.this, "navHome", Toast.LENGTH_SHORT).show();
                 }else if(itemId==R.id.navMessage){
                     replaceFragment(new ListMessagesFragment(), false);
                     fragmentCurrent = "ListMessagesFragment";
@@ -180,7 +180,6 @@ public class MainActivity extends AppCompatActivity {
                     if (isCheckQR==false){
                     fragmentCurrent = "QRFragment";
                     System.out.println("navSetting");
-                    Toast.makeText(MainActivity.this, "navSetting", Toast.LENGTH_SHORT).show();
                     // Xử lý sự kiện khi click vào nút quét mã QR
                     IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
                     integrator.setOrientationLocked(true);

@@ -193,10 +193,29 @@
             android:textSize="17dp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnSaveBill"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lưu hóa đơn" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnSaveBill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_weight="1"
+            android:text="Lưu hóa đơn\n thanh toán" />
+
+        <Button
+            android:id="@+id/btnXacNhanThanhToan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorBackgroundDark"
+            android:text="Xác nhận\nthanh toán" />
+    </LinearLayout>
 
 </LinearLayout>

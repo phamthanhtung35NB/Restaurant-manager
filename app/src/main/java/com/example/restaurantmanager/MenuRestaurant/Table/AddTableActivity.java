@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,7 +46,7 @@ import model.Table;
 public class AddTableActivity extends AppCompatActivity {
 
     EditText editTextNameTable,editTextDescribe;
-    ImageButton imageButtonAdd;
+    Button imageButtonAdd;
     ImageView imageViewPhoto;
     String accountId = "";
     private ProgressBar progressBar2;

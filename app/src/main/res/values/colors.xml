@@ -36,14 +36,14 @@
     <color name="colorOnErrorLight">#FFFFFF</color>
 
     <!-- Colors for dark theme -->
-    <color name="colorPrimaryDark">#022249</color>
+    <color name="colorPrimaryDark">#2B80E8</color>
     <color name="colorPrimaryVariantDark">#f07c41</color>
     <color name="colorSecondaryDark">#55bdca</color>
     <color name="colorSecondaryVariantDark">#0D8B8B</color>
-    <color name="colorBackgroundDark">#383D3E</color>
+    <color name="colorBackgroundDark">#6D8388</color>
     <color name="colorSurfaceDark">#ffffff</color>
     <color name="colorOnPrimaryDark">#ffffff</color>
-    <color name="colorOnSecondaryDark">#022249</color>
+    <color name="colorOnSecondaryDark">#0E4A94</color>
     <color name="colorOnBackgroundDark">#022249</color>
     <color name="colorOnSurfaceDark">#BCD6F4</color>
     <color name="colorErrorDark">#B00020</color>

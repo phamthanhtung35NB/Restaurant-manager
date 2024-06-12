@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ public class AddFoodActivity extends AppCompatActivity {
     EditText edtName, edtDescription, edtPrice;
     TextView textViewId;
     ImageView imageViewFood;
-    ImageButton imageButtonSave;
+    Button imageButtonSave;
     private ProgressBar progressBar;
 
     // Define a static final int for the camera request code
