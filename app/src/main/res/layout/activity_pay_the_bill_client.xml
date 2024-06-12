@@ -7,56 +7,89 @@
     android:orientation="vertical"
     android:background="@drawable/bg_white_corner_16"
     tools:context=".Client.PayTheBillClientActivity">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:background="@color/cyan"
-        android:gravity="center"
-        android:text="  Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi  \n\n  Vui lòng thanh toán cho nhân viên để kết thúc dịch vụ"
-        android:textColor="@color/black"
-        android:textFontWeight="@integer/material_motion_duration_long_1"
-        android:textColorLink="@color/gray"
-        android:textSize="19dp" />
 
-    <TextView
-        android:id="@+id/textViewShowBill"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="145dp"
-        android:layout_gravity="center"
-        android:background="@color/yellow"
-        android:gravity="center"
-        android:text="bill"
-        android:textColor="@color/black"
-        android:textColorLink="@color/gray"
-        android:textSize="18dp" />
+        android:layout_height="wrap_content">
 
-    <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:text="Thời gian:"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/txtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:text="00:00 00/00/0000"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/listViewClientPayTheBill"
+                android:layout_width="match_parent"
+                android:layout_height="510dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"></ListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="47dp"
+                    android:gravity="center|left"
+                    android:paddingStart="5dp"
+                    android:text="Tổng tiền:"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/textViewShowBill"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|left"
+                    android:paddingStart="5dp"
+                    android:text="bill"
+                    android:textColor="@color/black"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="  Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!  "
+                android:textColor="@color/black"
+                android:textColorLink="@color/gray"
+                android:textFontWeight="@integer/material_motion_duration_long_1"
+                android:textSize="17dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnSaveBill"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Bằng chữ:"
-        android:textColor="@color/black"
-        android:textFontWeight="@integer/material_motion_duration_long_1"
-        android:textSize="22dp" />
+        android:text="Lưu hóa đơn"" />
 
-    <TextView
-        android:id="@+id/textViewShowBillString"
-        android:layout_width="match_parent"
-        android:layout_height="128dp"
-        android:layout_gravity="center"
-        android:background="@color/yellow"
-        android:gravity="center"
-        android:text="bill"
-        android:textColor="@color/black"
-        android:textColorLink="@color/gray"
-        android:textSize="18dp" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Trạng thái bàn: Đang chờ thanh toán"
-        android:textColor="@color/black"
-        android:textFontWeight="@integer/material_motion_duration_long_1"
-        android:textSize="22dp" />
 </LinearLayout>

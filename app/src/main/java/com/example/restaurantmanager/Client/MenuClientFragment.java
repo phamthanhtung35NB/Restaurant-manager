@@ -42,12 +42,12 @@ import model.SetTableStateEmptyRealtime;
 
 public class MenuClientFragment extends Fragment {
     public static ListView listViewClient;
-
     public static MenuClientAdapter menuClientAdapter;
     public static ArrayList<MenuRestaurant> dataMenuViewClient;
 //    TextView textViewInformation;
     Button imageButtonFragmentOder;
 //    ImageButton imageButtonBack;
+
     public static String accountId = "";
     public static String type = "restaurant";
     public static String numberTable = "";

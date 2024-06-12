@@ -3,6 +3,8 @@ package com.example.restaurantmanager.Client;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,14 +15,24 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.restaurantmanager.R;
 
-import model.NumberToWordsConverter;
+//import model.NumberToWordsConverter;
+import java.util.ArrayList;
+
+import adapter.Client.MenuClientAdapter;
+import model.MenuRestaurant;
 import model.SetTableStateEmptyRealtime;
 
 public class PayTheBillClientActivity extends AppCompatActivity {
-    TextView textViewShowBill,textViewShowBillString;
+    public static ListView listViewClient;
+    public static MenuClientAdapter menuClientAdapter;
+    public static ArrayList<MenuRestaurant> dataMenuViewClient;
+    TextView textViewShowBill,txtDate;
+    Button btnSaveBill;
     String table="";
     double billDouble;
     String accountId="";
+    public static String type = "restaurant";
+    public static String URL = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         System.out.println("đã tới đây0");
@@ -42,7 +54,8 @@ public class PayTheBillClientActivity extends AppCompatActivity {
     void init() {
         System.out.println("trong init");
         textViewShowBill = findViewById(R.id.textViewShowBill);
-        textViewShowBillString = findViewById(R.id.textViewShowBillString);
+
+
         Intent intent = getIntent();
         table = intent.getStringExtra("table");
         // get bill as a Double directly
@@ -54,10 +67,9 @@ public class PayTheBillClientActivity extends AppCompatActivity {
         System.out.println("trong addEvents");
         startChecking();
         System.out.println("addEvents 2");
-        String billString = NumberToWordsConverter.convert(billDouble);
+//        String billString = NumberToWordsConverter.convert(billDouble);
         System.out.println("addEvents 3");
         textViewShowBill.setText("Tổng tiền bàn số "+table+" là: "+billDouble+" VNĐ");
-        textViewShowBillString.setText(billString+" Đồng");
         System.out.println("hết addEvents");
 
     }
